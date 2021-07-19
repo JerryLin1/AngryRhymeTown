@@ -29,7 +29,7 @@ export default class Home extends React.Component {
           <Button
             variant="outline-dark"
             onClick={() => {
-              client.redirect($(`${home.inputRoomID}`).val());
+              client.redirect($(`#${home.inputRoomID}`).val());
             }}
             id={`${home.joinRoom}`}
           >
