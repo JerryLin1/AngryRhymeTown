@@ -5,6 +5,8 @@ import Home from "./Components/Home";
 import Lobby from "./Components/Lobby";
 import reportWebVitals from "./reportWebVitals";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 ReactDOM.render(
   director(),
   document.getElementById("root")

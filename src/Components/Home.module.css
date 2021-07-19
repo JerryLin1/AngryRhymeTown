@@ -1,0 +1,17 @@
+.App {
+    text-align: center;
+}
+
+#inputRoomID {
+    display: inline-block;
+    height: 38px;
+    transform: translateY(8%);
+}
+
+#createLobby {
+    margin-right: 5em;
+}
+
+#joinRoom {
+    margin-left: 0.5em;
+}
