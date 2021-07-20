@@ -5,6 +5,8 @@ import Home from "./Components/Home";
 import Lobby from "./Components/Lobby";
 import reportWebVitals from "./reportWebVitals";
 import Client from './client.js';
+import tts from "./tts";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 let client = new Client();
 
@@ -14,10 +16,16 @@ ReactDOM.render(
 );
 
 function director() {
+  tts.rap([
+    "Hey my name is Jerry Lin",
+    "Everyday I only win",
+    "Every time I get that dub",
+    "I take a bath inside my tub"
+  ])
   if (window.location.pathname + window.location.search === "/") {
     return <Home client = {client}/>;
   } else {
-    return <Lobby client = {client} room = {client.room}/>;
+    return <Lobby client = {client}/>;
   }
 }
 

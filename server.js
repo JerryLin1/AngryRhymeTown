@@ -7,6 +7,8 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 // ======================================
 
+const wm = require("./server/wm.js");
+
 const port = process.env.PORT || 6567;
 server.listen(port, () => {
     console.log(`Listening on port ${port}`)
