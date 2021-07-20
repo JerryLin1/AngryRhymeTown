@@ -13,13 +13,20 @@ const port = process.env.PORT || 6567;
 server.listen(port, () => {
     console.log(`Listening on port ${port}`)
 });
-var rooms = [];
+const rooms = {};
 
 // Whenever a client connects
 io.on('connection', socket => {
     console.log(`ID: ${socket.id} has joined.`);
+    socket.room = undefined;
     socket.on('disconnect', () => {
         console.log(`ID: ${socket.id} has disconnected.`);
+        if (socket.room in rooms) {
+            let index = rooms[socket.room].indexOf(socket.id);
+            rooms[socket.room].splice(index, 1);
+            io.to(socket.room).emit("updateRoom", rooms);
+
+        }
     });
 
     // When client creates lobby
@@ -27,15 +34,19 @@ io.on('connection', socket => {
         let gid = RandomId(8);
         // Redirect client to new URL
         socket.emit("redirect", gid);
-        rooms.push(gid);
+        rooms[gid] = [];
         console.log(`Room ${gid} created.`);
     });
     
     // Joins client to room
     socket.on("joinRoom", id => {
         // If room exists, join client to room
-        if (rooms.includes(id)) {
+        if (id in rooms) {
             socket.join(id);
+            rooms[id].push(socket.id);
+            console.log(`Current players in ${id}: ${rooms[id]}`);
+            socket.room = id;
+            io.to(socket.room).emit("updateRoom", rooms);
         }
         // Else redirect them back to home
         else {
@@ -55,3 +66,4 @@ setInterval(() => {
 function RandomId(length) {
     return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, length);
 }
+

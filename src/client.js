@@ -1,35 +1,49 @@
+import React from "react";
 import io from "socket.io-client";
+import $ from "jquery";
 
-export default function client() {
-    const socket = io();
+export default class Client extends React.Component {
 
-    this.createRoom = function () {
-        socket.emit("createRoom");
+    constructor(props) {
+        super(props);
+
+        this.socket = io();
+        this.room = [];
+
+        // At start, attempt to join the room ID from the URL
+        let roomId = window.location.pathname + window.location.search;
+        roomId = roomId.substring(1);
+        if (roomId.length > 1) {
+            this.joinRoom(roomId);
+        }
+
+        // For debug
+        this.socket.on("log", (msg) => {
+            console.log(msg);
+        });
+
+        // Redirect URL (e.g. when client creates room)
+        this.socket.on("redirect", (id) => {
+            this.redirect(id);
+        });
+
+        this.socket.on("updateRoom", (rooms) => {
+            this.room = rooms[roomId];
+            document.getElementById("lobbyList").innerHTML = rooms[roomId];
+        })
     }
 
-    this.joinRoom = function (roomId) {
-        socket.emit("joinRoom", roomId);
+    createRoom = () => {
+        this.socket.emit("createRoom");
     }
 
-    this.redirect = function (id) {
+    joinRoom = (roomId) => {
+        this.socket.emit("joinRoom", roomId);
+    }
+
+    redirect = (id) => {
         window.location.href = id;
     }
 
-    // At start, attempt to join the room ID from the URL
-    let roomId = window.location.pathname + window.location.search;
-    roomId = roomId.substring(1);
-    if (roomId.length > 1) {
-        this.joinRoom(roomId);
-    }
 
-    // For debug
-    socket.on("log", (msg) => {
-        console.log(msg);
-    });
-
-    // Redirect URL (e.g. when client creates room)
-    socket.on("redirect", (id) => {
-        this.redirect(id);
-    });
 }
-

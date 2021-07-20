@@ -1,15 +1,15 @@
 import React from "react";
 import $ from "jquery";
-import cclient from "../client.js";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-
 import home from "./Home.module.css";
 
-const client = new cclient();
-
 export default class Home extends React.Component {
+  constructor(props){
+    super(props);
+    this.client = props.client;
+  }
   render() {
     return (
       <div className={`${home.App}`}>
@@ -24,7 +24,7 @@ export default class Home extends React.Component {
             <Button
               variant="outline-dark"
               id={`${home.createLobby}`}
-              onClick={client.createRoom}
+              onClick={this.client.createRoom}
             >
               Create lobby
             </Button>
@@ -36,7 +36,7 @@ export default class Home extends React.Component {
             <Button
               variant="outline-dark"
               onClick={() => {
-                client.redirect($(`#${home.inputRoomID}`).val());
+                this.client.redirect($(`#${home.inputRoomID}`).val());
               }}
               id={`${home.joinRoom}`}
             >

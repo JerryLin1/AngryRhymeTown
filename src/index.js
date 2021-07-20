@@ -4,9 +4,11 @@ import "./index.css";
 import Home from "./Components/Home";
 import Lobby from "./Components/Lobby";
 import reportWebVitals from "./reportWebVitals";
+import Client from './client.js';
 import tts from "./tts";
-
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+let client = new Client();
 
 ReactDOM.render(
   director(),
@@ -21,9 +23,9 @@ function director() {
   //   "I take a bath inside my tub"
   // ])
   if (window.location.pathname + window.location.search === "/") {
-    return <Home />;
+    return <Home client = {client}/>;
   } else {
-    return <Lobby />;
+    return <Lobby client = {client}/>;
   }
 }
 
