@@ -10,7 +10,7 @@ export default class Client extends React.Component {
         this.socket = io();
         this.room = [];
 
-        
+
         // At start, attempt to join the room ID from the URL
         this.roomId = (window.location.pathname + window.location.search).substring(1);
 
@@ -37,6 +37,26 @@ export default class Client extends React.Component {
             $("#lobbyList").text(this.room);
         })
 
+        this.socket.on("startGame", () => {
+            // TODO: Do some animations
+        })
+        this.socket.on("startPairPhase", pairs => {
+            // TODO: Display round pairs (who is vs. who)
+        })
+        this.socket.on("startWritePhase", () => {
+            // TODO: Start a timer
+            // Theoretically, response should call after receiving callback from server
+            this.socket.emit("requestWords", (response) => {
+                // the words should be returned as response.words
+                // Display the words
+            });
+            // TODO: Text input box and submit button
+            // Submit button emits line and words to server, then request more words
+        })
+        // Clientside timer should end same time as they receive startVotePhase from server
+        this.socket.on("startVotePhase", () => {
+            // Start a timer
+        })
     }
 
     setNick = (name) => {
@@ -57,5 +77,11 @@ export default class Client extends React.Component {
         window.location.href = id;
     }
 
+    // This should be an onClick button only available to the host
+    startGame = () => {
+        this.socket.emit("startGame");
+        // TODO: instead of an empty emit, emit an object that contains all the game options
+        // E.g. Writing time, voting time, number of rounds, etc.
+    }
 
 }

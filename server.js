@@ -63,6 +63,24 @@ io.on('connection', socket => {
     })
 
     //TODO: Remove ID from rooms when empty
+
+    socket.on("startGame", () => {
+        // TODO: if (socket.host === true)
+        // TODO: if (rooms[socket.room].length %% 2 === 0) Must be even number of players. unless we code bot?
+        io.to(socket.room).emit("startGame");
+        // TODO: Set player scores to 0
+
+        io.to(socket.room).emit("roundPairs", GeneratePairs(rooms[socket.room]));
+
+        // After X seconds start writing phase
+        setTimeout(io.to(socket.room).emit("startWritePhase"), 5000);
+        // After X seconds start vote phase
+        setTimeout(io.to(socket.room).emit("startVotePhase"), 180000);
+    });
+    // i have no idea if this callback works
+    socket.on("requestWords", callback => {
+        words: wm.getRandomWords();
+    })
 });
 
 // Server debug messages
@@ -70,6 +88,25 @@ setInterval(() => {
     console.log(`${io.engine.clientsCount} clients.`);
     console.log(rooms);
 }, 10000)
+
+// Pairs clients against each other. Pass in array of sockets in a room (rooms[roomId])
+function GeneratePairs(sockets) {
+    // TODO: make sure no repeat pairs in immediate rounds? Pair based on points?
+    let remainingClients = sockets;
+    let pairings;
+    while (remainingClients.length > 0) {
+        let int1 = wm.getRandomInt(0, remainingClients.length);
+        let cl1 = remainingClients[int1];
+        remainingClients.splice(int1);
+
+        let int2 = wm.getRandomInt(0, remainingClients.length);
+        let cl2 = remainingClients[int2];
+        remainingClients.splice(int2);
+
+        pairings.cl1 = cl2;
+    }
+    return pairings;
+}
 
 // Room id generator
 function RandomId(length) {
