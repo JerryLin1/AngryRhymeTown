@@ -29,7 +29,7 @@ export default class Client extends React.Component {
 
         this.socket.on("updateRoom", (rooms) => {
             this.room = rooms[roomId];
-            document.getElementById("lobbyList").innerHTML = rooms[roomId];
+            $("#lobbyList").text(rooms[roomId])
         })
 
         this.socket.on("startGame", () => {
