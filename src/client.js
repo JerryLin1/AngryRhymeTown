@@ -31,6 +31,25 @@ export default class Client extends React.Component {
             this.room = rooms[roomId];
             document.getElementById("lobbyList").innerHTML = rooms[roomId];
         })
+
+        this.socket.on("startGame", () => {
+            // TODO: Do some animations
+        })
+        this.socket.on("startPairPhase", pairs => {
+            // TODO: Display round pairs (who is vs. who)
+        })
+        this.socket.on("startWritePhase", () => {
+            // TODO: Start a timer
+            // Theoretically, response should call after receiving callback from server
+            this.socket.emit("requestWords", (response) => {
+                // document.write(response.words)
+            });
+            // TODO: Create button that submits line and words to server, then request more words
+        })
+        // Clientside timer should end same time as they receive startVotePhase from server
+        this.socket.on("startVotePhase", () => {
+            // Start a timer
+        })
     }
 
     createRoom = () => {
@@ -45,5 +64,9 @@ export default class Client extends React.Component {
         window.location.href = id;
     }
 
+    // Set to a button only visible to host
+    startGame = () => {
+        this.socket.emit("startGame");
+    }
 
 }
