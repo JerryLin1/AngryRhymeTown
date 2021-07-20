@@ -67,9 +67,9 @@ io.on('connection', socket => {
         // After X seconds start vote phase
         setTimeout(io.to(socket.room).emit("startVotePhase"), 180000);
     });
-    // i have no idea if this works
+    // i have no idea if this callback works
     socket.on("requestWords", callback => {
-        status: wm.getRandomWords();
+        words: wm.getRandomWords();
     })
 });
 

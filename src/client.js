@@ -42,9 +42,11 @@ export default class Client extends React.Component {
             // TODO: Start a timer
             // Theoretically, response should call after receiving callback from server
             this.socket.emit("requestWords", (response) => {
-                // document.write(response.words)
+                // the words should be returned as response.words
+                // Display the words
             });
-            // TODO: Create button that submits line and words to server, then request more words
+            // TODO: Text input box and submit button
+            // Submit button emits line and words to server, then request more words
         })
         // Clientside timer should end same time as they receive startVotePhase from server
         this.socket.on("startVotePhase", () => {
@@ -64,7 +66,7 @@ export default class Client extends React.Component {
         window.location.href = id;
     }
 
-    // Set to a button only visible to host
+    // This should be an onClick button only available to the host
     startGame = () => {
         this.socket.emit("startGame");
     }
