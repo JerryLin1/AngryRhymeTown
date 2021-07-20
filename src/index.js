@@ -4,6 +4,9 @@ import "./index.css";
 import Home from "./Components/Home";
 import Lobby from "./Components/Lobby";
 import reportWebVitals from "./reportWebVitals";
+import Client from './client.js';
+
+let client = new Client();
 
 ReactDOM.render(
   director(),
@@ -12,9 +15,9 @@ ReactDOM.render(
 
 function director() {
   if (window.location.pathname + window.location.search === "/") {
-    return <Home />;
+    return <Home client = {client}/>;
   } else {
-    return <Lobby />;
+    return <Lobby client = {client} room = {client.room}/>;
   }
 }
 
