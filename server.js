@@ -24,8 +24,7 @@ io.on('connection', socket => {
         if (socket.room in rooms) {
             let index = rooms[socket.room].indexOf(socket.id);
             rooms[socket.room].splice(index, 1);
-            io.to(socket.room).emit("updateRoom", rooms);
-
+            // socket.emit("updateRooms", rooms);
         }
     });
 
