@@ -9,6 +9,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Form from "react-bootstrap/Form";
 import { Clipboard } from "react-bootstrap-icons";
+import Client from "../client.js";
 
 const roomId = (window.location.pathname + window.location.search).substring(1);
 
@@ -31,7 +32,7 @@ export default class Lobby extends React.Component {
               style={{ height: "1em", width: "10em", display: "inline" }}
               id="roomCode"
             >
-              (SOCKET ID)
+              {roomId}
             </Form.Control>
             <OverlayTrigger
               placement="right"
@@ -68,7 +69,6 @@ export default class Lobby extends React.Component {
         </Row>
 
 
-        <div id="lobbyList" />
 
         <Row>
           <Col xs="6">
@@ -76,14 +76,44 @@ export default class Lobby extends React.Component {
               <Card.Header style={{ fontSize: "2em " }}>
                 Player List
               </Card.Header>
-              <Card.Body>
-                <Card.Text>Player 1</Card.Text>
-                <Card.Text>Player 2</Card.Text>
-                <Card.Text>Player 3</Card.Text>
+              <Card.Body id="lobbyList">
               </Card.Body>
             </Card>
           </Col>
+          <Col>
+            <Card style={{ height: "24em" }}>
+              <Card.Header style={{ fontSize: "2em " }}>
+                Chat
+              </Card.Header>
+              <Card.Body id = "chat">
+                
+                <div id={`${lobby.sendbar}`}>
+                  <input
+                    placeholder="Type a message..."
+                    type="text"
+                    id={`${lobby.chatInput}`}
+                  />
+                  <Button
+                    variant="outline-dark"
+                    onClick = {() => {
+                      this.client.sendMessage($(`#${lobby.chatInput}`).val());
+                    }}
+                    id={`${lobby.chatEnter}`}
+                  >
+                    Send Message
+                  </Button>
+
+                </div>
+
+              </Card.Body>
+            </Card>
+
+
+
+          </Col>
         </Row>
+
+
       </div>
     );
   }

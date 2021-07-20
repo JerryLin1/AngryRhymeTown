@@ -1,5 +1,5 @@
 * {
-    max-width: 99vw;
+    max-width: 98vw;
 }
 
 .lobby {
@@ -25,4 +25,24 @@ textarea {
 
 #tooltip {
     margin-left: 0.25em;
+}
+
+#sendbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 50px;
+    width: 100%;
+    display: inline-flex;
+}
+
+#chatInput {
+    width: 70%;
+
+    
+}
+
+#chatEnter {
+    width: 30%;
+
 }

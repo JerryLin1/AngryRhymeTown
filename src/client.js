@@ -1,6 +1,7 @@
 import React from "react";
 import io from "socket.io-client";
 import $ from "jquery";
+import { Card } from "react-bootstrap";
 
 export default class Client extends React.Component {
 
@@ -8,6 +9,7 @@ export default class Client extends React.Component {
         super(props);
 
         this.socket = io();
+        this.name = "";
         this.room = [];
 
 
@@ -17,6 +19,7 @@ export default class Client extends React.Component {
         if (this.roomId.length > 1) {
             this.joinRoom(this.roomId);
         }
+
 
         // For debug
         this.socket.on("log", (msg) => {
@@ -30,13 +33,24 @@ export default class Client extends React.Component {
 
         // Update the player list in the client's room
         this.socket.on("updateClientList", (room) => {
-            this.room = []
-            for (let key in room) {
-                this.room.push(room[key]);
-            }
-            $("#lobbyList").text(this.room);
+            $('#lobbyList').html("");
+            this.name = room[this.socket.id];
+            this.room = Object.keys(room).map(function (key) {
+                $("#lobbyList").append("<div>" + room[key] + "</div>");
+               
+                return room[key];
+            });
         })
 
+
+        // Update the chat 
+        this.socket.on("receiveMessage", (chatInfo) => {
+            console.log(chatInfo);
+            $("#chat").append("<div> From " + chatInfo["sender"] + ": " + chatInfo["msg"] + "</div>");
+        })
+
+
+        // ANCHOR: Game state handlers
         this.socket.on("startGame", () => {
             // TODO: Do some animations
         })
@@ -60,9 +74,19 @@ export default class Client extends React.Component {
     }
 
     setNick = (name) => {
-        // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE
+        if (this.room.includes(name)) {
+            // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE
+        } else {
+            this.name = name;
+            this.socket.emit("updateNickname", name);
+        }
+    }
 
-        this.socket.emit("updateNickname", name);
+    sendMessage = (msg) => {
+        console.log(msg + " " + this.socket.name);
+        if (msg != "") {
+            this.socket.emit("sendMessage", {"msg": msg, "sender": this.name});
+        }
     }
 
     createRoom = () => {

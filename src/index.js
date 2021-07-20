@@ -10,6 +10,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 let client = new Client();
 
+
+
 ReactDOM.render(
   director(),
   document.getElementById("root")

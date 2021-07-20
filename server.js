@@ -20,7 +20,7 @@ const rooms = {};
 io.on('connection', socket => {
     console.log(`ID: ${socket.id} has joined.`);
     socket.room = undefined;
-    socket.name = "New Player " + socket.id.substring(0,3);
+    socket.name = "New Player #" + socket.id.substring(0,4).toUpperCase();
 
     socket.on('disconnect', () => {
         console.log(`ID: ${socket.id} has disconnected.`);
@@ -55,11 +55,16 @@ io.on('connection', socket => {
         }
     })
 
-    // When client updates their nickname
+    // Update's client's nickname and updates client list on client side for all clients
     socket.on("updateNickname", name => {
         socket.name = name;
         rooms[socket.room][socket.id] = socket.name;
         io.to(socket.room).emit("updateClientList", rooms[socket.room]);
+    })
+
+    // Receives and sends message to all clients in a room
+    socket.on("sendMessage", (chatInfo) => {
+        io.to(socket.room).emit("receiveMessage", {"msg": chatInfo["msg"], "sender": chatInfo["sender"]});
     })
 
     //TODO: Remove ID from rooms when empty
