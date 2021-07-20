@@ -6,6 +6,13 @@
     display: inline-block;
     height: 38px;
     transform: translateY(8%);
+    border-radius: 0.25em;
+    border: 1px solid #000;
+    transition: 0.25s;
+}
+
+#inputRoomID:hover {
+    box-shadow: 2px 3px rgb(77, 77, 77);
 }
 
 #createLobby {
