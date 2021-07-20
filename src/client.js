@@ -83,6 +83,8 @@ export default class Client extends React.Component {
     // This should be an onClick button only available to the host
     startGame = () => {
         this.socket.emit("startGame");
+        // TODO: instead of an empty emit, emit an object that contains all the game options
+        // E.g. Writing time, voting time, number of rounds, etc.
     }
 
 }
