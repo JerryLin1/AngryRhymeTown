@@ -45,7 +45,7 @@ io.on('connection', socket => {
             rooms[id].push(socket.id);
             console.log(`Current players in ${id}: ${rooms[id]}`);
             socket.room = id;
-            socket.emit("updateRoom", rooms);
+            io.to(socket.room).emit("updateRoom", rooms);
         }
         // Else redirect them back to home
         else {

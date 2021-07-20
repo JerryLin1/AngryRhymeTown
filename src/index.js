@@ -16,12 +16,12 @@ ReactDOM.render(
 );
 
 function director() {
-  tts.rap([
-    "Hey my name is Jerry Lin",
-    "Everyday I only win",
-    "Every time I get that dub",
-    "I take a bath inside my tub"
-  ])
+  // tts.rap([
+  //   "Hey my name is Jerry Lin",
+  //   "Everyday I only win",
+  //   "Every time I get that dub",
+  //   "I take a bath inside my tub"
+  // ])
   if (window.location.pathname + window.location.search === "/") {
     return <Home client = {client}/>;
   } else {
