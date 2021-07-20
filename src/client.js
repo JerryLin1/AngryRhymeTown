@@ -32,8 +32,8 @@ export default class Client extends React.Component {
         // Update the player list in the client's room
         this.socket.on("updateRoom", (rooms) => {
             this.room = rooms[roomId];
-            
-            document.getElementById("lobbyList").innerHTML = rooms[roomId];
+            $("#lobbyList").text(rooms[roomId])
+
         })
 
         // Set the player's name to their ID after their ID loads in
@@ -44,8 +44,7 @@ export default class Client extends React.Component {
         let index = this.room.indexOf(this.name);
         this.room[index] = name;
         this.name = name;
-        console.log(this.room);
-        document.getElementById("lobbyList").innerHTML = this.room;
+        $("#lobbyList").text(this.room);
     }
 
     createRoom = () => {

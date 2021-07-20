@@ -1,3 +1,28 @@
+* {
+    max-width: 99vw;
+}
+
 .lobby {
     margin: 1em 0 0 1em;
+}
+
+#cb {
+    transform: translateY(-30%);
+    font-size: 12px;
+}
+
+#cb:hover {
+    cursor: pointer;
+}
+
+textarea {
+    border: none !important;
+    resize: none !important;
+    padding: 0 !important;
+    transform: translateY(50%);
+    pointer-events: none;
+}
+
+#tooltip {
+    margin-left: 0.25em;
 }

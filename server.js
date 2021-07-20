@@ -38,7 +38,7 @@ io.on('connection', socket => {
         rooms[gid] = [];
         console.log(`Room ${gid} created.`);
     });
-    
+
     // Joins client to room
     socket.on("joinRoom", id => {
         // If room exists, join client to room
