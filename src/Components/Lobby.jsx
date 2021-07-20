@@ -51,22 +51,22 @@ export default class Lobby extends React.Component {
               />
             </OverlayTrigger>
             <input
-          placeholder="Nickname"
-          type="text"
-          id={`${lobby.inputNickname}`}
-        />
-        <Button
-          variant="outline-dark"
-          onClick={() => {
-            this.client.setNick($(`#${lobby.inputNickname}`).val());
-          }}
-          id={`${lobby.setName}`}
-        >
-          Set Nickname
-        </Button>
+              placeholder="Nickname"
+              type="text"
+              id={`${lobby.inputNickname}`}
+            />
+            <Button
+              variant="outline-dark"
+              onClick={() => {
+                this.client.setNick($(`#${lobby.inputNickname}`).val());
+              }}
+              id={`${lobby.setName}`}
+            >
+              Set Nickname
+            </Button>
           </Col>
         </Row>
-        
+
 
         <div id="lobbyList" />
 

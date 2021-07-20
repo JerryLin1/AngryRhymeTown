@@ -20,13 +20,13 @@ const rooms = {};
 io.on('connection', socket => {
     console.log(`ID: ${socket.id} has joined.`);
     socket.room = undefined;
+    socket.name = "New Player " + socket.id.substring(0,3);
 
     socket.on('disconnect', () => {
         console.log(`ID: ${socket.id} has disconnected.`);
         if (socket.room in rooms) {
-            let index = rooms[socket.room].indexOf(socket.id);
-            rooms[socket.room].splice(index, 1);
-            io.to(socket.room).emit("updateRoom", rooms);
+            delete rooms[socket.room][socket.id];
+            io.to(socket.room).emit("updateClientList", rooms[socket.room]);
         }
     });
 
@@ -35,7 +35,7 @@ io.on('connection', socket => {
         let gid = RandomId(8);
         // Redirect client to new URL
         socket.emit("redirect", gid);
-        rooms[gid] = [];
+        rooms[gid] = {};
         console.log(`Room ${gid} created.`);
     });
 
@@ -44,15 +44,22 @@ io.on('connection', socket => {
         // If room exists, join client to room
         if (id in rooms) {
             socket.join(id);
-            rooms[id].push(socket.id);
+            rooms[id][socket.id] = socket.name;
             console.log(`Current players in ${id}: ${rooms[id]}`);
             socket.room = id;
-            io.to(socket.room).emit("updateRoom", rooms);
+            io.to(socket.room).emit("updateClientList", rooms[id]);
         }
         // Else redirect them back to home
         else {
             socket.emit("redirect", "/");
         }
+    })
+
+    // When client updates their nickname
+    socket.on("updateNickname", name => {
+        socket.name = name;
+        rooms[socket.room][socket.id] = socket.name;
+        io.to(socket.room).emit("updateClientList", rooms[socket.room]);
     })
 
     //TODO: Remove ID from rooms when empty

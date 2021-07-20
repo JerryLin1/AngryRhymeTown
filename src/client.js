@@ -8,15 +8,14 @@ export default class Client extends React.Component {
         super(props);
 
         this.socket = io();
-        this.name = "";
-        this.room = {};
+        this.room = [];
 
         
         // At start, attempt to join the room ID from the URL
-        let roomId = window.location.pathname + window.location.search;
-        roomId = roomId.substring(1);
-        if (roomId.length > 1) {
-            this.joinRoom(roomId);
+        this.roomId = (window.location.pathname + window.location.search).substring(1);
+
+        if (this.roomId.length > 1) {
+            this.joinRoom(this.roomId);
         }
 
         // For debug
@@ -30,21 +29,20 @@ export default class Client extends React.Component {
         });
 
         // Update the player list in the client's room
-        this.socket.on("updateRoom", (rooms) => {
-            this.room = rooms[roomId];
-            $("#lobbyList").text(rooms[roomId])
-
+        this.socket.on("updateClientList", (room) => {
+            this.room = []
+            for (let key in room) {
+                this.room.push(room[key]);
+            }
+            $("#lobbyList").text(this.room);
         })
 
-        // Set the player's name to their ID after their ID loads in
-        this.socket.on("connect", () => {this.name = this.socket.id});
     }
 
     setNick = (name) => {
-        let index = this.room.indexOf(this.name);
-        this.room[index] = name;
-        this.name = name;
-        $("#lobbyList").text(this.room);
+        // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE
+
+        this.socket.emit("updateNickname", name);
     }
 
     createRoom = () => {
