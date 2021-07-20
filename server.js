@@ -13,19 +13,20 @@ const port = process.env.PORT || 6567;
 server.listen(port, () => {
     console.log(`Listening on port ${port}`)
 });
+
 const rooms = {};
 
 // Whenever a client connects
 io.on('connection', socket => {
     console.log(`ID: ${socket.id} has joined.`);
     socket.room = undefined;
+
     socket.on('disconnect', () => {
         console.log(`ID: ${socket.id} has disconnected.`);
         if (socket.room in rooms) {
             let index = rooms[socket.room].indexOf(socket.id);
             rooms[socket.room].splice(index, 1);
             io.to(socket.room).emit("updateRoom", rooms);
-
         }
     });
 
@@ -53,6 +54,7 @@ io.on('connection', socket => {
             socket.emit("redirect", "/");
         }
     })
+
     //TODO: Remove ID from rooms when empty
 });
 

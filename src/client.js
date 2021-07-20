@@ -8,8 +8,10 @@ export default class Client extends React.Component {
         super(props);
 
         this.socket = io();
-        this.room = [];
+        this.name = "";
+        this.room = {};
 
+        
         // At start, attempt to join the room ID from the URL
         let roomId = window.location.pathname + window.location.search;
         roomId = roomId.substring(1);
@@ -27,10 +29,23 @@ export default class Client extends React.Component {
             this.redirect(id);
         });
 
+        // Update the player list in the client's room
         this.socket.on("updateRoom", (rooms) => {
             this.room = rooms[roomId];
+            
             document.getElementById("lobbyList").innerHTML = rooms[roomId];
         })
+
+        // Set the player's name to their ID after their ID loads in
+        this.socket.on("connect", () => {this.name = this.socket.id});
+    }
+
+    setNick = (name) => {
+        let index = this.room.indexOf(this.name);
+        this.room[index] = name;
+        this.name = name;
+        console.log(this.room);
+        document.getElementById("lobbyList").innerHTML = this.room;
     }
 
     createRoom = () => {
