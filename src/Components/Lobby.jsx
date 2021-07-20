@@ -2,12 +2,13 @@ import React from "react";
 import $ from "jquery";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
+import lobby from "./Lobby.module.css";
+import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/esm/Card";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Form from "react-bootstrap/Form";
 import { Clipboard } from "react-bootstrap-icons";
-import lobby from "./Lobby.module.css";
 
 const roomId = (window.location.pathname + window.location.search).substring(1);
 
@@ -15,8 +16,9 @@ export default class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
-    this.room = props.room;
   }
+
+
 
   render() {
     return (
@@ -48,8 +50,23 @@ export default class Lobby extends React.Component {
                 }}
               />
             </OverlayTrigger>
+            <input
+          placeholder="Nickname"
+          type="text"
+          id={`${lobby.inputNickname}`}
+        />
+        <Button
+          variant="outline-dark"
+          onClick={() => {
+            this.client.setNick($(`#${lobby.inputNickname}`).val());
+          }}
+          id={`${lobby.setName}`}
+        >
+          Set Nickname
+        </Button>
           </Col>
         </Row>
+        
 
         <div id="lobbyList" />
 
