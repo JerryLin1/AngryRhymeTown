@@ -2,6 +2,6 @@
 module.exports = {
     LOBBY: 0,
     PAIRING: 1,
-    WRITIING: 2,
+    WRITING: 2,
     VOTING: 3
 }

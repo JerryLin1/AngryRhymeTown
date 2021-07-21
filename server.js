@@ -70,11 +70,9 @@ io.on('connection', socket => {
             else {
                 rooms[roomId].clients[socket.id].isHost = false;
             }
-            logRooms();
+            hf.logObj(rooms);
             socket.room = roomId;
             io.to(socket.room).emit("updateClientList", rooms[roomId]);
-
-            console.log(hf.GeneratePairs(rooms[roomId].clients))
         }
         // Else redirect them back to home
         else {
@@ -98,14 +96,22 @@ io.on('connection', socket => {
         if (rooms[socket.room].clients[socket.id].isHost === true) {
             // TODO: if (rooms[socket.room].length %% 2 === 0) Must be even number of players. unless we code bot?
             io.to(socket.room).emit("startGame");
-            // TODO: Set player scores to 0
+            // rooms[socket.room].gameState = gameState.START; ??
+            
+            // Set player scores to 0
+            for (let client of Object.values(rooms[socket.room].clients)) {
+                client.score = 0;
+            }
 
             io.to(socket.room).emit("startPairPhase", hf.GeneratePairs(rooms.clients));
+            rooms[socket.room].gameState = gameState.PAIRING;
 
             // After X seconds start writing phase
             setTimeout(io.to(socket.room).emit("startWritePhase"), 5000);
+            rooms[socket.room].gameState = gameState.WRITING;
             // After X seconds start vote phase
             setTimeout(io.to(socket.room).emit("startVotePhase"), 180000);
+            rooms[socket.room].gameState = gameState.VOTING;
         }
     });
     // i have no idea if this callback works
@@ -117,13 +123,8 @@ io.on('connection', socket => {
 // Server debug messages
 setInterval(() => {
     console.log(`${io.engine.clientsCount} clients.`);
-    logRooms();
+    hf.logObj(rooms)
 }, 10000)
-
-function logRooms() {
-    // this prints out full object instead of [Object object]
-    console.dir(rooms, { depth: null });
-}
 
 function numberOfClientsInRoom(roomId) {
     return Object.keys(rooms[roomId].clients).length;
