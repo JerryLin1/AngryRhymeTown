@@ -142,6 +142,7 @@ export default class Lobby extends React.Component {
           <Col>
             <Card style={{ height: "24em" }}>
               <Card.Header style={{ fontSize: "2em" }}>Chat</Card.Header>
+              {/* TODO: auto scroll */}
               <Card.Body id="chat" style={{ overflowY: "scroll" }}></Card.Body>
             </Card>
             <div id={`${lobby.sendbar}`}>

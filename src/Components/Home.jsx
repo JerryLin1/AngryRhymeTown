@@ -6,7 +6,7 @@ import Row from "react-bootstrap/Row";
 import home from "./Home.module.css";
 
 export default class Home extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.client = props.client;
   }
@@ -14,10 +14,6 @@ export default class Home extends React.Component {
     return (
       <div className={`${home.App}`}>
         <h1 id="title">ANGRY RHYME TOWN</h1>
-        
-        <Row>
-          <Col>PLACEHOLDER</Col>
-        </Row>
 
         <Row>
           <Col>
