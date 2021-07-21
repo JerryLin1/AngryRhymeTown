@@ -25,7 +25,18 @@ io.on('connection', socket => {
     socket.on('disconnect', () => {
         console.log(`${socket.id} has disconnected.`);
         if (socket.room in rooms) {
+            // If host disconnects, transfer host to the next client
+            let transferHost = false;
+            if (rooms[socket.room].clients[socket.id].isHost === true && numberOfClientsInRoom(socket.room) > 1) {
+                transferHost = true;
+            }
+
             delete rooms[socket.room].clients[socket.id];
+
+            if (transferHost === true) {
+                Object.values(rooms[socket.room].clients)[0].isHost = true;
+            }
+
             io.to(socket.room).emit("updateClientList", rooms[socket.room]);
         }
     });
@@ -44,10 +55,19 @@ io.on('connection', socket => {
         // If room exists, join client to room
         if (roomId in rooms) {
             socket.join(roomId);
-            if (rooms[roomId].clients === undefined) rooms[roomId].clients = {};
+            if (rooms[roomId].clients === undefined) {
+                rooms[roomId].clients = {};
+            }
             rooms[roomId].clients[socket.id] = {};
             rooms[roomId].clients[socket.id].name = socket.name;
-            CLRooms();
+
+            if (numberOfClientsInRoom(roomId) === 1) {
+                rooms[roomId].clients[socket.id].isHost = true;
+            }
+            else {
+                rooms[roomId].clients[socket.id].isHost = false;
+            }
+            logRooms();
             socket.room = roomId;
             io.to(socket.room).emit("updateClientList", rooms[roomId]);
         }
@@ -91,16 +111,15 @@ io.on('connection', socket => {
 // Server debug messages
 setInterval(() => {
     console.log(`${io.engine.clientsCount} clients.`);
-    CLRooms();
+    logRooms();
 }, 10000)
 
-// Pairs clients against each other. Pass in room clients)
-// TODO: this doesn't work. it is probably very easy to do but i cant figure it out
-// I think it may 
+// Pairs clients against each other. Pass in room.clients
 function GeneratePairs(clients) {
     // TODO: Pair based on points? Make sure pairs arent repeated?
     let remainingClients = Object.values(clients).map(client => client.name);
     let pairings = {};
+    // If odd number of players, pair someone with undefined
     if (remainingClients.length % 2 === 1) {
         remainingClients.push(undefined);
     }
@@ -116,8 +135,13 @@ function RandomId(length) {
     return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, length);
 }
 
-function CLRooms() {
+function logRooms() {
+    // this prints out full object instead of [Object object]
     console.dir(rooms, { depth: null });
+}
+
+function numberOfClientsInRoom(roomId) {
+    return Object.keys(rooms[roomId].clients).length;
 }
 
 // https://stackoverflow.com/a/12646864/8280780
