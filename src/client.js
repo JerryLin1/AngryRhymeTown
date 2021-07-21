@@ -12,15 +12,12 @@ export default class Client extends React.Component {
         this.name = "";
         this.room = [];
 
-
         // At start, attempt to join the room ID from the URL
         this.roomId = (window.location.pathname + window.location.search).substring(1);
 
         if (this.roomId.length > 1) {
             this.joinRoom(this.roomId);
         }
-
-
         // For debug
         this.socket.on("log", (msg) => {
             console.log(msg);
@@ -36,14 +33,13 @@ export default class Client extends React.Component {
             $('#lobbyList').html("");
             this.name = room.clients[this.socket.id].name;
 
-            // IMO this.room should be the actual room not a list of names in the room
             this.room = room;
 
             for (let client of Object.values(room.clients)) {
                 $("#lobbyList").append("<div>" + client.name + "</div>");
             }
 
-            // Also im like infinite% sure using map like this is bad programming practice
+            // Im like infinite% sure using map like this is bad programming practice
             // this.room = Object.keys(room).map(function (key) {
             //     $("#lobbyList").append("<div>" + room[key].name + "</div>");
                
@@ -51,13 +47,11 @@ export default class Client extends React.Component {
             // });
         })
 
-
         // Update the chat 
         this.socket.on("receiveMessage", (chatInfo) => {
             console.log(chatInfo);
             $("#chat").append("<div> From " + chatInfo["sender"] + ": " + chatInfo["msg"] + "</div>");
         })
-
 
         // ANCHOR: Game state handlers
         this.socket.on("startGame", () => {
@@ -84,7 +78,7 @@ export default class Client extends React.Component {
 
     setNick = (name) => {
         if (Object.values(this.room.clients).map(client=>client.name).includes(name)) {
-            // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE
+            // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE. Already functional but an alert would be good
         } else {
             this.name = name;
             this.socket.emit("updateNickname", name);
@@ -116,5 +110,4 @@ export default class Client extends React.Component {
         // TODO: instead of an empty emit, emit an object that contains all the game options
         // E.g. Writing time, voting time, number of rounds, etc.
     }
-
 }

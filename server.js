@@ -18,12 +18,12 @@ const rooms = {};
 
 // Whenever a client connects
 io.on('connection', socket => {
-    console.log(`ID: ${socket.id} has joined.`);
+    console.log(`${socket.id} has connected.`);
     socket.room = undefined;
-    socket.name = "New Player #" + socket.id.substring(0,4).toUpperCase();
+    socket.name = "New Player #" + socket.id.substring(0, 4).toUpperCase();
 
     socket.on('disconnect', () => {
-        console.log(`ID: ${socket.id} has disconnected.`);
+        console.log(`${socket.id} has disconnected.`);
         if (socket.room in rooms) {
             delete rooms[socket.room].clients[socket.id];
             io.to(socket.room).emit("updateClientList", rooms[socket.room]);
@@ -66,7 +66,7 @@ io.on('connection', socket => {
 
     // Receives and sends message to all clients in a room
     socket.on("sendMessage", (chatInfo) => {
-        io.to(socket.room).emit("receiveMessage", {"msg": chatInfo["msg"], "sender": chatInfo["sender"]});
+        io.to(socket.room).emit("receiveMessage", { "msg": chatInfo["msg"], "sender": chatInfo["sender"] });
     })
 
     socket.on("startGame", () => {
@@ -75,7 +75,7 @@ io.on('connection', socket => {
         io.to(socket.room).emit("startGame");
         // TODO: Set player scores to 0
 
-        io.to(socket.room).emit("roundPairs", GeneratePairs(rooms[socket.room]));
+        io.to(socket.room).emit("startPairPhase", GeneratePairs(rooms.clients));
 
         // After X seconds start writing phase
         setTimeout(io.to(socket.room).emit("startWritePhase"), 5000);
@@ -94,23 +94,21 @@ setInterval(() => {
     CLRooms();
 }, 10000)
 
-// Pairs clients against each other. Pass in array of sockets in a room (rooms[roomId])
-function GeneratePairs(sockets) {
-    // TODO: make sure no repeat pairs in immediate rounds? Pair based on points?
-    let remainingClients = sockets;
-    let pairings;
-    while (remainingClients.length > 0) {
-        let int1 = wm.getRandomInt(0, remainingClients.length);
-        let cl1 = remainingClients[int1];
-        remainingClients.splice(int1);
-
-        let int2 = wm.getRandomInt(0, remainingClients.length);
-        let cl2 = remainingClients[int2];
-        remainingClients.splice(int2);
-
-        pairings.cl1 = cl2;
+// Pairs clients against each other. Pass in room clients)
+// TODO: this doesn't work. it is probably very easy to do but i cant figure it out
+// I think it may 
+function GeneratePairs(clients) {
+    // TODO: Pair based on points? Make sure pairs arent repeated?
+    let remainingClients = Object.values(clients).map(client => client.name);
+    let pairings = {};
+    if (remainingClients.length % 2 === 1) {
+        remainingClients.push(undefined);
     }
-    return pairings;
+    shuffleArray(remainingClients);
+    for (let i = 0; i < remainingClients.length; i += 2) {
+        pairings[remainingClients[i]] = remainingClients[i + 1];
+    }
+    return pairings
 }
 
 // Room id generator
@@ -119,5 +117,13 @@ function RandomId(length) {
 }
 
 function CLRooms() {
-    console.dir(rooms, {depth: null});
+    console.dir(rooms, { depth: null });
+}
+
+// https://stackoverflow.com/a/12646864/8280780
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
 }
