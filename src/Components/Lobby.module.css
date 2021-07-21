@@ -1,3 +1,5 @@
+/******* Global settings *******/
+
 * {
     max-width: 98vw;
 }
@@ -6,8 +8,10 @@
     margin: 1em 0 0 1em;
 }
 
+/******* Row 1 *******/
+
 #cb {
-    transform: translateY(-30%);
+    transform: translateY(-10%);
     font-size: 12px;
 }
 
@@ -15,34 +19,43 @@
     cursor: pointer;
 }
 
-textarea {
-    border: none !important;
-    resize: none !important;
-    padding: 0 !important;
-    transform: translateY(50%);
-    pointer-events: none;
-}
-
 #tooltip {
     margin-left: 0.25em;
 }
 
+#roomCode {
+    display: inline-block;
+    border: none;
+    width: 5em !important;
+}
+
+/******* Row 2 *******/
+
+#row_2 {
+    margin-bottom: 0.5em;
+}
+
+#inputNickname {
+    display: inline-block;
+    width: 10em;
+}
+
+#setName {
+    width: 8em;
+}
+
+/******* Row 3 *******/
+
 #sendbar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 50px;
+    height: 3em;
     width: 100%;
     display: inline-flex;
 }
 
 #chatInput {
     width: 70%;
-
-    
 }
 
 #chatEnter {
     width: 30%;
-
 }
