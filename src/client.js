@@ -50,7 +50,7 @@ export default class Client extends React.Component {
         // Update the chat 
         this.socket.on("receiveMessage", (chatInfo) => {
             console.log(chatInfo);
-            $("#chat").append("<div> From " + chatInfo["sender"] + ": " + chatInfo["msg"] + "</div>");
+            $("#chat").append("<div>" + chatInfo["sender"] + ": " + chatInfo["msg"] + "</div>");
         })
 
         // ANCHOR: Game state handlers
