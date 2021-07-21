@@ -35,11 +35,16 @@ io.on('connection', socket => {
 
             delete rooms[socket.room].clients[socket.id];
 
-            if (transferHost === true) {
-                Object.values(rooms[socket.room].clients)[0].isHost = true;
-            }
+            if (numberOfClientsInRoom(socket.room) > 0) {
+                if (transferHost === true) {
+                    Object.values(rooms[socket.room].clients)[0].isHost = true;
+                }
 
-            io.to(socket.room).emit("updateClientList", rooms[socket.room]);
+                io.to(socket.room).emit("updateClientList", rooms[socket.room]);
+            }
+            else {
+                delete rooms[socket.room];
+            }
         }
     });
 
