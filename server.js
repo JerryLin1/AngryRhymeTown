@@ -25,7 +25,7 @@ io.on('connection', socket => {
     socket.on('disconnect', () => {
         console.log(`ID: ${socket.id} has disconnected.`);
         if (socket.room in rooms) {
-            delete rooms[socket.room][socket.id];
+            delete rooms[socket.room].clients[socket.id];
             io.to(socket.room).emit("updateClientList", rooms[socket.room]);
         }
     });
@@ -44,8 +44,9 @@ io.on('connection', socket => {
         // If room exists, join client to room
         if (roomId in rooms) {
             socket.join(roomId);
-            rooms[roomId][socket.id] = {};
-            rooms[roomId][socket.id].name = socket.name;
+            if (rooms[roomId].clients === undefined) rooms[roomId].clients = {};
+            rooms[roomId].clients[socket.id] = {};
+            rooms[roomId].clients[socket.id].name = socket.name;
             CLRooms();
             socket.room = roomId;
             io.to(socket.room).emit("updateClientList", rooms[roomId]);
@@ -59,7 +60,7 @@ io.on('connection', socket => {
     // Update's client's nickname and updates client list on client side for all clients
     socket.on("updateNickname", name => {
         socket.name = name;
-        rooms[socket.room][socket.id].name = socket.name;
+        rooms[socket.room].clients[socket.id].name = socket.name;
         io.to(socket.room).emit("updateClientList", rooms[socket.room]);
     })
 

@@ -34,12 +34,21 @@ export default class Client extends React.Component {
         // Update the player list in the client's room
         this.socket.on("updateClientList", (room) => {
             $('#lobbyList').html("");
-            this.name = room[this.socket.id].name;
-            this.room = Object.keys(room).map(function (key) {
-                $("#lobbyList").append("<div>" + room[key].name + "</div>");
+            this.name = room.clients[this.socket.id].name;
+
+            // IMO this.room should be the actual room not a list of names in the room
+            this.room = room;
+
+            for (let client of Object.values(room.clients)) {
+                $("#lobbyList").append("<div>" + client.name + "</div>");
+            }
+
+            // Also im like infinite% sure using map like this is bad programming practice
+            // this.room = Object.keys(room).map(function (key) {
+            //     $("#lobbyList").append("<div>" + room[key].name + "</div>");
                
-                return room[key].name;
-            });
+            //     return room[key].name;
+            // });
         })
 
 
@@ -74,7 +83,7 @@ export default class Client extends React.Component {
     }
 
     setNick = (name) => {
-        if (this.room.includes(name)) {
+        if (Object.values(this.room.clients).map(client=>client.name).includes(name)) {
             // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE
         } else {
             this.name = name;
@@ -83,7 +92,7 @@ export default class Client extends React.Component {
     }
 
     sendMessage = (msg) => {
-        console.log(msg + " " + this.socket.name);
+        console.log(msg + " " + this.name);
         if (msg != "") {
             this.socket.emit("sendMessage", {"msg": msg, "sender": this.name});
         }
