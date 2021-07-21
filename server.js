@@ -7,7 +7,9 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 // ======================================
 
-const wm = require("./server/wm.js");
+const wordFunctions = require("./server/wordFunctions.js");
+const gameState = require("./server/gameState.js");
+const hf = require("./server/helperFunctions.js");
 
 const port = process.env.PORT || 6567;
 server.listen(port, () => {
@@ -43,10 +45,11 @@ io.on('connection', socket => {
 
     // When client creates lobby
     socket.on("createRoom", () => {
-        let roomId = RandomId(8);
+        let roomId = hf.RandomId(8);
         // Redirect client to new URL
         socket.emit("redirect", roomId);
         rooms[roomId] = {};
+        rooms[roomId].gameState = gameState.LOBBY;
         console.log(`Room ${roomId} created.`);
     });
 
@@ -70,6 +73,8 @@ io.on('connection', socket => {
             logRooms();
             socket.room = roomId;
             io.to(socket.room).emit("updateClientList", rooms[roomId]);
+
+            console.log(hf.GeneratePairs(rooms[roomId].clients))
         }
         // Else redirect them back to home
         else {
@@ -90,21 +95,22 @@ io.on('connection', socket => {
     })
 
     socket.on("startGame", () => {
-        // TODO: if (socket.host === true)
-        // TODO: if (rooms[socket.room].length %% 2 === 0) Must be even number of players. unless we code bot?
-        io.to(socket.room).emit("startGame");
-        // TODO: Set player scores to 0
+        if (rooms[socket.room].clients[socket.id].isHost === true) {
+            // TODO: if (rooms[socket.room].length %% 2 === 0) Must be even number of players. unless we code bot?
+            io.to(socket.room).emit("startGame");
+            // TODO: Set player scores to 0
 
-        io.to(socket.room).emit("startPairPhase", GeneratePairs(rooms.clients));
+            io.to(socket.room).emit("startPairPhase", hf.GeneratePairs(rooms.clients));
 
-        // After X seconds start writing phase
-        setTimeout(io.to(socket.room).emit("startWritePhase"), 5000);
-        // After X seconds start vote phase
-        setTimeout(io.to(socket.room).emit("startVotePhase"), 180000);
+            // After X seconds start writing phase
+            setTimeout(io.to(socket.room).emit("startWritePhase"), 5000);
+            // After X seconds start vote phase
+            setTimeout(io.to(socket.room).emit("startVotePhase"), 180000);
+        }
     });
     // i have no idea if this callback works
     socket.on("requestWords", callback => {
-        words: wm.getRandomWords();
+        words: wordFunctions.getRandomWords();
     })
 });
 
@@ -114,27 +120,6 @@ setInterval(() => {
     logRooms();
 }, 10000)
 
-// Pairs clients against each other. Pass in room.clients
-function GeneratePairs(clients) {
-    // TODO: Pair based on points? Make sure pairs arent repeated?
-    let remainingClients = Object.values(clients).map(client => client.name);
-    let pairings = {};
-    // If odd number of players, pair someone with undefined
-    if (remainingClients.length % 2 === 1) {
-        remainingClients.push(undefined);
-    }
-    shuffleArray(remainingClients);
-    for (let i = 0; i < remainingClients.length; i += 2) {
-        pairings[remainingClients[i]] = remainingClients[i + 1];
-    }
-    return pairings
-}
-
-// Room id generator
-function RandomId(length) {
-    return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, length);
-}
-
 function logRooms() {
     // this prints out full object instead of [Object object]
     console.dir(rooms, { depth: null });
@@ -142,12 +127,4 @@ function logRooms() {
 
 function numberOfClientsInRoom(roomId) {
     return Object.keys(rooms[roomId].clients).length;
-}
-
-// https://stackoverflow.com/a/12646864/8280780
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
 }

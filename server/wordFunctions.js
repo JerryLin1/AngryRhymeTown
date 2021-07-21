@@ -8,6 +8,7 @@
 // e.g. End with this word, use these words in order, use both of these words
 // Additionally, you could get bonuses/powerups other than points
 // e.g. Extra time next round, reroll words once
+const hf = require("./helperFunctions.js");
 module.exports = {
     WORD_LIST: require("../data/words/nouns.json"),
     calculatePoints(sentence, words) {
@@ -44,15 +45,6 @@ module.exports = {
     },
     getRandomWord() {
         // TODO: Specify in parameter which pool of words to pick from?
-        return this.WORD_LIST[this.getRandomInt(0, Object.keys(this.WORD_LIST).length)]
-    },
-
-    // Helper function
-    // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-    getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min) + min);
-        //The maximum is exclusive and the minimum is inclusive
+        return this.WORD_LIST[hf.getRandomInt(0, Object.keys(this.WORD_LIST).length)];
     }
 }
