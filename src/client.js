@@ -34,11 +34,11 @@ export default class Client extends React.Component {
         // Update the player list in the client's room
         this.socket.on("updateClientList", (room) => {
             $('#lobbyList').html("");
-            this.name = room[this.socket.id];
+            this.name = room[this.socket.id].name;
             this.room = Object.keys(room).map(function (key) {
-                $("#lobbyList").append("<div>" + room[key] + "</div>");
+                $("#lobbyList").append("<div>" + room[key].name + "</div>");
                
-                return room[key];
+                return room[key].name;
             });
         })
 
