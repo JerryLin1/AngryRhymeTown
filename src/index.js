@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import Home from "./Components/Home";
 import Lobby from "./Components/Lobby";
+import Game from "./Components/Game"
 import reportWebVitals from "./reportWebVitals";
 import Client from './client.js';
 import tts from "./tts";

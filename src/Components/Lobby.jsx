@@ -68,6 +68,7 @@ export default class Lobby extends React.Component {
         {/* Second row that displays the nickname changer */}
         <Row id={`${lobby.row_2}`}>
           <Col xs="auto">
+            {/* TODO: change to empty name */}
             <Form.Control
               placeholder="Nickname"
               id={`${lobby.inputNickname}`}
