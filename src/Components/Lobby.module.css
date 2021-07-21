@@ -26,7 +26,7 @@
 #roomCode {
     display: inline-block;
     border: none;
-    width: 5em !important;
+    width: 15em !important;
 }
 
 /******* Row 2 *******/
@@ -42,6 +42,11 @@
 
 #setName {
     width: 8em;
+}
+
+#nameWarning {
+    display: inline-block;
+    color: red;
 }
 
 /******* Row 3 *******/
