@@ -8,9 +8,6 @@ class PairingPhase extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-    this.props.startPhase(this.props.nextPhase, 5);
-  }
 
   render() {
     return (
@@ -42,10 +39,6 @@ class WritingPhase extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-    this.props.startPhase(this.props.nextPhase, 5);
-  }
-
   render() {
     return (
       <div>
@@ -62,15 +55,11 @@ class WritingPhase extends React.Component {
      super(props);
    }
 
-   componentDidMount() {
-     this.props.startPhase(this.props.nextPhase, 5);
-
-   }
-
    render() {
      return (
        <div>
-         <div></div>
+         <div>voting phase</div>
+        <Countdown time={5} />
 
        </div>
      )
@@ -93,15 +82,12 @@ export default class Game extends React.Component {
 
   setPhase = () => {
     if (this.state.phase === "Pairing") {
-      return <PairingPhase
-        startPhase={this.client.startPhase}
-        nextPhase="Writing" />
+      return <PairingPhase/>
     } else if (this.state.phase === "Writing") {
-      return <WritingPhase
-        startPhase={this.client.startPhase}
-        nextPhase="Pairing" />
+      return <WritingPhase/>
+    } else if (this.state.phase == "Voting") {
+      return <VotingPhase />
     }
-    /// add more phases
   }
 
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////

@@ -108,24 +108,21 @@ io.on('connection', socket => {
                 client.score = 0;
             }
 
-            io.to(socket.room).emit("startPairPhase", hf.GeneratePairs(rooms[socket.room].clients));
-            rooms[socket.room].gameState = gameState.PAIRING;
-
-            // After X seconds start writing phase
-            setTimeout(() => { io.to(socket.room).emit("startWritePhase") }, 5000);
-            rooms[socket.room].gameState = gameState.WRITING;
-            // After X seconds start vote phase
-            // setTimeout(()=>{io.to(socket.room).emit("startVotePhase")}, 180000);
-            // rooms[socket.room].gameState = gameState.VOTING;
+            io.to(socket.room).emit("setUpGame", hf.GeneratePairs(rooms[socket.room].clients));
+            rooms[socket.room].gameState = gameState.PAIRING;            
         }
     });
 
-    // Starts serverside countdown to next phase
-    socket.on("startCountdown", (nextPhase, time) => {
-        if (rooms[socket.room].clients[socket.id].isHost === true) {
-            setTimeout(() => { io.to(socket.room).emit("switchPhase", nextPhase) }, parseInt(time) * 1000);
-        }
+    socket.on("startWritePhase", () => {
+        io.to(socket.room).emit("startWritePhase");
+        rooms[socket.room].gameState = gameState.WRITING;
     })
+
+    socket.on("startVotePhase", () => {
+        io.to(socket.room).emit("startVotePhase");
+        rooms[socket.room].gameState = gameState.VOTING;
+    })
+
 
     // Callback is the response: it returns the generated words to the client
     socket.on("requestWords", (callback) => {

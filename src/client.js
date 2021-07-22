@@ -67,17 +67,16 @@ export default class Client extends React.Component {
             this.props.switchState(true);
             // TODO: Do some animations
         })
-        this.socket.on("switchPhase", (nextPhase) => {
-            this.switchPhase(nextPhase);
-            // TODO: Do some animations
-        })
-        this.socket.on("startPairPhase", pairs => {
-
-            // TODO: Display round pairs (who is vs. who)
+        this.socket.on("setUpGame", pairs => {
+            this.switchPhase("Pairing");
+            setTimeout(() => { this.socket.emit("startWritePhase") }, 5000);
         })
         this.socket.on("startWritePhase", () => {
             // TODO: Start a timer
             // Response is called when the server responds
+            this.switchPhase("Writing");
+            setTimeout(() => { this.socket.emit("startVotePhase") }, 5000);
+
             this.socket.emit("requestWords", (response) => {
                 // the words should be returned as response.words
                 // Display the words
@@ -88,6 +87,7 @@ export default class Client extends React.Component {
         })
         // Clientside timer should end about the same time as they receive startVotePhase from server
         this.socket.on("startVotePhase", () => {
+            this.switchPhase("Voting");
             // Start a timer
         })
     }
@@ -127,7 +127,4 @@ export default class Client extends React.Component {
         // E.g. Writing time, voting time, number of rounds, etc.
     }
 
-    startPhase = (nextPhase, time) => {
-        this.socket.emit("startCountdown", nextPhase, time);
-    }
 }
