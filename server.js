@@ -102,26 +102,28 @@ io.on('connection', socket => {
             // TODO: if (rooms[socket.room].length %% 2 === 0) Must be even number of players. unless we code bot?
             io.to(socket.room).emit("startGame");
             // rooms[socket.room].gameState = gameState.START; ??
-            
+
             // Set player scores to 0
             for (let client of Object.values(rooms[socket.room].clients)) {
                 client.score = 0;
             }
 
-            io.to(socket.room).emit("startPairPhase", hf.GeneratePairs(rooms.clients));
+            io.to(socket.room).emit("startPairPhase", hf.GeneratePairs(rooms[socket.room].clients));
             rooms[socket.room].gameState = gameState.PAIRING;
 
             // After X seconds start writing phase
-            setTimeout(io.to(socket.room).emit("startWritePhase"), 5000);
+            setTimeout(() => { io.to(socket.room).emit("startWritePhase") }, 5000);
             rooms[socket.room].gameState = gameState.WRITING;
             // After X seconds start vote phase
-            setTimeout(io.to(socket.room).emit("startVotePhase"), 180000);
-            rooms[socket.room].gameState = gameState.VOTING;
+            // setTimeout(()=>{io.to(socket.room).emit("startVotePhase")}, 180000);
+            // rooms[socket.room].gameState = gameState.VOTING;
         }
     });
     // i have no idea if this callback works
-    socket.on("requestWords", callback => {
-        words: wordFunctions.getRandomWords();
+    socket.on("requestWords", (callback) => {
+        callback({
+            words: wordFunctions.getRandomWords()
+        })
     })
 });
 

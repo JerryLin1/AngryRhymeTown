@@ -76,6 +76,7 @@ export default class Client extends React.Component {
             this.socket.emit("requestWords", (response) => {
                 // the words should be returned as response.words
                 // Display the words
+                console.log(response.words)
             });
             // TODO: Text input box and submit button
             // Submit button emits line and words to server, then request more words
