@@ -55,7 +55,27 @@ class WritingPhase extends React.Component {
       </div>
     );
   }
-}
+ }
+
+ class VotingPhase extends React.Component {
+   constructor(props) {
+     super(props);
+   }
+
+   componentDidMount() {
+     this.props.startPhase(this.props.nextPhase, 5);
+
+   }
+
+   render() {
+     return (
+       <div>
+         <div></div>
+
+       </div>
+     )
+   }
+ }
 
 
 export default class Game extends React.Component {

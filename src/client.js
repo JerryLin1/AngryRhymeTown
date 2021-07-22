@@ -69,8 +69,10 @@ export default class Client extends React.Component {
         })
         this.socket.on("switchPhase", (nextPhase) => {
             this.switchPhase(nextPhase);
+            // TODO: Do some animations
         })
         this.socket.on("startPairPhase", pairs => {
+
             // TODO: Display round pairs (who is vs. who)
         })
         this.socket.on("startWritePhase", () => {
