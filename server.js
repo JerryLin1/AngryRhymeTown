@@ -54,6 +54,8 @@ io.on('connection', socket => {
         // Redirect client to new URL
         socket.emit("redirect", roomId);
         rooms[roomId] = {};
+        rooms[roomId].clients = {};
+        rooms[roomId].chatHistory = [];
         rooms[roomId].gameState = gameState.LOBBY;
         console.log(`Room ${roomId} created.`);
     });
@@ -63,9 +65,6 @@ io.on('connection', socket => {
         // If room exists, join client to room
         if (roomId in rooms) {
             socket.join(roomId);
-            if (rooms[roomId].clients === undefined) {
-                rooms[roomId].clients = {};
-            }
             rooms[roomId].clients[socket.id] = {};
             rooms[roomId].clients[socket.id].name = socket.name;
 
@@ -94,7 +93,9 @@ io.on('connection', socket => {
 
     // Receives and sends message to all clients in a room
     socket.on("sendMessage", (chatInfo) => {
-        io.to(socket.room).emit("receiveMessage", { "msg": chatInfo["msg"], "sender": chatInfo["sender"] });
+        let chatMsg = { "msg": chatInfo["msg"], "sender": chatInfo["sender"] };
+        rooms[socket.room].chatHistory.push(chatMsg);
+        io.to(socket.room).emit("receiveMessage", chatMsg);
     })
 
     socket.on("startGame", () => {
