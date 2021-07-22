@@ -101,16 +101,13 @@ export default class Game extends React.Component {
 
   setPhase = () => {
     if (this.state.phase === "Pairing") {
-      return (
-        <PairingPhase startPhase={this.client.startPhase} nextPhase="Writing" />
-      );
+      return <PairingPhase/>
     } else if (this.state.phase === "Writing") {
-      return (
-        <WritingPhase startPhase={this.client.startPhase} nextPhase="Pairing" />
-      );
+      return <WritingPhase/>
+    } else if (this.state.phase == "Voting") {
+      return <VotingPhase />
     }
-    /// add more phases
-  };
+  }
 
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////
   render() {

@@ -108,37 +108,21 @@ io.on('connection', socket => {
                 client.score = 0;
             }
 
-            io.to(socket.room).emit("startPairPhase", hf.GeneratePairs(rooms[socket.room].clients));
-            rooms[socket.room].gameState = gameState.PAIRING;
-
-            // After X seconds start writing phase
-            setTimeout(() => { io.to(socket.room).emit("startWritePhase") }, 5000);
-            rooms[socket.room].gameState = gameState.WRITING;
-            // After X seconds start vote phase
-            // setTimeout(()=>{io.to(socket.room).emit("startVotePhase")}, 180000);
-            // rooms[socket.room].gameState = gameState.VOTING;
+            io.to(socket.room).emit("setUpGame", hf.GeneratePairs(rooms[socket.room].clients));
+            rooms[socket.room].gameState = gameState.PAIRING;            
         }
     });
 
-    // Starts serverside countdown to next phase
-    socket.on("startCountdown", (nextPhase, time) => {
-        console.log("called by" + socket.name);
-        if (rooms[socket.room].clients[socket.id].isHost === true) {
-            console.log("really activated by" + socket.name);
-            let startingTime = Date.now();
-            let secondsLeft = parseInt(time);
-            let interval = setInterval(() => {
-                // deltaTime is in milliseconds
-                let deltaTime = Date.now() - startingTime;
-                secondsLeft = Math.round(time - deltaTime / 1000);
-                if (secondsLeft <= 0) {
-                    clearInterval(interval);
-                    io.to(socket.room).emit("switchPhase", nextPhase);
-                    secondsLeft = 0;
-                }
-            }, 60 / 1000);
-        }
+    socket.on("startWritePhase", () => {
+        io.to(socket.room).emit("startWritePhase");
+        rooms[socket.room].gameState = gameState.WRITING;
     })
+
+    socket.on("startVotePhase", () => {
+        io.to(socket.room).emit("startVotePhase");
+        rooms[socket.room].gameState = gameState.VOTING;
+    })
+
 
     // Callback is the response: it returns the generated words to the client
     socket.on("requestWords", (callback) => {
