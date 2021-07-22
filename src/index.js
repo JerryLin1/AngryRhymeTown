@@ -9,28 +9,44 @@ import Client from './client.js';
 import tts from "./tts";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-let client = new Client();
 
+class Director extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { inGame: false };
+    this.switchState = this.switchState.bind(this);
+    this.client = new Client({switchState: this.switchState});
+  }
 
+  switchState = (inGame) => {
+    this.setState({ inGame: inGame });
+  }
 
-ReactDOM.render(
-  director(),
-  document.getElementById("root")
-);
+  displayState = () => {
+    if (window.location.pathname + window.location.search === "/") {
+      return <Home client = {this.client}/>;
+    } else {
+      if (this.state.inGame) {
+        return <Game client = {this.client}/>;
+      } else {
+        return <Lobby client = {this.client} switchState = {this.switchState}/>;
+      }
+    }
+  }
 
-function director() {
-  // tts.rap([
-  //   "Hey my name is Jerry Lin",
-  //   "Everyday I only win",
-  //   "Every time I get that dub",
-  //   "I take a bath inside my tub"
-  // ])
-  if (window.location.pathname + window.location.search === "/") {
-    return <Game client = {client}/>;
-  } else {
-    return <Lobby client = {client}/>;
+  render() {
+    return (
+      <div>
+        {this.displayState()}
+      </div>
+    );
   }
 }
+
+ReactDOM.render(
+  <Director/>,
+  document.getElementById("root")
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

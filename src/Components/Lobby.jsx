@@ -63,6 +63,15 @@ export default class Lobby extends React.Component {
               </OverlayTrigger>
             </Form.Group>
           </Col>
+          <Col>
+            <Button
+              variant="outline-dark"
+              onClick={() => {this.client.startGame()}}
+              id={`${lobby.startGame}`}
+            >
+              Start Game
+            </Button>
+          </Col>
         </Row>
 
         {/* Second row that displays the nickname changer */}
