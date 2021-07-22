@@ -7,7 +7,7 @@ export default class Game extends React.Component {
   constructor(props) {
     super(props);
   }
-
+  ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////
   render() {
     return (
       <div className="game">

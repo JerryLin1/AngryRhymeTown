@@ -26,7 +26,7 @@ function director() {
   //   "I take a bath inside my tub"
   // ])
   if (window.location.pathname + window.location.search === "/") {
-    return <Home client = {client}/>;
+    return <Game client = {client}/>;
   } else {
     return <Lobby client = {client}/>;
   }
