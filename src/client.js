@@ -38,13 +38,6 @@ export default class Client extends React.Component {
             for (let client of Object.values(room.clients)) {
                 $("#lobbyList").append("<div>" + client.name + "</div>");
             }
-
-            // Im like infinite% sure using map like this is bad programming practice
-            // this.room = Object.keys(room).map(function (key) {
-            //     $("#lobbyList").append("<div>" + room[key].name + "</div>");
-
-            //     return room[key].name;
-            // });
         })
 
         // ANCHOR: Game state handlers
@@ -61,9 +54,8 @@ export default class Client extends React.Component {
             this.switchPhase("Writing");
 
             this.socket.emit("requestWords", (response) => {
-                // the words should be returned as response.words
-                // Display the words
-                console.log("You got: " + response.words)
+
+                this.socket.emit("receiveWords", response.words);
             });
             // TODO: Text input box and submit button
             // Submit button emits line and words to server, then request more words
