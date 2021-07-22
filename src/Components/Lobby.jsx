@@ -35,47 +35,6 @@ export default class Lobby extends React.Component {
       <div className={`${lobby.lobby}`}>
         {/* First row that displays the room code */}
         <Row>
-          <Col>
-            <Form.Group>
-              <Form.Label column>Room Link: &ensp;</Form.Label>
-              <Form.Control
-                id={`${lobby.roomCode}`}
-                value={window.location.href}
-                readOnly
-                plaintext
-              />
-              <OverlayTrigger
-                placement="right"
-                overlay={(props) => (
-                  <Tooltip id={`${lobby.tooltip}`} {...props}>
-                    Copy Code
-                  </Tooltip>
-                )}
-              >
-                <Clipboard
-                  id={`${lobby.cb}`}
-                  onMouseDown={() => {
-                    $(`#${lobby.roomCode}`).select();
-                    document.execCommand("copy");
-                    $(".tooltip-inner").text("Copied!");
-                  }}
-                />
-              </OverlayTrigger>
-            </Form.Group>
-          </Col>
-          <Col>
-            <Button
-              variant="outline-dark"
-              onClick={() => {this.client.startGame()}}
-              id={`${lobby.startGame}`}
-            >
-              Start Game
-            </Button>
-          </Col>
-        </Row>
-
-        {/* Second row that displays the nickname changer */}
-        <Row id={`${lobby.row_2}`}>
           <Col xs="auto">
             {/* TODO: change to empty name */}
             <Form.Control
@@ -134,6 +93,46 @@ export default class Lobby extends React.Component {
               Set Nickname
             </Button>
           </Col>
+          <Col>
+            <Button
+              variant="success"
+              onClick={() => {
+                this.client.startGame();
+              }}
+              id={`${lobby.startGame}`}
+              size="lg"
+            >
+              Start Game
+            </Button>
+          </Col>
+          <Col>
+            <Form.Group id={`${lobby.copyCode}`}>
+              <Form.Label column>Room Link: &ensp;</Form.Label>
+              <Form.Control
+                id={`${lobby.roomCode}`}
+                value={window.location.href}
+                readOnly
+                plaintext
+              />
+              <OverlayTrigger
+                placement="right"
+                overlay={(props) => (
+                  <Tooltip id={`${lobby.tooltip}`} {...props}>
+                    Copy Code
+                  </Tooltip>
+                )}
+              >
+                <Clipboard
+                  id={`${lobby.cb}`}
+                  onMouseDown={() => {
+                    $(`#${lobby.roomCode}`).select();
+                    document.execCommand("copy");
+                    $(".tooltip-inner").text("Copied!");
+                  }}
+                />
+              </OverlayTrigger>
+            </Form.Group>
+          </Col>
         </Row>
 
         {/* Third row that displays the players on the left and the room chat on the right */}
@@ -152,7 +151,6 @@ export default class Lobby extends React.Component {
           <Col>
             <Card style={{ height: "24em" }}>
               <Card.Header style={{ fontSize: "2em" }}>Chat</Card.Header>
-              {/* TODO: auto scroll */}
               <Card.Body id="chat" style={{ overflowY: "scroll" }}></Card.Body>
             </Card>
             <div id={`${lobby.sendbar}`}>
@@ -166,6 +164,8 @@ export default class Lobby extends React.Component {
                 onClick={() => {
                   this.client.sendMessage($(`#${lobby.chatInput}`).val());
                   $(`#${lobby.chatInput}`).val("");
+                  document.getElementById("chat").scrollHeight =
+                    $("#chat").attr("height");
                 }}
                 id={`${lobby.chatEnter}`}
               >

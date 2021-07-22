@@ -10,6 +10,35 @@
 
 /******* Row 1 *******/
 
+.lobby > div:first-child {
+    margin-bottom: 1em;
+}
+
+#inputNickname {
+    display: inline-block;
+    width: 10em;
+}
+
+#setName {
+    display: inline-block;
+    width: 8em;
+}
+
+#nameWarning {
+    display: inline-block;
+    color: red;
+}
+
+#startGame {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -25%)
+}
+
+#copyCode {
+    text-align-last: right;
+}
+
 #cb {
     transform: translateY(-10%);
     font-size: 12px;
@@ -26,30 +55,12 @@
 #roomCode {
     display: inline-block;
     border: none;
+    text-align-last: left;
+    margin-right: 0.5em;
     width: 15em !important;
 }
 
 /******* Row 2 *******/
-
-#row_2 {
-    margin-bottom: 0.5em;
-}
-
-#inputNickname {
-    display: inline-block;
-    width: 10em;
-}
-
-#setName {
-    width: 8em;
-}
-
-#nameWarning {
-    display: inline-block;
-    color: red;
-}
-
-/******* Row 3 *******/
 
 #sendbar {
     height: 3em;
