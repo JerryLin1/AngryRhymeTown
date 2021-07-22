@@ -21,7 +21,7 @@ class PairingPhase extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col>{this.props.words}</Col>
+              <Col>Words come here I think</Col>
             </Row>
           </Col>
 
