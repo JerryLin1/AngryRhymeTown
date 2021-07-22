@@ -1,4 +1,5 @@
 import React from "react";
+import $ from "jquery"
 import Countdown from "./Countdown.jsx";
 import { Card, Col, Row } from "react-bootstrap";
 import game from "./Game.module.css";
@@ -9,7 +10,8 @@ class PairingPhase extends React.Component {
   }
 
   componentDidMount() {
-    this.props.startPhase(this.props.nextPhase, 5);
+    /* disabled for testing */
+    // this.props.startPhase(this.props.nextPhase, 5);
   }
 
   render() {
@@ -17,21 +19,30 @@ class PairingPhase extends React.Component {
       <div>
         <Row>
           {/* Main Game */}
-          <Col>
-            <h1>GAME :D</h1>
-            <Countdown time={5} />
-
+          <Col id={`${game.mainGame}`}>
+            <Row>
+              <Col id={`${game.countdown}`}>
+                <Countdown time={5} />
+              </Col>
+            </Row>
+            <Row>
+              <Col>**PROMPTS**</Col>
+            </Row>
           </Col>
 
           {/* Matchup List */}
-          <Col xs="2">
-            <Card variant="dark">
-              <Card.Title>GET READY</Card.Title>
-              <Card.Body>I dont know how to do this</Card.Body>
+          <Col xs="3">
+            <Card
+              id={`${game.matchups}`}
+              variant="dark"
+              style={{ textAlign: "center" }}
+            >
+              <Card.Title>
+                <strong>GET READY FOR YOUR MATCHUP</strong>
+              </Card.Title>
             </Card>
           </Col>
         </Row>
-
       </div>
     );
   }
@@ -43,40 +54,37 @@ class WritingPhase extends React.Component {
   }
 
   componentDidMount() {
+    /* disabled for testing */
+    // this.props.startPhase(this.props.nextPhase, 5);
+  }
+
+  render() {
+    return (
+      <div>
+        <div>Writing Phase</div>
+        <Countdown time={5} />
+      </div>
+    );
+  }
+}
+
+class VotingPhase extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
     this.props.startPhase(this.props.nextPhase, 5);
   }
 
   render() {
     return (
       <div>
-        <div>writing phase</div>
-        <Countdown time={5} />
-
+        <div></div>
       </div>
     );
   }
- }
-
- class VotingPhase extends React.Component {
-   constructor(props) {
-     super(props);
-   }
-
-   componentDidMount() {
-     this.props.startPhase(this.props.nextPhase, 5);
-
-   }
-
-   render() {
-     return (
-       <div>
-         <div></div>
-
-       </div>
-     )
-   }
- }
-
+}
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -89,27 +97,23 @@ export default class Game extends React.Component {
 
   switchPhase = (newPhase) => {
     this.setState({ phase: newPhase });
-  }
+  };
 
   setPhase = () => {
     if (this.state.phase === "Pairing") {
-      return <PairingPhase
-        startPhase={this.client.startPhase}
-        nextPhase="Writing" />
+      return (
+        <PairingPhase startPhase={this.client.startPhase} nextPhase="Writing" />
+      );
     } else if (this.state.phase === "Writing") {
-      return <WritingPhase
-        startPhase={this.client.startPhase}
-        nextPhase="Pairing" />
+      return (
+        <WritingPhase startPhase={this.client.startPhase} nextPhase="Pairing" />
+      );
     }
     /// add more phases
-  }
+  };
 
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////
   render() {
-    return (
-      <div className="game">
-        {this.setPhase()}
-      </div>
-    );
+    return <div className="game">{this.setPhase()}</div>;
   }
 }

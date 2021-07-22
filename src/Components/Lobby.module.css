@@ -8,10 +8,14 @@
     margin: 1em 0 0 1em;
 }
 
+input {
+    border-radius: 0.25em;
+    border: 1px solid #ccc;
+}
 /******* Row 1 *******/
 
 .lobby > div:first-child {
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
 }
 
 #inputNickname {
@@ -46,10 +50,6 @@
 
 #cb:hover {
     cursor: pointer;
-}
-
-#tooltip {
-    margin-left: 0.25em;
 }
 
 #roomCode {

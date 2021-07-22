@@ -15,7 +15,7 @@ class Director extends React.Component {
     super(props);
     this.state = { inGame: false };
     this.switchState = this.switchState.bind(this);
-    this.client = new Client({switchState: this.switchState});
+    this.client = new Client({ switchState: this.switchState });
   }
 
   switchState = (inGame) => {
@@ -24,12 +24,12 @@ class Director extends React.Component {
 
   displayState = () => {
     if (window.location.pathname + window.location.search === "/") {
-      return <Home client = {this.client}/>;
+      return <Home client={this.client} />;
     } else {
       if (this.state.inGame) {
-        return <Game client = {this.client}/>;
+        return <Game client={this.client} />;
       } else {
-        return <Lobby client = {this.client} switchState = {this.switchState}/>;
+        return <Lobby client={this.client} switchState={this.switchState} />;
       }
     }
   }
@@ -44,7 +44,7 @@ class Director extends React.Component {
 }
 
 ReactDOM.render(
-  <Director/>,
+  <Director />,
   document.getElementById("root")
 );
 

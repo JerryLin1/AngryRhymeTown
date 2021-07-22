@@ -20,16 +20,6 @@ export default class Lobby extends React.Component {
     this.client = props.client;
   }
 
-  // add handler to the chat input field when the page loads
-  componentDidMount() {
-    $(`#${lobby.chatInput}`).on("keydown", (e) => {
-      if (e.code === "Enter") {
-        this.client.sendMessage($(`#${lobby.chatInput}`).val());
-        $(`#${lobby.chatInput}`).val("");
-      }
-    });
-  }
-
   render() {
     return (
       <div className={`${lobby.lobby}`}>
@@ -45,24 +35,24 @@ export default class Lobby extends React.Component {
                 // if statements to check if name is empty or too long
                 if (
                   (input.val().length === 13 || input.val().trim() === "") &&
-                  document.getElementById(`${lobby.nameWarning}`) === null
+                  $(`#${lobby.nameWarning}`).css("display") === "none"
                 ) {
-                  if (input.val().trim().length === 0) {
-                    $(`#${lobby.row_2}`).append(
-                      `<div id=${lobby.nameWarning}>Nickname cannot be empty</div>`
-                    );
+                  if (input.val().trim() === "") {
+                    $(`#${lobby.nameWarning}`).text("Nickname cannot be empty");
+                    $(`#${lobby.nameWarning}`).show();
                   } else {
-                    $(`#${lobby.row_2}`).append(
-                      `<div id=${lobby.nameWarning}>Nickname is too long. Must be no more than 12 characters</div>`
+                    $(`#${lobby.nameWarning}`).text(
+                      "Nickname is too long. It must be no more than 12 characters"
                     );
+                    $(`#${lobby.nameWarning}`).show();
                   }
-                } else if (
-                  input.val().length > 12 ||
-                  input.val().trim() === ""
-                ) {
+                } else if (input.val().length > 12) {
+                  return;
+                } else if (input.val().trim() === "") {
+                  $(`#${lobby.nameWarning}`).text("Nickname cannot be empty");
                   return;
                 } else {
-                  $(`#${lobby.nameWarning}`).remove();
+                  $(`#${lobby.nameWarning}`).hide();
                 }
               }}
             />
@@ -72,7 +62,8 @@ export default class Lobby extends React.Component {
               variant="outline-dark"
               onClick={() => {
                 const nickname = $(`#${lobby.inputNickname}`).val();
-                if (document.getElementById(`${lobby.nameWarning}`) !== null) {
+                if ($(`#${lobby.nameWarning}`).css("display") !== "none") {
+                  console.log(nickname);
                   anime({
                     targets: `#${lobby.nameWarning}`,
                     keyframes: [
@@ -84,15 +75,30 @@ export default class Lobby extends React.Component {
                     ],
                     duration: 1000,
                   });
-                  return;
+                } else if (nickname === "") {
+                  $(`#${lobby.nameWarning}`).text("Nickname cannot be empty");
+                  $(`#${lobby.nameWarning}`).show();
+                  anime({
+                    targets: `#${lobby.nameWarning}`,
+                    keyframes: [
+                      { color: "rgb(255,0,0)" },
+                      { color: "rgb(0,0,0)" },
+                      { color: "rgb(255,0,0)" },
+                      { color: "rgb(0,0,0)" },
+                      { color: "rgb(255,0,0)" },
+                    ],
+                    duration: 1000,
+                  });
+                } else {
+                  this.client.setNick(nickname);
                 }
-                this.client.setNick(nickname);
               }}
               id={`${lobby.setName}`}
             >
               Set Nickname
             </Button>
           </Col>
+
           <Col>
             <Button
               variant="success"
@@ -115,16 +121,12 @@ export default class Lobby extends React.Component {
                 plaintext
               />
               <OverlayTrigger
-                placement="right"
-                overlay={(props) => (
-                  <Tooltip id={`${lobby.tooltip}`} {...props}>
-                    Copy Code
-                  </Tooltip>
-                )}
+                placement="top"
+                overlay={<Tooltip id={`${lobby.tooltip}`}>Copy Code</Tooltip>}
               >
                 <Clipboard
                   id={`${lobby.cb}`}
-                  onMouseDown={() => {
+                  onClick={() => {
                     $(`#${lobby.roomCode}`).select();
                     document.execCommand("copy");
                     $(".tooltip-inner").text("Copied!");
@@ -135,7 +137,11 @@ export default class Lobby extends React.Component {
           </Col>
         </Row>
 
-        {/* Third row that displays the players on the left and the room chat on the right */}
+        <div id={`${lobby.nameWarning}`} style={{ display: "none" }}>
+          Nickname is too long. It must be no more than 12 characters
+        </div>
+
+        {/* Second row that displays the players on the left and the room chat on the right */}
         <Row>
           {/* Player list */}
           <Col xs="6">
@@ -149,7 +155,7 @@ export default class Lobby extends React.Component {
 
           {/* Lobby Chat */}
           <Col>
-            <Card style={{ height: "24em" }}>
+            <Card style={{ height: "24em", marginBottom: "0.25em" }}>
               <Card.Header style={{ fontSize: "2em" }}>Chat</Card.Header>
               <Card.Body id="chat" style={{ overflowY: "scroll" }}></Card.Body>
             </Card>
@@ -158,6 +164,12 @@ export default class Lobby extends React.Component {
                 placeholder="Type a message..."
                 type="text"
                 id={`${lobby.chatInput}`}
+                onKeyDown={(e) => {
+                  if (e.code === "Enter") {
+                    this.client.sendMessage($(`#${lobby.chatInput}`).val());
+                    $(`#${lobby.chatInput}`).val("");
+                  }
+                }}
               />
               <Button
                 variant="outline-dark"
