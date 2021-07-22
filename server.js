@@ -119,6 +119,23 @@ io.on('connection', socket => {
             // rooms[socket.room].gameState = gameState.VOTING;
         }
     });
+
+    // Starts serverside countdown to next phase
+    socket.on("startCountdown", (nextPhase, time) => {
+        let startingTime = Date.now();
+        let secondsLeft = parseInt(time);
+        let interval = setInterval(() => {
+            // deltaTime is in milliseconds
+            let deltaTime = Date.now() - startingTime;
+            secondsLeft = Math.round(time - deltaTime / 1000);
+            if (secondsLeft <= 0) {
+                clearInterval(interval);
+                socket.emit("switchPhase", nextPhase);
+                secondsLeft = 0;
+            }
+        }, 60 / 1000);
+    })
+
     // Callback is the response: it returns the generated words to the client
     socket.on("requestWords", (callback) => {
         callback({

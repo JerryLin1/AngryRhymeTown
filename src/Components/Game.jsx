@@ -1,12 +1,15 @@
 import React from "react";
 import Countdown from "./Countdown.jsx";
 import { Card, Col, Row } from "react-bootstrap";
-
 import game from "./Game.module.css";
 
 class PairingPhase extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    this.props.startPhase(this.props.nextPhase, 5);
   }
 
   render() {
@@ -16,7 +19,7 @@ class PairingPhase extends React.Component {
           {/* Main Game */}
           <Col>
             <h1>GAME :D</h1>
-            <Countdown time={10} onCountdownEnd={this.props.switchPhase} nextPhase="Writing" />
+            <Countdown time={5} />
 
           </Col>
 
@@ -39,11 +42,15 @@ class WritingPhase extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    this.props.startPhase(this.props.nextPhase, 5);
+  }
+
   render() {
     return (
       <div>
         <div>writing phase</div>
-        <Countdown time={10} onCountdownEnd={this.props.switchPhase} nextPhase="Pairing" />
+        <Countdown time={5} />
 
       </div>
     );
@@ -54,8 +61,10 @@ class WritingPhase extends React.Component {
 export default class Game extends React.Component {
   constructor(props) {
     super(props);
+    this.client = props.client;
     this.state = { phase: "Pairing" };
     this.switchPhase = this.switchPhase.bind(this);
+    this.client.switchPhase = this.switchPhase;
   }
 
   switchPhase = (newPhase) => {
@@ -64,9 +73,13 @@ export default class Game extends React.Component {
 
   setPhase = () => {
     if (this.state.phase === "Pairing") {
-      return <PairingPhase switchPhase={this.switchPhase} />
+      return <PairingPhase
+        startPhase={this.client.startPhase}
+        nextPhase="Writing" />
     } else if (this.state.phase === "Writing") {
-      return <WritingPhase switchPhase={this.switchPhase} />
+      return <WritingPhase
+        startPhase={this.client.startPhase}
+        nextPhase="Pairing" />
     }
     /// add more phases
   }

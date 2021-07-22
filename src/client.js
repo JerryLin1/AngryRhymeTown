@@ -67,6 +67,9 @@ export default class Client extends React.Component {
             this.props.switchState(true);
             // TODO: Do some animations
         })
+        this.socket.on("switchPhase", (nextPhase) => {
+            this.switchPhase(nextPhase);
+        })
         this.socket.on("startPairPhase", pairs => {
             // TODO: Display round pairs (who is vs. who)
         })
@@ -120,5 +123,9 @@ export default class Client extends React.Component {
         this.socket.emit("startGame");
         // TODO: instead of an empty emit, emit an object that contains all the game options
         // E.g. Writing time, voting time, number of rounds, etc.
+    }
+
+    startPhase = (nextPhase, time) => {
+        this.socket.emit("startCountdown", nextPhase, time);
     }
 }
