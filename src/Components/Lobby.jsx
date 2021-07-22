@@ -18,6 +18,21 @@ export default class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
+
+    // Update the chat 
+    this.client.socket.on("receiveMessage", (chatInfo) => {
+      console.log(chatInfo);
+
+      // Autoscroll chat if scroll is already at bottom
+      // Otherwise we assume they are reading chat and so do not scroll
+      let autoScroll = false;
+      let jsele = $("#chat")[0];
+      if (jsele.scrollHeight - jsele.scrollTop === jsele.clientHeight) autoScroll = true;
+
+      $("#chat").append("<div>" + chatInfo["sender"] + ": " + chatInfo["msg"] + "</div>");
+
+      if (autoScroll === true) jsele.scrollTo(0, jsele.scrollHeight);
+  })
   }
 
   render() {
