@@ -14,6 +14,7 @@ export default class Countdown extends React.Component {
       this.secondsLeft = Math.round(this.props.time - this.deltaTime / 1000);
       if (this.secondsLeft <= 0) {
         clearInterval(this.interval);
+        this.props.onCountdownEnd(this.props.nextPhase);
         this.secondsLeft = 0;
       }
 
