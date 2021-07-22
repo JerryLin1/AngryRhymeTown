@@ -10,7 +10,6 @@
     "bootstrap": "^5.0.2",
     "express": "^4.17.1",
     "jquery": "^3.6.0",
-    "nodemon": "^2.0.12",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-bootstrap-icons": "^1.5.0",
@@ -44,5 +43,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:6567"
+  "proxy": "http://localhost:6567",
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
 }

@@ -66,7 +66,8 @@ class VotingPhase extends React.Component {
   render() {
     return (
       <div>
-        <div></div>
+         <div>Voting Phase</div>
+        <Countdown time={5} />
       </div>
     );
   }
@@ -76,9 +77,14 @@ export default class Game extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
-    this.state = { phase: "Pairing" };
+    this.state = { phase: "Pairing", words: [] };
     this.switchPhase = this.switchPhase.bind(this);
     this.client.switchPhase = this.switchPhase;
+
+    this.client.socket.on("receiveWords", newWords => {
+      this.setState({words: newWords});
+      console.log(this.state.words);
+    })
   }
 
   switchPhase = (newPhase) => {

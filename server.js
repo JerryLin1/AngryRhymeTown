@@ -127,8 +127,10 @@ io.on('connection', socket => {
 
     // Callback is the response: it returns the generated words to the client
     socket.on("requestWords", (callback) => {
+        let words = wordFunctions.getRandomWords();
+        rooms[socket.room].clients[socket.id].words = words;
         callback({
-            words: wordFunctions.getRandomWords()
+            words: words
         })
     })
 });
