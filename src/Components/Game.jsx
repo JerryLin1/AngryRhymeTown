@@ -1,5 +1,5 @@
 import React from "react";
-import $ from "jquery"
+import $ from "jquery";
 import Countdown from "./Countdown.jsx";
 import { Card, Col, Row } from "react-bootstrap";
 import game from "./Game.module.css";
@@ -9,12 +9,7 @@ class PairingPhase extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-    this.props.startPhase(this.props.nextPhase, 5);
-  }
-
   render() {
-
     return (
       <div>
         <Row>
@@ -53,10 +48,6 @@ class WritingPhase extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-    this.props.startPhase(this.props.nextPhase, 5);
-  }
-
   render() {
     return (
       <div>
@@ -70,10 +61,6 @@ class WritingPhase extends React.Component {
 class VotingPhase extends React.Component {
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    this.props.startPhase(this.props.nextPhase, 5);
   }
 
   render() {
@@ -100,13 +87,13 @@ export default class Game extends React.Component {
 
   setPhase = () => {
     if (this.state.phase === "Pairing") {
-      return <PairingPhase/>
+      return <PairingPhase />;
     } else if (this.state.phase === "Writing") {
-      return <WritingPhase/>
+      return <WritingPhase />;
     } else if (this.state.phase == "Voting") {
-      return <VotingPhase />
+      return <VotingPhase />;
     }
-  }
+  };
 
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////
   render() {
