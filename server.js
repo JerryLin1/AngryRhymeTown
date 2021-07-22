@@ -119,7 +119,7 @@ io.on('connection', socket => {
             // rooms[socket.room].gameState = gameState.VOTING;
         }
     });
-    // i have no idea if this callback works
+    // Callback is the response: it returns the generated words to the client
     socket.on("requestWords", (callback) => {
         callback({
             words: wordFunctions.getRandomWords()

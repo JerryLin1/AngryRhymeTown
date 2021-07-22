@@ -72,16 +72,16 @@ export default class Client extends React.Component {
         })
         this.socket.on("startWritePhase", () => {
             // TODO: Start a timer
-            // Theoretically, response should call after receiving callback from server
+            // Response is called when the server responds
             this.socket.emit("requestWords", (response) => {
                 // the words should be returned as response.words
                 // Display the words
-                console.log(response.words)
+                console.log("You got: "+response.words)
             });
             // TODO: Text input box and submit button
             // Submit button emits line and words to server, then request more words
         })
-        // Clientside timer should end same time as they receive startVotePhase from server
+        // Clientside timer should end about the same time as they receive startVotePhase from server
         this.socket.on("startVotePhase", () => {
             // Start a timer
         })
