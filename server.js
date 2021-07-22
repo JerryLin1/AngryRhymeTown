@@ -122,21 +122,8 @@ io.on('connection', socket => {
 
     // Starts serverside countdown to next phase
     socket.on("startCountdown", (nextPhase, time) => {
-        console.log("called by" + socket.name);
         if (rooms[socket.room].clients[socket.id].isHost === true) {
-            console.log("really activated by" + socket.name);
-            let startingTime = Date.now();
-            let secondsLeft = parseInt(time);
-            let interval = setInterval(() => {
-                // deltaTime is in milliseconds
-                let deltaTime = Date.now() - startingTime;
-                secondsLeft = Math.round(time - deltaTime / 1000);
-                if (secondsLeft <= 0) {
-                    clearInterval(interval);
-                    io.to(socket.room).emit("switchPhase", nextPhase);
-                    secondsLeft = 0;
-                }
-            }, 60 / 1000);
+            setTimeout(() => { io.to(socket.room).emit("switchPhase", nextPhase) }, parseInt(time) * 1000);
         }
     })
 
