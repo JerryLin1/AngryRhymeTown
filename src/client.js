@@ -64,6 +64,7 @@ export default class Client extends React.Component {
 
         // ANCHOR: Game state handlers
         this.socket.on("startGame", () => {
+            this.props.switchState(true);
             // TODO: Do some animations
         })
         this.socket.on("startPairPhase", pairs => {
