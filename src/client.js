@@ -42,7 +42,7 @@ export default class Client extends React.Component {
             // Im like infinite% sure using map like this is bad programming practice
             // this.room = Object.keys(room).map(function (key) {
             //     $("#lobbyList").append("<div>" + room[key].name + "</div>");
-               
+
             //     return room[key].name;
             // });
         })
@@ -50,7 +50,7 @@ export default class Client extends React.Component {
         // Update the chat 
         this.socket.on("receiveMessage", (chatInfo) => {
             console.log(chatInfo);
-            
+
             // Autoscroll chat if scroll is already at bottom
             // Otherwise we assume they are reading chat and so do not scroll
             let autoScroll = false;
@@ -58,7 +58,7 @@ export default class Client extends React.Component {
             if (jsele.scrollHeight - jsele.scrollTop === jsele.clientHeight) autoScroll = true;
 
             $("#chat").append("<div>" + chatInfo["sender"] + ": " + chatInfo["msg"] + "</div>");
-            
+
             if (autoScroll === true) jsele.scrollTo(0, jsele.scrollHeight);
         })
 
@@ -80,7 +80,7 @@ export default class Client extends React.Component {
             this.socket.emit("requestWords", (response) => {
                 // the words should be returned as response.words
                 // Display the words
-                console.log("You got: "+response.words)
+                console.log("You got: " + response.words)
             });
             // TODO: Text input box and submit button
             // Submit button emits line and words to server, then request more words
@@ -93,7 +93,7 @@ export default class Client extends React.Component {
     }
 
     setNick = (name) => {
-        if (Object.values(this.room.clients).map(client=>client.name).includes(name)) {
+        if (Object.values(this.room.clients).map(client => client.name).includes(name)) {
             // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE. Already functional but an alert would be good
         } else {
             this.name = name;
@@ -104,7 +104,7 @@ export default class Client extends React.Component {
     sendMessage = (msg) => {
         console.log(msg + " " + this.name);
         if (msg != "") {
-            this.socket.emit("sendMessage", {"msg": msg, "sender": this.name});
+            this.socket.emit("sendMessage", { "msg": msg, "sender": this.name });
         }
     }
 

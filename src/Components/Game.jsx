@@ -10,11 +10,11 @@ class PairingPhase extends React.Component {
   }
 
   componentDidMount() {
-    /* disabled for testing */
-    // this.props.startPhase(this.props.nextPhase, 5);
+    this.props.startPhase(this.props.nextPhase, 5);
   }
 
   render() {
+
     return (
       <div>
         <Row>
@@ -26,7 +26,7 @@ class PairingPhase extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col>**PROMPTS**</Col>
+              <Col>{this.props.words}</Col>
             </Row>
           </Col>
 
@@ -54,8 +54,7 @@ class WritingPhase extends React.Component {
   }
 
   componentDidMount() {
-    /* disabled for testing */
-    // this.props.startPhase(this.props.nextPhase, 5);
+    this.props.startPhase(this.props.nextPhase, 5);
   }
 
   render() {
