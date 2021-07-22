@@ -69,13 +69,11 @@ export default class Client extends React.Component {
         })
         this.socket.on("setUpGame", pairs => {
             this.switchPhase("Pairing");
-            setTimeout(() => { this.socket.emit("startWritePhase") }, 5000);
         })
         this.socket.on("startWritePhase", () => {
             // TODO: Start a timer
             // Response is called when the server responds
             this.switchPhase("Writing");
-            setTimeout(() => { this.socket.emit("startVotePhase") }, 5000);
 
             this.socket.emit("requestWords", (response) => {
                 // the words should be returned as response.words

@@ -107,22 +107,23 @@ io.on('connection', socket => {
             for (let client of Object.values(rooms[socket.room].clients)) {
                 client.score = 0;
             }
+            setTimeout(() => { startWritePhase() }, 5000);
 
             io.to(socket.room).emit("setUpGame", hf.GeneratePairs(rooms[socket.room].clients));
             rooms[socket.room].gameState = gameState.PAIRING;            
         }
     });
 
-    socket.on("startWritePhase", () => {
+    function startWritePhase() {
         io.to(socket.room).emit("startWritePhase");
         rooms[socket.room].gameState = gameState.WRITING;
-    })
+        setTimeout(() => { startVotePhase() }, 5000);
+    };
 
-    socket.on("startVotePhase", () => {
+    function startVotePhase() {
         io.to(socket.room).emit("startVotePhase");
         rooms[socket.room].gameState = gameState.VOTING;
-    })
-
+    }
 
     // Callback is the response: it returns the generated words to the client
     socket.on("requestWords", (callback) => {
