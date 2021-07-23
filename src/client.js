@@ -53,10 +53,7 @@ export default class Client extends React.Component {
             // Response is called when the server responds
             this.switchPhase("Writing");
 
-            this.socket.emit("requestWords", (response) => {
-
-                this.socket.emit("receiveWords", response.words);
-            });
+            this.socket.emit("requestWords");
             // TODO: Text input box and submit button
             // Submit button emits line and words to server, then request more words
         })
