@@ -196,8 +196,7 @@ export default class Lobby extends React.Component {
                 onClick={() => {
                   this.client.sendMessage($(`#${lobby.chatInput}`).val());
                   $(`#${lobby.chatInput}`).val("");
-                  document.getElementById("chat").scrollHeight =
-                    $("#chat").attr("height");
+                  $(`#${lobby.chatInput}`).focus();
                 }}
                 id={`${lobby.chatEnter}`}
               >
