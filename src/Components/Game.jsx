@@ -111,6 +111,8 @@ class WritingPhase extends React.Component {
 class VotingPhase extends React.Component {
   constructor(props) {
     super(props);
+    console.log($(`#${"game.word_" + x}`).val());
+    
   }
 
   render() {
