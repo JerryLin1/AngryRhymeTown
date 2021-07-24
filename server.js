@@ -153,7 +153,7 @@ io.on('connection', socket => {
     function startGameResultsPhase() {
         io.to(socket.room).emit("startGameResultsPhase");
         setGameState(socket.room, gameState.GAME_RESULTS);
-        
+
         // TODO: In addition to or instead of these timeouts, 
         // have a button to go immediately to the next phase
         setTimeout(() => { returnToLobby() }, 5000);
@@ -167,7 +167,7 @@ io.on('connection', socket => {
     // Callback is the response: it returns the generated words to the client
     socket.on("requestWords", () => {
         let words = [];
-        for (let i = 0; i < 4; i ++) {
+        for (let i = 0; i < 4; i++) {
             words.push(wordFunctions.getRandomWords());
         }
         rooms[socket.room].clients[socket.id].words = words;
@@ -185,5 +185,7 @@ function numberOfClientsInRoom(roomId) {
     return Object.keys(rooms[roomId].clients).length;
 }
 function setGameState(roomId, gameState) {
-    rooms[roomId].gameState = gameState;
+    if (rooms[roomId] != undefined) {
+        rooms[roomId].gameState = gameState;
+    }
 }
