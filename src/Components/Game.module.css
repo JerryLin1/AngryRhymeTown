@@ -4,9 +4,22 @@ html {
 
 #countdown {
     text-align: center;
-    font-size: 5em;
+    margin-bottom: 2em;
+    display: inline-block;
 }
 
 #matchups {
     height: 75vh;
+}
+
+#header {
+    font-size: 3em;
+}
+
+#promptContainer > div {
+    margin-bottom: 0.5em;
+}
+
+.timePrompt {
+    font-size: 2.5em;
 }

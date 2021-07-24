@@ -1,4 +1,5 @@
 import React from "react";
+import game from "./Game.module.css"
 
 // displays text that counts down. I figured someone would need to do it eventually
 export default class Countdown extends React.Component {
@@ -25,6 +26,10 @@ export default class Countdown extends React.Component {
   }
 
   render() {
-    return <div className="countdown">{this.secondsLeft}</div>;
+    return (
+      <div className="countdown" id={game.countdown}>
+        {this.secondsLeft}
+      </div>
+    );
   }
 }

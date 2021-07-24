@@ -12,7 +12,7 @@ export default class Home extends React.Component {
   }
   render() {
     return (
-      <div className={`${home.App}`}>
+      <div className={`${home.Home}`}>
         <h1 id="title">ANGRY RHYME TOWN</h1>
 
         <Row>

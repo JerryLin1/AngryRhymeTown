@@ -1,7 +1,7 @@
 import React from "react";
 import $ from "jquery";
 import Countdown from "./Countdown.jsx";
-import { Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Form, FormGroup, Row } from "react-bootstrap";
 import game from "./Game.module.css";
 
 class PairingPhase extends React.Component {
@@ -35,6 +35,9 @@ class PairingPhase extends React.Component {
               <Card.Title>
                 <strong>GET READY FOR YOUR MATCHUP</strong>
               </Card.Title>
+              <Card.Body>A vs B</Card.Body>
+              <Card.Body>C vs D</Card.Body>
+              <Card.Body>E vs F</Card.Body>
             </Card>
           </Col>
         </Row>
@@ -50,9 +53,54 @@ class WritingPhase extends React.Component {
 
   render() {
     return (
-      <div>
-        <div>Writing Phase</div>
-        <Countdown time={5} />
+      <div className="writingPhase">
+        <Row>
+          <Col>
+            <div id={`${game.header}`}>Write your rhyme!</div>
+          </Col>
+        </Row>
+
+        <Row id="countdown">
+          <Countdown time={5} />
+        </Row>
+
+        <div id={`${game.promptContainer}`}>
+          <Form.Group as={Row}>
+            <Form.Label column xs="2" sm={{ offset: 4 }}>
+              Hey my name is
+            </Form.Label>
+            <Col xs="1">
+              <Form.Control id={game.word_1} />
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row}>
+            <Form.Label column xs="2" sm={{ offset: 4 }}>
+              Everyday I only{" "}
+            </Form.Label>
+            <Col xs="1">
+              <Form.Control id={game.word_2} />
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row}>
+            <Form.Label column xs="2" sm={{ offset: 4 }}>
+              Everyday I get that
+            </Form.Label>
+            <Col xs="1">
+              <Form.Control id={game.word_3} />
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row}>
+            <Form.Label column xs="2" sm={{ offset: 4 }}>
+              I take a bath inside
+            </Form.Label>
+            <Col xs="1">
+              <Form.Control id={game.word_4} />
+            </Col>
+          </Form.Group>
+        </div>
       </div>
     );
   }
@@ -66,8 +114,31 @@ class VotingPhase extends React.Component {
   render() {
     return (
       <div>
-         <div>Voting Phase</div>
-        <Countdown time={5} />
+        <Row>
+          <div id={`${game.header}`}>Time To Vote!</div>
+        </Row>
+        <Row>
+          <div className={`${game.timePrompt}`}>
+            You have <Countdown time={5} /> seconds left to vote for your
+            favorite rap!
+          </div>
+        </Row>
+
+        <Row>
+          <Col xs="3" sm={{ offset: 4 }}>
+            Gerry Lin's Rap
+          </Col>
+          <Col xs="3">P.han.tom's Rap</Col>
+        </Row>
+
+        <Row>
+          <Col xs="3" sm={{ offset: 4 }}>
+            <Button style={{ justifyContent: "center" }}>lol</Button>
+          </Col>
+          <Col xs="3">
+            <Button style={{ justifyContent: "center" }}>lol</Button>
+          </Col>
+        </Row>
       </div>
     );
   }
@@ -81,10 +152,10 @@ export default class Game extends React.Component {
     this.switchPhase = this.switchPhase.bind(this);
     this.client.switchPhase = this.switchPhase;
 
-    this.client.socket.on("receiveWords", newWords => {
-      this.setState({words: newWords});
+    this.client.socket.on("receiveWords", (newWords) => {
+      this.setState({ words: newWords });
       console.log(this.state.words);
-    })
+    });
   }
 
   switchPhase = (newPhase) => {
@@ -92,13 +163,13 @@ export default class Game extends React.Component {
   };
 
   setPhase = () => {
-    if (this.state.phase === "Pairing") {
-      return <PairingPhase />;
-    } else if (this.state.phase === "Writing") {
-      return <WritingPhase />;
-    } else if (this.state.phase == "Voting") {
-      return <VotingPhase />;
-    }
+    // if (this.state.phase === "Pairing") {
+    //   return <PairingPhase />;
+    // } else if (this.state.phase === "Writing") {
+    return <VotingPhase />;
+    // } else if (this.state.phase == "Voting") {
+    //   return <VotingPhase />;
+    // }
   };
 
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////
