@@ -164,30 +164,29 @@ export default class Lobby extends React.Component {
               <Card.Header style={{ fontSize: "2em" }}>Chat</Card.Header>
               <Card.Body id="chat" style={{ overflowY: "scroll" }}></Card.Body>
             </Card>
-            <div id={`${lobby.sendbar}`}>
-              <input
-                placeholder="Type a message..."
-                type="text"
-                id={`${lobby.chatInput}`}
-                onKeyDown={(e) => {
-                  if (e.code === "Enter") {
-                    this.client.sendMessage($(`#${lobby.chatInput}`).val());
-                    $(`#${lobby.chatInput}`).val("");
-                  }
-                }}
-              />
-              <Button
-                variant="outline-dark"
-                onClick={() => {
-                  this.client.sendMessage($(`#${lobby.chatInput}`).val());
-                  $(`#${lobby.chatInput}`).val("");
-                  $(`#${lobby.chatInput}`).focus();
-                }}
-                id={`${lobby.chatEnter}`}
-              >
-                Send Message
-              </Button>
-            </div>
+            <Form
+              onSubmit={(event) => {
+                event.preventDefault();
+                this.client.sendMessage($(`#${lobby.chatInput}`).val());
+                $(`#${lobby.chatInput}`).val("");
+                $(`#${lobby.chatInput}`).focus();
+              }}
+            >
+              <div id={`${lobby.sendbar}`}>
+                <input
+                  placeholder="Type a message..."
+                  type="text"
+                  id={`${lobby.chatInput}`}
+                />
+                <Button
+                  variant="outline-dark"
+                  id={`${lobby.chatEnter}`}
+                  type="submit"
+                >
+                  Send Message
+                </Button>
+              </div>
+            </Form>
           </Col>
         </Row>
       </div>
