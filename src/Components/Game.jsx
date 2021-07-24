@@ -69,7 +69,7 @@ class WritingPhase extends React.Component {
         <div id={`${game.promptContainer}`}>
           <Form.Group as={Row}>
             <Form.Label column xs="2" sm={{ offset: 4 }}>
-              Hey my name is
+              {this.props.words[0]}
             </Form.Label>
             <Col xs="1">
               <Form.Control id={game.word_1} />
@@ -78,7 +78,7 @@ class WritingPhase extends React.Component {
 
           <Form.Group as={Row}>
             <Form.Label column xs="2" sm={{ offset: 4 }}>
-              Everyday I only{" "}
+              {this.props.words[1]}
             </Form.Label>
             <Col xs="1">
               <Form.Control id={game.word_2} />
@@ -87,7 +87,7 @@ class WritingPhase extends React.Component {
 
           <Form.Group as={Row}>
             <Form.Label column xs="2" sm={{ offset: 4 }}>
-              Everyday I get that
+              {this.props.words[2]}
             </Form.Label>
             <Col xs="1">
               <Form.Control id={game.word_3} />
@@ -96,7 +96,7 @@ class WritingPhase extends React.Component {
 
           <Form.Group as={Row}>
             <Form.Label column xs="2" sm={{ offset: 4 }}>
-              I take a bath inside
+              {this.props.words[3]}
             </Form.Label>
             <Col xs="1">
               <Form.Control id={game.word_4} />
@@ -156,7 +156,6 @@ export default class Game extends React.Component {
 
     this.client.socket.on("receiveWords", (newWords) => {
       this.setState({ words: newWords });
-      console.log(this.state.words);
     });
   }
 
@@ -168,7 +167,7 @@ export default class Game extends React.Component {
     if (this.state.phase === "Pairing") {
       return <PairingPhase />;
     } else if (this.state.phase === "Writing") {
-    return <VotingPhase />;
+      return <WritingPhase words={this.state.words} />;
     } else if (this.state.phase == "Voting") {
       return <VotingPhase />;
     }
