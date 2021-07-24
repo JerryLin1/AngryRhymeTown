@@ -135,10 +135,10 @@ class VotingPhase extends React.Component {
 
         <Row>
           <Col xs="3" sm={{ offset: 4 }}>
-            <Button style={{ justifyContent: "center" }}>lol</Button>
+            <Button variant="outline-success">VOTE</Button>
           </Col>
           <Col xs="3">
-            <Button style={{ justifyContent: "center" }}>lol</Button>
+            <Button variant="outline-success">VOTE</Button>
           </Col>
         </Row>
       </div>
@@ -168,7 +168,7 @@ export default class Game extends React.Component {
     if (this.state.phase === "Pairing") {
       return <PairingPhase />;
     } else if (this.state.phase === "Writing") {
-      return <WritingPhase />;
+    return <VotingPhase />;
     } else if (this.state.phase == "Voting") {
       return <VotingPhase />;
     }
