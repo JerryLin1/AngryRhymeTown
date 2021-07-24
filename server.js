@@ -10,6 +10,7 @@ const io = new Server(server);
 const wordFunctions = require("./server/wordFunctions.js");
 const gameState = require("./server/gameState.js");
 const hf = require("./server/helperFunctions.js");
+const DEFAULT_ROOM_SETTINGS = require("./server/defaultRoomSettings.js")
 
 const port = process.env.PORT || 6567;
 server.listen(port, () => {
@@ -57,6 +58,7 @@ io.on('connection', socket => {
         rooms[roomId].clients = {};
         rooms[roomId].chatHistory = [];
         rooms[roomId].rounds = [];
+        rooms[roomId].settings = DEFAULT_ROOM_SETTINGS;
         rooms[roomId].gameState = gameState.LOBBY;
         console.log(`Room ${roomId} created.`);
     });
@@ -122,33 +124,38 @@ io.on('connection', socket => {
     function startPairPhase() {
         io.to(socket.room).emit("startPairPhase", hf.GeneratePairs(rooms[socket.room].clients));
         setGameState(socket.room, gameState.PAIRING);
-        setTimeout(() => { startWritePhase() }, 5000);
+        let t = rooms[socket.room].settings.pairingTime;
+        setTimeout(() => { startWritePhase() }, t);
     }
 
     function startWritePhase() {
         io.to(socket.room).emit("startWritePhase");
         setGameState(socket.room, gameState.WRITING);
-        setTimeout(() => { startVotePhase() }, 5000);
+        let t = rooms[socket.room].settings.writingTime;
+        setTimeout(() => { startVotePhase() }, t);
     };
 
     function startVotePhase() {
         io.to(socket.room).emit("startVotePhase");
         setGameState(socket.room, gameState.VOTING);
-        setTimeout(() => { startVoteResultsPhase() }, 5000);
+        let t = rooms[socket.room].settings.votingTime;
+        setTimeout(() => { startVoteResultsPhase() }, t);
     }
 
     function startVoteResultsPhase() {
         io.to(socket.room).emit("startVoteResultsPhase");
         setGameState(socket.room, gameState.VOTING_RESULTS)
+        let t = rooms[socket.room].settings.votingResultsTime;
         // TODO: if last round, go to gameresults. Otherwise go to roundresults
-        setTimeout(() => { startGameResultsPhase() }, 5000);
+        setTimeout(() => { startGameResultsPhase() }, t);
     }
 
     function startRoundResultsPhase() {
         io.to(socket.room).emit("startRoundResultsPhase");
         setGameState(socket.room, gameState.ROUND_RESULTS);
+        let t = rooms[socket.room].settings.roundResultsTime;
         // Start next round (which starts at pairing phase)
-        setTimeout(() => { startRound() }, 5000);
+        setTimeout(() => { startRound() }, t);
     }
     function startGameResultsPhase() {
         io.to(socket.room).emit("startGameResultsPhase");
