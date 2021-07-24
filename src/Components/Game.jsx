@@ -10,7 +10,6 @@ class PairingPhase extends React.Component {
     super(props);
     this.props.socket.on("startPairPhase", (pairs) => {
       for (let pair of Object.entries(pairs)) {
-        console.log(pair);
         this.matchups.push(
           <Card.Body>{`${pair[0]} vs. ${pair[1]}`}</Card.Body>
         );
