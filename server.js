@@ -86,9 +86,11 @@ io.on('connection', socket => {
 
     // Update's client's nickname and updates client list on client side for all clients
     socket.on("updateNickname", name => {
-        socket.name = name;
-        rooms[socket.room].clients[socket.id].name = socket.name;
-        io.to(socket.room).emit("updateClientList", rooms[socket.room]);
+        if (rooms[socket.id].gameState === gameState.LOBBY) {
+            socket.name = name;
+            rooms[socket.room].clients[socket.id].name = socket.name;
+            io.to(socket.room).emit("updateClientList", rooms[socket.room]);
+        }
     })
 
     // Receives and sends message to all clients in a room
@@ -99,7 +101,7 @@ io.on('connection', socket => {
     })
 
     socket.on("startGame", () => {
-        if (rooms[socket.room].clients[socket.id].isHost === true) {
+        if (rooms[socket.room].gameState === gameState.LOBBY && rooms[socket.room].clients[socket.id].isHost === true) {
             // TODO: if (rooms[socket.room].length %% 2 === 0) Must be even number of players. unless we code bot?
             io.to(socket.room).emit("startGame");
             // rooms[socket.room].gameState = gameState.START; ??
@@ -111,7 +113,7 @@ io.on('connection', socket => {
             setTimeout(() => { startWritePhase() }, 5000);
 
             io.to(socket.room).emit("setUpGame", hf.GeneratePairs(rooms[socket.room].clients));
-            rooms[socket.room].gameState = gameState.PAIRING;            
+            rooms[socket.room].gameState = gameState.PAIRING;
         }
     });
 
