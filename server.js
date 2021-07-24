@@ -87,7 +87,7 @@ io.on('connection', socket => {
 
     // Update's client's nickname and updates client list on client side for all clients
     socket.on("updateNickname", name => {
-        if (rooms[socket.id].gameState === gameState.LOBBY) {
+        if (rooms[socket.room].gameState === gameState.LOBBY) {
             socket.name = name;
             rooms[socket.room].clients[socket.id].name = socket.name;
             io.to(socket.room).emit("updateClientList", rooms[socket.room]);
