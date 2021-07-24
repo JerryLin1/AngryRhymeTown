@@ -56,6 +56,7 @@ io.on('connection', socket => {
         rooms[roomId] = {};
         rooms[roomId].clients = {};
         rooms[roomId].chatHistory = [];
+        rooms[roomId].rounds = [];
         rooms[roomId].gameState = gameState.LOBBY;
         console.log(`Room ${roomId} created.`);
     });
@@ -110,22 +111,57 @@ io.on('connection', socket => {
             for (let client of Object.values(rooms[socket.room].clients)) {
                 client.score = 0;
             }
-            setTimeout(() => { startWritePhase() }, 5000);
-
-            io.to(socket.room).emit("setUpGame", hf.GeneratePairs(rooms[socket.room].clients));
-            rooms[socket.room].gameState = gameState.PAIRING;
+            startRound();
         }
     });
 
+    function startRound() {
+        startPairPhase();
+    }
+
+    function startPairPhase() {
+        io.to(socket.room).emit("startPairPhase", hf.GeneratePairs(rooms[socket.room].clients));
+        setGameState(socket.room, gameState.PAIRING);
+        setTimeout(() => { startWritePhase() }, 5000);
+    }
+
     function startWritePhase() {
         io.to(socket.room).emit("startWritePhase");
-        rooms[socket.room].gameState = gameState.WRITING;
+        setGameState(socket.room, gameState.WRITING);
         setTimeout(() => { startVotePhase() }, 5000);
     };
 
     function startVotePhase() {
         io.to(socket.room).emit("startVotePhase");
-        rooms[socket.room].gameState = gameState.VOTING;
+        setGameState(socket.room, gameState.VOTING);
+        setTimeout(() => { startVoteResultsPhase() }, 5000);
+    }
+
+    function startVoteResultsPhase() {
+        io.to(socket.room).emit("startVoteResultsPhase");
+        setGameState(socket.room, gameState.VOTING_RESULTS)
+        // TODO: if last round, go to gameresults. Otherwise go to roundresults
+        setTimeout(() => { startGameResultsPhase() }, 5000);
+    }
+
+    function startRoundResultsPhase() {
+        io.to(socket.room).emit("startRoundResultsPhase");
+        setGameState(socket.room, gameState.ROUND_RESULTS);
+        // Start next round (which starts at pairing phase)
+        setTimeout(() => { startRound() }, 5000);
+    }
+    function startGameResultsPhase() {
+        io.to(socket.room).emit("startGameResultsPhase");
+        setGameState(socket.room, gameState.GAME_RESULTS);
+        
+        // TODO: In addition to or instead of these timeouts, 
+        // have a button to go immediately to the next phase
+        setTimeout(() => { returnToLobby() }, 5000);
+    }
+    function returnToLobby() {
+        io.to(socket.room).emit("returnToLobby");
+        setGameState(socket.room, gameState.LOBBY);
+        // TODO: reset stuff like round data?
     }
 
     // Callback is the response: it returns the generated words to the client
@@ -144,4 +180,7 @@ setInterval(() => {
 
 function numberOfClientsInRoom(roomId) {
     return Object.keys(rooms[roomId].clients).length;
+}
+function setGameState(roomId, gameState) {
+    rooms[roomId].gameState = gameState;
 }

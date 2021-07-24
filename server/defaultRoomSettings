@@ -1,0 +1,4 @@
+export const DEFAULT_ROOM_SETTINGS = {
+    pairingTime: 5000,
+    
+}
