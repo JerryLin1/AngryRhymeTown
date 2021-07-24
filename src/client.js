@@ -49,18 +49,25 @@ export default class Client extends React.Component {
             this.switchPhase("Pairing");
         })
         this.socket.on("startWritePhase", () => {
-            // TODO: Start a timer
-            // Response is called when the server responds
             this.switchPhase("Writing");
 
             this.socket.emit("requestWords");
-            // TODO: Text input box and submit button
-            // Submit button emits line and words to server, then request more words
         })
         // Clientside timer should end about the same time as they receive startVotePhase from server
         this.socket.on("startVotePhase", () => {
             this.switchPhase("Voting");
-            // Start a timer
+        })
+        this.socket.on("startVoteResultsPhase", () => {
+            this.switchPhase("VotingResults");
+        })
+        this.socket.on("startRoundResultsPhase", () => {
+            this.switchPhase("RoundResults");
+        })
+        this.socket.on("startGameResultsPhase", () => {
+            this.switchPhase("GameResults");
+        })
+        this.socket.on("returnToLobby", () => {
+            // TODO: Return to the lobby
         })
     }
 
@@ -98,5 +105,4 @@ export default class Client extends React.Component {
         // TODO: instead of an empty emit, emit an object that contains all the game options
         // E.g. Writing time, voting time, number of rounds, etc.
     }
-
 }
