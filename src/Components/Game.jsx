@@ -5,8 +5,17 @@ import { Button, Card, Col, Form, FormGroup, Row } from "react-bootstrap";
 import game from "./Game.module.css";
 
 class PairingPhase extends React.Component {
+  matchups = [];
   constructor(props) {
     super(props);
+    this.props.socket.on("startPairPhase", (pairs) => {
+      for (let pair of Object.entries(pairs)) {
+        this.matchups.push(
+          <Card.Body>{`${pair[0]} vs. ${pair[1]}`}</Card.Body>
+        );
+      }
+      this.forceUpdate();
+    });
   }
 
   render() {
@@ -37,9 +46,7 @@ class PairingPhase extends React.Component {
               <Card.Title>
                 <strong>GET READY FOR YOUR MATCHUP</strong>
               </Card.Title>
-              <Card.Body>A vs B</Card.Body>
-              <Card.Body>C vs D</Card.Body>
-              <Card.Body>E vs F</Card.Body>
+              <div>{this.matchups}</div>
             </Card>
           </Col>
         </Row>
@@ -51,7 +58,39 @@ class PairingPhase extends React.Component {
 class WritingPhase extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      words: [],
+      displayWords: [],
+      nextWords: [true, false, false, false],
+    };
+
+    this.props.socket.on("receiveWords", (newWords) => {
+      this.setState({ words: newWords });
+
+      let toDisplayWords = [];
+      for (let i = 0; i < newWords.length; i++) {
+        let display = "";
+        for (let word of newWords[i]) {
+          display +=
+            word.substring(0, 1).toUpperCase() + word.substring(1) + " / ";
+        }
+        toDisplayWords.push(display);
+      }
+      this.setState({ displayWords: toDisplayWords });
+    });
   }
+
+  showNextWords = (barIndex) => {
+    let updateNextWords = this.state.nextWords;
+    updateNextWords[barIndex + 1] = true;
+    this.setState({ nextWords: updateNextWords });
+  };
+
+  displayWords = (index) => {
+    if (this.state.nextWords[index]) {
+      return this.state.displayWords[index];
+    }
+  };
 
   render() {
     return (
@@ -68,38 +107,77 @@ class WritingPhase extends React.Component {
 
         <div id={`${game.promptContainer}`}>
           <Form.Group as={Row}>
-            <Form.Label column xs="2" sm={{ offset: 4 }}>
-              {this.props.words[0]}
+            <Form.Label column xs="3">
+              {this.displayWords(0)}
             </Form.Label>
-            <Col xs="1">
-              <Form.Control id={game.word_1} />
+            <Col xs="5">
+              <Form.Control id={`${game.word_1}`} />
+            </Col>
+            <Col xs="4">
+              <Button
+                variant="outline-dark"
+                onClick={() => {
+                  this.showNextWords(0);
+                  this.props.socket.emit(
+                    "sendBars",
+                    $(`#${game.word_1}`).val()
+                  );
+                }}
+              >
+                Submit tha bar
+              </Button>
             </Col>
           </Form.Group>
 
           <Form.Group as={Row}>
-            <Form.Label column xs="2" sm={{ offset: 4 }}>
-              {this.props.words[1]}
+            <Form.Label column xs="3">
+              {this.displayWords(1)}
             </Form.Label>
-            <Col xs="1">
+            <Col xs="5">
               <Form.Control id={game.word_2} />
             </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Form.Label column xs="2" sm={{ offset: 4 }}>
-              {this.props.words[2]}
-            </Form.Label>
-            <Col xs="1">
-              <Form.Control id={game.word_3} />
+            <Col xs="4">
+              <Button
+                variant="outline-dark"
+                onClick={() => {
+                  this.showNextWords(1);
+                }}
+              >
+                Submit tha bar
+              </Button>
             </Col>
           </Form.Group>
 
           <Form.Group as={Row}>
-            <Form.Label column xs="2" sm={{ offset: 4 }}>
-              {this.props.words[3]}
+            <Form.Label column xs="3">
+              {this.displayWords(2)}
             </Form.Label>
-            <Col xs="1">
+            <Col xs="5">
+              <Form.Control id={game.word_3} />
+            </Col>
+            <Col xs="4">
+              <Button
+                variant="outline-dark"
+                onClick={() => {
+                  this.showNextWords(2);
+                }}
+              >
+                Submit tha bar
+              </Button>
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row}>
+            <Form.Label column xs="3">
+              {this.displayWords(3)}
+            </Form.Label>
+            <Col xs="5">
               <Form.Control id={game.word_4} />
+            </Col>
+            <Col xs="4">
+              <Button variant="outline-dark" onClick={() => {}}>
+                Submit tha bar
+              </Button>
             </Col>
           </Form.Group>
         </div>
@@ -148,6 +226,30 @@ class VotingPhase extends React.Component {
   }
 }
 
+class VotingResultsPhase extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <div>da voting results</div>;
+  }
+}
+class RoundResultsPhase extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <div>da round results</div>;
+  }
+}
+class GameResultsPhase extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <div>da game results</div>;
+  }
+}
 export default class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -155,10 +257,6 @@ export default class Game extends React.Component {
     this.state = { phase: "Pairing", words: [] };
     this.switchPhase = this.switchPhase.bind(this);
     this.client.switchPhase = this.switchPhase;
-
-    this.client.socket.on("receiveWords", (newWords) => {
-      this.setState({ words: newWords });
-    });
   }
 
   switchPhase = (newPhase) => {
@@ -167,11 +265,17 @@ export default class Game extends React.Component {
 
   setPhase = () => {
     if (this.state.phase === "Pairing") {
-      return <PairingPhase />;
+      return <PairingPhase socket={this.client.socket} />;
     } else if (this.state.phase === "Writing") {
-      return <WritingPhase words={this.state.words} />;
-    } else if (this.state.phase == "Voting") {
+      return <WritingPhase socket={this.client.socket} />;
+    } else if (this.state.phase === "Voting") {
       return <VotingPhase />;
+    } else if (this.state.phase == "VotingResults") {
+      return <VotingResultsPhase />;
+    } else if (this.state.phase == "RoundResults") {
+      return <RoundResultsPhase />;
+    } else if (this.state.phase == "GameResults") {
+      return <GameResultsPhase />;
     }
   };
 
