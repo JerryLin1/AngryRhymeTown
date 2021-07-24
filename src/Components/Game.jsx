@@ -17,11 +17,13 @@ class PairingPhase extends React.Component {
           <Col id={`${game.mainGame}`}>
             <Row>
               <Col id={`${game.countdown}`}>
-                <Countdown time={5} />
+                <div id={`${game.header}`}>
+                  The game starts in <Countdown time={5} /> seconds
+                </div>
               </Col>
             </Row>
             <Row>
-              <Col>Words come here I think</Col>
+              <Col>Something</Col>
             </Row>
           </Col>
 
@@ -163,13 +165,13 @@ export default class Game extends React.Component {
   };
 
   setPhase = () => {
-    // if (this.state.phase === "Pairing") {
-    //   return <PairingPhase />;
-    // } else if (this.state.phase === "Writing") {
-    return <VotingPhase />;
-    // } else if (this.state.phase == "Voting") {
-    //   return <VotingPhase />;
-    // }
+    if (this.state.phase === "Pairing") {
+      return <PairingPhase />;
+    } else if (this.state.phase === "Writing") {
+      return <WritingPhase />;
+    } else if (this.state.phase == "Voting") {
+      return <VotingPhase />;
+    }
   };
 
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////
