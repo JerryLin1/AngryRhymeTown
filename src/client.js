@@ -91,11 +91,13 @@ export default class Client extends React.Component {
     }
 
     setNick = (name) => {
-        if (Object.values(this.room.clients).map(client => client.name).includes(name)) {
-            // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE. Already functional but an alert would be good
-        } else {
-            this.name = name;
-            this.socket.emit("updateNickname", name);
+        if (name.trim() === "" || name.trim().length <= 12) {
+            if (Object.values(this.room.clients).map(client => client.name).includes(name)) {
+                // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE. Already functional but an alert would be good
+            } else {
+                this.name = name;
+                this.socket.emit("updateNickname", name);
+            }
         }
     }
 
