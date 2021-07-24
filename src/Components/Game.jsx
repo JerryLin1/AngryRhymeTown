@@ -5,19 +5,18 @@ import { Button, Card, Col, Form, FormGroup, Row } from "react-bootstrap";
 import game from "./Game.module.css";
 
 class PairingPhase extends React.Component {
-  matchups = []
+  matchups = [];
   constructor(props) {
     super(props);
-    this.props.socket.on("startPairPhase", pairs=>{
+    this.props.socket.on("startPairPhase", (pairs) => {
       for (let pair of Object.entries(pairs)) {
-        console.log(pair)
+        console.log(pair);
         this.matchups.push(
-        <Card.Body>
-          {`${pair[0]} vs. ${pair[1]}`}
-        </Card.Body>)
+          <Card.Body>{`${pair[0]} vs. ${pair[1]}`}</Card.Body>
+        );
       }
       this.forceUpdate();
-    })    
+    });
   }
 
   render() {
@@ -48,9 +47,7 @@ class PairingPhase extends React.Component {
               <Card.Title>
                 <strong>GET READY FOR YOUR MATCHUP</strong>
               </Card.Title>
-              <div>
-              {this.matchups}
-              </div>
+              <div>{this.matchups}</div>
             </Card>
           </Col>
         </Row>
@@ -62,7 +59,11 @@ class PairingPhase extends React.Component {
 class WritingPhase extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { words: [], displayWords: [], nextWords: [true, false, false, false] };
+    this.state = {
+      words: [],
+      displayWords: [],
+      nextWords: [true, false, false, false],
+    };
 
     this.props.socket.on("receiveWords", (newWords) => {
       this.setState({ words: newWords });
@@ -71,7 +72,8 @@ class WritingPhase extends React.Component {
       for (let i = 0; i < newWords.length; i++) {
         let display = "";
         for (let word of newWords[i]) {
-          display += word.substring(0, 1).toUpperCase() + word.substring(1) + " / ";
+          display +=
+            word.substring(0, 1).toUpperCase() + word.substring(1) + " / ";
         }
         toDisplayWords.push(display);
       }
@@ -83,13 +85,13 @@ class WritingPhase extends React.Component {
     let updateNextWords = this.state.nextWords;
     updateNextWords[barIndex + 1] = true;
     this.setState({ nextWords: updateNextWords });
-  }
+  };
 
   displayWords = (index) => {
     if (this.state.nextWords[index]) {
       return this.state.displayWords[index];
     }
-  }
+  };
 
   render() {
     return (
@@ -117,8 +119,12 @@ class WritingPhase extends React.Component {
                 variant="outline-dark"
                 onClick={() => {
                   this.showNextWords(0);
-                  this.props.socket.emit("sendBars", $(`#${game.word_1}`).val());
-                }}>
+                  this.props.socket.emit(
+                    "sendBars",
+                    $(`#${game.word_1}`).val()
+                  );
+                }}
+              >
                 Submit tha bar
               </Button>
             </Col>
@@ -134,7 +140,10 @@ class WritingPhase extends React.Component {
             <Col xs="4">
               <Button
                 variant="outline-dark"
-                onClick={() => { this.showNextWords(1) }}>
+                onClick={() => {
+                  this.showNextWords(1);
+                }}
+              >
                 Submit tha bar
               </Button>
             </Col>
@@ -150,7 +159,10 @@ class WritingPhase extends React.Component {
             <Col xs="4">
               <Button
                 variant="outline-dark"
-                onClick={() => { this.showNextWords(2) }}>
+                onClick={() => {
+                  this.showNextWords(2);
+                }}
+              >
                 Submit tha bar
               </Button>
             </Col>
@@ -164,9 +176,7 @@ class WritingPhase extends React.Component {
               <Form.Control id={game.word_4} />
             </Col>
             <Col xs="4">
-              <Button
-                variant="outline-dark"
-                onClick={() => { }}>
+              <Button variant="outline-dark" onClick={() => {}}>
                 Submit tha bar
               </Button>
             </Col>
@@ -220,11 +230,7 @@ class VotingResultsPhase extends React.Component {
     super(props);
   }
   render() {
-    return (
-      <div>
-        da voting results
-      </div>
-    )
+    return <div>da voting results</div>;
   }
 }
 class RoundResultsPhase extends React.Component {
@@ -232,11 +238,7 @@ class RoundResultsPhase extends React.Component {
     super(props);
   }
   render() {
-    return (
-      <div>
-        da round results
-      </div>
-    )
+    return <div>da round results</div>;
   }
 }
 class GameResultsPhase extends React.Component {
@@ -244,11 +246,7 @@ class GameResultsPhase extends React.Component {
     super(props);
   }
   render() {
-    return (
-      <div>
-        da game results
-      </div>
-    )
+    return <div>da game results</div>;
   }
 }
 export default class Game extends React.Component {
