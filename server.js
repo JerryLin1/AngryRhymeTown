@@ -68,6 +68,7 @@ io.on('connection', socket => {
             socket.join(roomId);
             rooms[roomId].clients[socket.id] = {};
             rooms[roomId].clients[socket.id].name = socket.name;
+            rooms[roomId].clients[socket.id].bars = [];
 
             if (numberOfClientsInRoom(roomId) === 1) {
                 rooms[roomId].clients[socket.id].isHost = true;
@@ -172,6 +173,10 @@ io.on('connection', socket => {
         }
         rooms[socket.room].clients[socket.id].words = words;
         socket.emit("receiveWords", words);
+    })
+
+    socket.on("sendBars", (bars) => {
+        rooms[socket.room].clients[socket.id].bars.push(bars);
     })
 });
 
