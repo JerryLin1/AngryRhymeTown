@@ -5,8 +5,19 @@ import { Button, Card, Col, Form, FormGroup, Row } from "react-bootstrap";
 import game from "./Game.module.css";
 
 class PairingPhase extends React.Component {
+  matchups = []
   constructor(props) {
     super(props);
+    this.props.socket.on("startPairPhase", pairs=>{
+      for (let pair of Object.entries(pairs)) {
+        console.log(pair)
+        this.matchups.push(
+        <Card.Body>
+          {`${pair[0]} vs. ${pair[1]}`}
+        </Card.Body>)
+      }
+      this.forceUpdate();
+    })    
   }
 
   render() {
@@ -37,9 +48,9 @@ class PairingPhase extends React.Component {
               <Card.Title>
                 <strong>GET READY FOR YOUR MATCHUP</strong>
               </Card.Title>
-              <Card.Body>A vs B</Card.Body>
-              <Card.Body>C vs D</Card.Body>
-              <Card.Body>E vs F</Card.Body>
+              <div>
+              {this.matchups}
+              </div>
             </Card>
           </Col>
         </Row>
@@ -255,7 +266,7 @@ export default class Game extends React.Component {
 
   setPhase = () => {
     if (this.state.phase === "Pairing") {
-      return <PairingPhase />;
+      return <PairingPhase socket={this.client.socket} />;
     } else if (this.state.phase === "Writing") {
       return <WritingPhase socket={this.client.socket} />;
     } else if (this.state.phase === "Voting") {

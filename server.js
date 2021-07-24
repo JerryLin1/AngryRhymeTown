@@ -43,9 +43,10 @@ io.on('connection', socket => {
 
                 io.to(socket.room).emit("updateClientList", rooms[socket.room]);
             }
-            else {
-                delete rooms[socket.room];
-            }
+            // TODO: Delete room when empty. Currently, just this will cause errors
+            // else {
+            //     delete rooms[socket.room];
+            // }
         }
     });
 
