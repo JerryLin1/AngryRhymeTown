@@ -171,11 +171,9 @@ io.on('connection', socket => {
     }
 
     socket.on("getBattle", () => {
-        if (rooms[socket.room].clients[socket.id].isHost === true) {
+        if (rooms[socket.room].clients[socket.id].isHost) {
             const battles = Object.keys(pairings);
             rapper1 = battles[currentBattle];
-            hf.logObj(rooms[socket.room].rounds[currentRound][rapper1] + " opponent");
-            hf.logObj(rooms);
             rapper2 = rooms[socket.room].rounds[currentRound][rapper1].opponent;
             currentBattle += 1;
             if (currentBattle > battles.length) {

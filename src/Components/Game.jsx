@@ -208,14 +208,14 @@ class VotingPhase extends React.Component {
         </Row>
 
         <Row>
-          <Col xs="3" sm={{ offset: 4 }}>
+          <Col xs="5" sm={{ offset: 2 }}>
             {this.state.matchup[0].nickname}
-            {this.state.matchup[0].bars}
+            <div>{this.state.matchup[0].bars}</div>
           </Col>
 
-          <Col xs="3">
+          <Col xs="5">
             {this.state.matchup[1].nickname}
-            {this.state.matchup[1].bars}
+            <div>{this.state.matchup[1].bars}</div>
             </Col>
         </Row>
 
