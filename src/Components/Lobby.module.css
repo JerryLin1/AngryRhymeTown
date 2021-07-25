@@ -14,7 +14,7 @@ input {
 }
 /******* Row 1 *******/
 
-.lobby > div:first-child {
+.lobby > form:first-child {
     margin-bottom: 0.5em;
 }
 
