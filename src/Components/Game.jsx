@@ -143,7 +143,7 @@ class WritingPhase extends React.Component {
         </Row>
 
         <Row id="countdown">
-          <Countdown time={5} />
+          <Countdown time={10} />
         </Row>
 
         <div id={`${game.promptContainer}`}>
@@ -169,6 +169,29 @@ class WritingPhase extends React.Component {
 class VotingPhase extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { matchup: [{nickname: "Loading", bars: "Loading"}, {nickname: "Loading", bars: "Loading"}] }
+
+    this.props.socket.on("receiveBattle", battle => {
+      if (battle === "finished") {
+        // handle here
+      } else {
+        this.setState({ matchup: battle });
+        console.log(this.state.matchup);
+      }
+    });
+  }
+
+  componentDidMount() {
+    this.getNextBattle();
+
+  }
+
+  getNextBattle = () => {
+    this.props.socket.emit("getBattle");
+  }
+
+  vote = (rapper) => {
+    this.props.socket.emit("receiveVote", rapper);
   }
 
   render() {
@@ -186,17 +209,30 @@ class VotingPhase extends React.Component {
 
         <Row>
           <Col xs="3" sm={{ offset: 4 }}>
-            Gerry Lin's Rap
+            {this.state.matchup[0].nickname}
+            {this.state.matchup[0].bars}
           </Col>
-          <Col xs="3">P.han.tom's Rap</Col>
+
+          <Col xs="3">
+            {this.state.matchup[1].nickname}
+            {this.state.matchup[1].bars}
+            </Col>
         </Row>
 
         <Row>
           <Col xs="3" sm={{ offset: 4 }}>
-            <Button style={{ justifyContent: "center" }}>lol</Button>
+            <Button 
+            style={{ justifyContent: "center" }}
+            onClick = {() => {this.vote(1)}}>
+              Vote for {this.state.matchup[0].nickname}'s rap!
+            </Button>
           </Col>
           <Col xs="3">
-            <Button style={{ justifyContent: "center" }}>lol</Button>
+          <Button 
+            style={{ justifyContent: "center" }}
+            onClick = {() => {this.vote(2)}}>
+            Vote for {this.state.matchup[1].nickname}'s rap!
+          </Button>
           </Col>
         </Row>
       </div>
@@ -232,7 +268,7 @@ export default class Game extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
-    this.state = { phase: "Pairing"};
+    this.state = { phase: "Pairing" };
     this.switchPhase = this.switchPhase.bind(this);
     this.client.switchPhase = this.switchPhase;
 
@@ -244,11 +280,11 @@ export default class Game extends React.Component {
 
   setPhase = () => {
     if (this.state.phase === "Pairing") {
-      return <PairingPhase socket = {this.client.socket} />;
+      return <PairingPhase socket={this.client.socket} />;
     } else if (this.state.phase === "Writing") {
       return <WritingPhase socket={this.client.socket} />;
     } else if (this.state.phase === "Voting") {
-      return <VotingPhase />;
+      return <VotingPhase socket={this.client.socket} />;
     } else if (this.state.phase == "VotingResults") {
       return <VotingResultsPhase />;
     } else if (this.state.phase == "RoundResults") {
