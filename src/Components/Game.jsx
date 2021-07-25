@@ -61,7 +61,7 @@ class WritingPhase extends React.Component {
     this.state = {
       words: [],
       displayWords: [],
-      nextWords: [true, false, false, false],
+      nextWords: [true, false, false, false, false],
     };
 
     this.props.socket.on("receiveWords", (newWords) => {
@@ -92,6 +92,42 @@ class WritingPhase extends React.Component {
     }
   };
 
+  sendBarsToServer = (index) => {
+    this.props.socket.emit(
+      "sendBars",
+      $("#barInput_" + index).val()
+    );
+  }
+
+  generateInputFields = () => {
+    let arr = []
+    for (let i = 0; i < 4; i++) {
+      arr.push(
+        <Form.Group as={Row}>
+          <Form.Label column xs="3">
+            {this.displayWords(i)}
+          </Form.Label>
+          <Col xs="5">
+            <Form.Control id={"barInput_" + i} />
+          </Col>
+          <Col xs="4">
+            <Button
+              variant="outline-dark"
+              disabled={this.state.nextWords[i + 1]}
+              onClick={() => {
+                this.showNextWords(i);
+                this.sendBarsToServer(i);
+              }}
+            >
+              Submit tha bar
+            </Button>
+          </Col>
+        </Form.Group>
+      )
+    }
+    return arr;
+  }
+
   render() {
     return (
       <div className="writingPhase">
@@ -106,81 +142,20 @@ class WritingPhase extends React.Component {
         </Row>
 
         <div id={`${game.promptContainer}`}>
-          <Form.Group as={Row}>
-            <Form.Label column xs="3">
-              {this.displayWords(0)}
-            </Form.Label>
-            <Col xs="5">
-              <Form.Control id={`${game.word_1}`} />
-            </Col>
-            <Col xs="4">
-              <Button
-                variant="outline-dark"
-                onClick={() => {
-                  this.showNextWords(0);
-                  this.props.socket.emit(
-                    "sendBars",
-                    $(`#${game.word_1}`).val()
-                  );
-                }}
-              >
-                Submit tha bar
-              </Button>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Form.Label column xs="3">
-              {this.displayWords(1)}
-            </Form.Label>
-            <Col xs="5">
-              <Form.Control id={game.word_2} />
-            </Col>
-            <Col xs="4">
-              <Button
-                variant="outline-dark"
-                onClick={() => {
-                  this.showNextWords(1);
-                }}
-              >
-                Submit tha bar
-              </Button>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Form.Label column xs="3">
-              {this.displayWords(2)}
-            </Form.Label>
-            <Col xs="5">
-              <Form.Control id={game.word_3} />
-            </Col>
-            <Col xs="4">
-              <Button
-                variant="outline-dark"
-                onClick={() => {
-                  this.showNextWords(2);
-                }}
-              >
-                Submit tha bar
-              </Button>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Form.Label column xs="3">
-              {this.displayWords(3)}
-            </Form.Label>
-            <Col xs="5">
-              <Form.Control id={game.word_4} />
-            </Col>
-            <Col xs="4">
-              <Button variant="outline-dark" onClick={() => {}}>
-                Submit tha bar
-              </Button>
-            </Col>
-          </Form.Group>
+          {this.generateInputFields()}
         </div>
+
+        <Row>
+          <Col>
+            <Button
+              variant="outline-dark"
+
+            >
+              Finish Spitting
+            </Button>
+          </Col>
+
+        </Row>
       </div>
     );
   }
