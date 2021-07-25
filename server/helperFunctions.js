@@ -13,11 +13,11 @@ module.exports = {
     // Pairs clients against each other. Pass in room.clients
     GeneratePairs(clients) {
         // TODO: Pair based on points? Make sure pairs arent repeated?
-        let remainingClients = Object.values(clients).map(client => client.name);
+        let remainingClients = clients;
         let pairings = {};
         // If odd number of players, pair someone with undefined
         if (remainingClients.length % 2 === 1) {
-            remainingClients.push(undefined);
+            remainingClients.push("filler");
         }
         this.shuffleArray(remainingClients);
         for (let i = 0; i < remainingClients.length; i += 2) {

@@ -72,7 +72,6 @@ io.on('connection', socket => {
             socket.join(roomId);
             rooms[roomId].clients[socket.id] = {};
             rooms[roomId].clients[socket.id].name = socket.name;
-            rooms[roomId].clients[socket.id].bars = [];
 
             if (numberOfClientsInRoom(roomId) === 1) {
                 rooms[roomId].clients[socket.id].isHost = true;
@@ -129,16 +128,24 @@ io.on('connection', socket => {
         }
 
         startPairPhase();
-        // startWritePhase();
     }
 
     function startPairPhase() {
-        let pairings = hf.GeneratePairs(rooms[socket.room].clients);
-        // console.log(pairings);
-        // for (let rapper of Object.keys(pairings)) {
-        //     rooms[socket.room].rounds[currentRound][rapper].opponent = pairings[rapper]; 
-        // }
-        io.to(socket.room).emit("startPairPhase", pairings);
+        let pairings = hf.GeneratePairs(Object.keys(rooms[socket.room].clients));
+        
+        // TODO: Remove undefined check when bot is ready or when odd number of players check is ready
+        let pairingsOfNames = Object.entries(pairings).map(([k, v]) => {
+            let newK = (k === "filler") ? "filler" : rooms[socket.room].clients[k].name;
+            let newV = (v === "filler") ? "filler" : rooms[socket.room].clients[v].name;
+            return [newK, newV];
+        });
+        for (let rapper of Object.keys(pairings)) {
+
+            // TODO: Remove undefined check when bot is ready or when odd number of players check is ready
+            if (rapper === "filler") continue;
+            rooms[socket.room].rounds[currentRound][rapper].opponent = pairings[rapper];
+        }
+        io.to(socket.room).emit("startPairPhase", pairings, pairingsOfNames);
         setGameState(socket.room, gameState.PAIRING);
         let t = rooms[socket.room].settings.pairingTime;
         setTimeout(() => { startWritePhase() }, t);

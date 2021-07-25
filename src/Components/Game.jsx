@@ -4,12 +4,13 @@ import Countdown from "./Countdown.jsx";
 import { Button, Card, Col, Form, FormGroup, Row } from "react-bootstrap";
 import game from "./Game.module.css";
 
+// ANCHOR: Pairing Phase
 class PairingPhase extends React.Component {
-  matchups = [];
   constructor(props) {
     super(props);
-    this.props.socket.on("startPairPhase", (pairs) => {
-      for (let pair of Object.entries(pairs)) {
+    this.matchups = [];
+    this.props.socket.on("startPairPhase", (pairs, pairDisplay) => {
+      for (let pair of pairDisplay) {
         this.matchups.push(
           <Card.Body>{`${pair[0]} vs. ${pair[1]}`}</Card.Body>
         );
@@ -17,6 +18,8 @@ class PairingPhase extends React.Component {
       this.forceUpdate();
     });
   }
+
+
 
   render() {
     return (
@@ -55,6 +58,8 @@ class PairingPhase extends React.Component {
   }
 }
 
+
+// ANCHOR: Writing Phase
 class WritingPhase extends React.Component {
   constructor(props) {
     super(props);
@@ -227,9 +232,10 @@ export default class Game extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
-    this.state = { phase: "Pairing", words: [] };
+    this.state = { phase: "Pairing"};
     this.switchPhase = this.switchPhase.bind(this);
     this.client.switchPhase = this.switchPhase;
+
   }
 
   switchPhase = (newPhase) => {
@@ -238,7 +244,7 @@ export default class Game extends React.Component {
 
   setPhase = () => {
     if (this.state.phase === "Pairing") {
-      return <PairingPhase socket={this.client.socket} />;
+      return <PairingPhase socket = {this.client.socket} />;
     } else if (this.state.phase === "Writing") {
       return <WritingPhase socket={this.client.socket} />;
     } else if (this.state.phase === "Voting") {
