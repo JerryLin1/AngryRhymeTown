@@ -18,6 +18,7 @@ server.listen(port, () => {
 });
 
 const rooms = {};
+let currentRound = 0;
 
 // Whenever a client connects
 io.on('connection', socket => {
@@ -120,11 +121,24 @@ io.on('connection', socket => {
     });
 
     function startRound() {
+        rooms[socket.room].rounds.push({});
+        for (let client of Object.keys(rooms[socket.room].clients)) {
+            rooms[socket.room].rounds[currentRound][client] = {};
+            rooms[socket.room].rounds[currentRound][client].presented = false;
+            rooms[socket.room].rounds[currentRound][client].bars = [];
+        }
+
         startPairPhase();
+        // startWritePhase();
     }
 
     function startPairPhase() {
-        io.to(socket.room).emit("startPairPhase", hf.GeneratePairs(rooms[socket.room].clients));
+        let pairings = hf.GeneratePairs(rooms[socket.room].clients);
+        // console.log(pairings);
+        // for (let rapper of Object.keys(pairings)) {
+        //     rooms[socket.room].rounds[currentRound][rapper].opponent = pairings[rapper]; 
+        // }
+        io.to(socket.room).emit("startPairPhase", pairings);
         setGameState(socket.room, gameState.PAIRING);
         let t = rooms[socket.room].settings.pairingTime;
         setTimeout(() => { startWritePhase() }, t);
@@ -184,7 +198,7 @@ io.on('connection', socket => {
     })
 
     socket.on("sendBars", (bars) => {
-        rooms[socket.room].clients[socket.id].bars.push(bars);
+        rooms[socket.room].rounds[currentRound][socket.id].bars.push(bars);
     })
 });
 
