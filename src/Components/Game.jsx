@@ -4,12 +4,13 @@ import Countdown from "./Countdown.jsx";
 import { Button, Card, Col, Form, FormGroup, Row } from "react-bootstrap";
 import game from "./Game.module.css";
 
+// ANCHOR: Pairing Phase
 class PairingPhase extends React.Component {
-  matchups = [];
   constructor(props) {
     super(props);
-    this.props.socket.on("startPairPhase", (pairs) => {
-      for (let pair of Object.entries(pairs)) {
+    this.matchups = [];
+    this.props.socket.on("startPairPhase", (pairs, pairDisplay) => {
+      for (let pair of pairDisplay) {
         this.matchups.push(
           <Card.Body>{`${pair[0]} vs. ${pair[1]}`}</Card.Body>
         );
@@ -17,6 +18,8 @@ class PairingPhase extends React.Component {
       this.forceUpdate();
     });
   }
+
+
 
   render() {
     return (
@@ -55,6 +58,8 @@ class PairingPhase extends React.Component {
   }
 }
 
+
+// ANCHOR: Writing Phase
 class WritingPhase extends React.Component {
   constructor(props) {
     super(props);
@@ -138,7 +143,7 @@ class WritingPhase extends React.Component {
         </Row>
 
         <Row id="countdown">
-          <Countdown time={5} />
+          <Countdown time={10} />
         </Row>
 
         <div id={`${game.promptContainer}`}>
@@ -164,6 +169,29 @@ class WritingPhase extends React.Component {
 class VotingPhase extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { matchup: [{nickname: "Loading", bars: "Loading"}, {nickname: "Loading", bars: "Loading"}] }
+
+    this.props.socket.on("receiveBattle", battle => {
+      if (battle === "finished") {
+        // handle here
+      } else {
+        this.setState({ matchup: battle });
+        console.log(this.state.matchup);
+      }
+    });
+  }
+
+  componentDidMount() {
+    this.getNextBattle();
+
+  }
+
+  getNextBattle = () => {
+    this.props.socket.emit("getBattle");
+  }
+
+  vote = (rapper) => {
+    this.props.socket.emit("receiveVote", rapper);
   }
 
   render() {
@@ -180,18 +208,38 @@ class VotingPhase extends React.Component {
         </Row>
 
         <Row>
-          <Col xs="3" sm={{ offset: 4 }}>
-            Gerry Lin's Rap
+          <Col xs="5" sm={{ offset: 2 }}>
+            {this.state.matchup[0].nickname}
+            <div>{this.state.matchup[0].bars}</div>
           </Col>
-          <Col xs="3">P.han.tom's Rap</Col>
+
+          <Col xs="5">
+            {this.state.matchup[1].nickname}
+            <div>{this.state.matchup[1].bars}</div>
+            </Col>
         </Row>
 
         <Row>
           <Col xs="3" sm={{ offset: 4 }}>
+<<<<<<< HEAD
             <Button variant="outline-success">VOTE</Button>
           </Col>
           <Col xs="3">
             <Button variant="outline-success">VOTE</Button>
+=======
+            <Button 
+            style={{ justifyContent: "center" }}
+            onClick = {() => {this.vote(1)}}>
+              Vote for {this.state.matchup[0].nickname}'s rap!
+            </Button>
+          </Col>
+          <Col xs="3">
+          <Button 
+            style={{ justifyContent: "center" }}
+            onClick = {() => {this.vote(2)}}>
+            Vote for {this.state.matchup[1].nickname}'s rap!
+          </Button>
+>>>>>>> b4736379a3edd3cbb1830a6d9a567380c71c06f8
           </Col>
         </Row>
       </div>
@@ -227,9 +275,10 @@ export default class Game extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
-    this.state = { phase: "Pairing", words: [] };
+    this.state = { phase: "Pairing" };
     this.switchPhase = this.switchPhase.bind(this);
     this.client.switchPhase = this.switchPhase;
+
   }
 
   switchPhase = (newPhase) => {
@@ -242,7 +291,7 @@ export default class Game extends React.Component {
     } else if (this.state.phase === "Writing") {
       return <WritingPhase socket={this.client.socket} />;
     } else if (this.state.phase === "Voting") {
-      return <VotingPhase />;
+      return <VotingPhase socket={this.client.socket} />;
     } else if (this.state.phase == "VotingResults") {
       return <VotingResultsPhase />;
     } else if (this.state.phase == "RoundResults") {

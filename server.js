@@ -18,7 +18,10 @@ server.listen(port, () => {
 });
 
 const rooms = {};
+let rapper1 = "", rapper2 = "";
 let currentRound = 0;
+let currentBattle = 0;
+let pairings = {};
 
 // Whenever a client connects
 io.on('connection', socket => {
@@ -72,7 +75,6 @@ io.on('connection', socket => {
             socket.join(roomId);
             rooms[roomId].clients[socket.id] = {};
             rooms[roomId].clients[socket.id].name = socket.name;
-            rooms[roomId].clients[socket.id].bars = [];
 
             if (numberOfClientsInRoom(roomId) === 1) {
                 rooms[roomId].clients[socket.id].isHost = true;
@@ -129,16 +131,25 @@ io.on('connection', socket => {
         }
 
         startPairPhase();
-        // startWritePhase();
     }
 
     function startPairPhase() {
-        let pairings = hf.GeneratePairs(rooms[socket.room].clients);
-        // console.log(pairings);
-        // for (let rapper of Object.keys(pairings)) {
-        //     rooms[socket.room].rounds[currentRound][rapper].opponent = pairings[rapper]; 
-        // }
-        io.to(socket.room).emit("startPairPhase", pairings);
+        pairings = hf.GeneratePairs(Object.keys(rooms[socket.room].clients));
+
+        // TODO: Remove undefined check when bot is ready or when odd number of players check is ready
+        let pairingsOfNames = Object.entries(pairings).map(([k, v]) => {
+            let newK = (k === "filler") ? "filler" : rooms[socket.room].clients[k].name;
+            let newV = (v === "filler") ? "filler" : rooms[socket.room].clients[v].name;
+            return [newK, newV];
+        });
+        for (let rapper of Object.keys(pairings)) {
+
+            // TODO: Remove undefined check when bot is ready or when odd number of players check is ready
+            if (rapper === "filler") continue;
+            rooms[socket.room].rounds[currentRound][rapper].opponent = pairings[rapper];
+            rooms[socket.room].rounds[currentRound][pairings[rapper]].opponent = rapper;
+        }
+        io.to(socket.room).emit("startPairPhase", pairings, pairingsOfNames);
         setGameState(socket.room, gameState.PAIRING);
         let t = rooms[socket.room].settings.pairingTime;
         setTimeout(() => { startWritePhase() }, t);
@@ -155,8 +166,40 @@ io.on('connection', socket => {
         io.to(socket.room).emit("startVotePhase");
         setGameState(socket.room, gameState.VOTING);
         let t = rooms[socket.room].settings.votingTime;
-        setTimeout(() => { startVoteResultsPhase() }, t);
+        // TODO: end voting phase on rap presentation finish
+        // setTimeout(() => { startVoteResultsPhase() }, t);
     }
+
+    socket.on("getBattle", () => {
+        if (rooms[socket.room].clients[socket.id].isHost) {
+            const battles = Object.keys(pairings);
+            rapper1 = battles[currentBattle];
+            rapper2 = rooms[socket.room].rounds[currentRound][rapper1].opponent;
+            currentBattle += 1;
+            if (currentBattle > battles.length) {
+                io.to(socket.room).emit("receiveBattle", "finished");
+                currentBattle = 0;
+            }
+
+            const matchup = [
+                {
+                    nickname: rooms[socket.room].clients[rapper1].name,
+                    bars: rooms[socket.room].rounds[currentRound][rapper1].bars
+                },
+                {
+                    nickname: rooms[socket.room].clients[rapper2].name,
+                    bars: rooms[socket.room].rounds[currentRound][rapper2].bars
+                }
+            ]
+
+            io.to(socket.room).emit("receiveBattle", matchup);
+        }
+
+    })
+
+    socket.on("receiveVote", rapper => {
+        (rapper === 1) ? rooms[socket.room].clients[rapper1].score += 1 : rooms[socket.room].clients[rapper2].score += 1;
+    })
 
     function startVoteResultsPhase() {
         io.to(socket.room).emit("startVoteResultsPhase");
