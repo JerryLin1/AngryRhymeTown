@@ -24,119 +24,124 @@ export default class Lobby extends React.Component {
     return (
       <div className={`${lobby.lobby}`}>
         {/* First row that displays the room code */}
-        <Row>
-          <Col xs="auto">
-            {/* TODO: change to empty name */}
-            <Form.Control
-              placeholder="Nickname"
-              id={`${lobby.inputNickname}`}
-              onChange={() => {
-                let input = $(`#${lobby.inputNickname}`);
-                // if statements to check if name is empty or too long
-                if (
-                  (input.val().length === 13 || input.val().trim() === "") &&
-                  $(`#${lobby.nameWarning}`).css("display") === "none"
-                ) {
-                  if (input.val().trim() === "") {
-                    $(`#${lobby.nameWarning}`).text("Nickname cannot be empty");
-                    $(`#${lobby.nameWarning}`).show();
-                  } else {
-                    $(`#${lobby.nameWarning}`).text(
-                      "Nickname is too long. It must be no more than 12 characters"
-                    );
-                    $(`#${lobby.nameWarning}`).show();
-                  }
-                } else if (input.val().length > 12) {
-                  return;
-                } else if (input.val().trim() === "") {
-                  $(`#${lobby.nameWarning}`).text("Nickname cannot be empty");
-                  return;
-                } else {
-                  $(`#${lobby.nameWarning}`).hide();
-                }
-              }}
-            />
-          </Col>
-          <Col xs="auto">
-            <Button
-              variant="outline-dark"
-              onClick={() => {
-                const nickname = $(`#${lobby.inputNickname}`).val();
-                if ($(`#${lobby.nameWarning}`).css("display") !== "none") {
-                  console.log(nickname);
-                  anime({
-                    targets: `#${lobby.nameWarning}`,
-                    keyframes: [
-                      { color: "rgb(255,0,0)" },
-                      { color: "rgb(0,0,0)" },
-                      { color: "rgb(255,0,0)" },
-                      { color: "rgb(0,0,0)" },
-                      { color: "rgb(255,0,0)" },
-                    ],
-                    duration: 1000,
-                  });
-                } else if (nickname === "") {
-                  $(`#${lobby.nameWarning}`).text("Nickname cannot be empty");
-                  $(`#${lobby.nameWarning}`).show();
-                  anime({
-                    targets: `#${lobby.nameWarning}`,
-                    keyframes: [
-                      { color: "rgb(255,0,0)" },
-                      { color: "rgb(0,0,0)" },
-                      { color: "rgb(255,0,0)" },
-                      { color: "rgb(0,0,0)" },
-                      { color: "rgb(255,0,0)" },
-                    ],
-                    duration: 1000,
-                  });
-                } else {
-                  this.client.setNick(nickname);
-                }
-              }}
-              id={`${lobby.setName}`}
-            >
-              Set Nickname
-            </Button>
-          </Col>
-
-          <Col>
-            <Button
-              variant="success"
-              onClick={() => {
-                this.client.startGame();
-              }}
-              id={`${lobby.startGame}`}
-              size="lg"
-            >
-              Start Game
-            </Button>
-          </Col>
-          <Col>
-            <Form.Group id={`${lobby.copyCode}`}>
-              <Form.Label column>Room Link: &ensp;</Form.Label>
+        <Form
+          onSubmit={(event) => {
+            event.preventDefault();
+            const nickname = $(`#${lobby.inputNickname}`).val();
+            if ($(`#${lobby.nameWarning}`).css("display") !== "none") {
+              console.log(nickname);
+              anime({
+                targets: `#${lobby.nameWarning}`,
+                keyframes: [
+                  { color: "rgb(255,0,0)" },
+                  { color: "rgb(0,0,0)" },
+                  { color: "rgb(255,0,0)" },
+                  { color: "rgb(0,0,0)" },
+                  { color: "rgb(255,0,0)" },
+                ],
+                duration: 1000,
+              });
+            } else if (nickname === "") {
+              $(`#${lobby.nameWarning}`).text("Nickname cannot be empty");
+              $(`#${lobby.nameWarning}`).show();
+              anime({
+                targets: `#${lobby.nameWarning}`,
+                keyframes: [
+                  { color: "rgb(255,0,0)" },
+                  { color: "rgb(0,0,0)" },
+                  { color: "rgb(255,0,0)" },
+                  { color: "rgb(0,0,0)" },
+                  { color: "rgb(255,0,0)" },
+                ],
+                duration: 1000,
+              });
+            } else {
+              this.client.setNick(nickname);
+              $(`#${lobby.inputNickname}`).val("");
+            }
+          }}
+        >
+          <Row>
+            <Col xs="auto">
               <Form.Control
-                id={`${lobby.roomCode}`}
-                value={window.location.href}
-                readOnly
-                plaintext
+                placeholder="Nickname"
+                id={`${lobby.inputNickname}`}
+                onChange={() => {
+                  let input = $(`#${lobby.inputNickname}`);
+                  // if statements to check if name is empty or too long
+                  if (
+                    (input.val().length === 13 || input.val().trim() === "") &&
+                    $(`#${lobby.nameWarning}`).css("display") === "none"
+                  ) {
+                    if (input.val().trim() === "") {
+                      $(`#${lobby.nameWarning}`).text(
+                        "Nickname cannot be empty"
+                      );
+                      $(`#${lobby.nameWarning}`).show();
+                    } else {
+                      $(`#${lobby.nameWarning}`).text(
+                        "Nickname is too long. It must be no more than 12 characters"
+                      );
+                      $(`#${lobby.nameWarning}`).show();
+                    }
+                  } else if (input.val().length > 12) {
+                    return;
+                  } else if (input.val().trim() === "") {
+                    $(`#${lobby.nameWarning}`).text("Nickname cannot be empty");
+                    return;
+                  } else {
+                    $(`#${lobby.nameWarning}`).hide();
+                  }
+                }}
               />
-              <OverlayTrigger
-                placement="top"
-                overlay={<Tooltip id={`${lobby.tooltip}`}>Copy Code</Tooltip>}
+            </Col>
+            <Col xs="auto">
+              <Button
+                variant="outline-dark"
+                type="submit"
+                id={`${lobby.setName}`}
               >
-                <Clipboard
-                  id={`${lobby.cb}`}
-                  onClick={() => {
-                    $(`#${lobby.roomCode}`).select();
-                    document.execCommand("copy");
-                    $(".tooltip-inner").text("Copied!");
-                  }}
+                Set Nickname
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                variant="success"
+                onClick={() => {
+                  this.client.startGame();
+                }}
+                id={`${lobby.startGame}`}
+                size="lg"
+              >
+                Start Game
+              </Button>
+            </Col>
+            <Col>
+              <Form.Group id={`${lobby.copyCode}`}>
+                <Form.Label column>Room Link: &ensp;</Form.Label>
+                <Form.Control
+                  id={`${lobby.roomCode}`}
+                  value={window.location.href}
+                  readOnly
+                  plaintext
                 />
-              </OverlayTrigger>
-            </Form.Group>
-          </Col>
-        </Row>
-
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip id={`${lobby.tooltip}`}>Copy Code</Tooltip>}
+                >
+                  <Clipboard
+                    id={`${lobby.cb}`}
+                    onClick={() => {
+                      $(`#${lobby.roomCode}`).select();
+                      document.execCommand("copy");
+                      $(".tooltip-inner").text("Copied!");
+                    }}
+                  />
+                </OverlayTrigger>
+              </Form.Group>
+            </Col>
+          </Row>
+        </Form>
         <div id={`${lobby.nameWarning}`} style={{ display: "none" }}>
           Nickname is too long. It must be no more than 12 characters
         </div>
@@ -159,30 +164,29 @@ export default class Lobby extends React.Component {
               <Card.Header style={{ fontSize: "2em" }}>Chat</Card.Header>
               <Card.Body id="chat" style={{ overflowY: "scroll" }}></Card.Body>
             </Card>
-            <div id={`${lobby.sendbar}`}>
-              <input
-                placeholder="Type a message..."
-                type="text"
-                id={`${lobby.chatInput}`}
-                onKeyDown={(e) => {
-                  if (e.code === "Enter") {
-                    this.client.sendMessage($(`#${lobby.chatInput}`).val());
-                    $(`#${lobby.chatInput}`).val("");
-                  }
-                }}
-              />
-              <Button
-                variant="outline-dark"
-                onClick={() => {
-                  this.client.sendMessage($(`#${lobby.chatInput}`).val());
-                  $(`#${lobby.chatInput}`).val("");
-                  $(`#${lobby.chatInput}`).focus();
-                }}
-                id={`${lobby.chatEnter}`}
-              >
-                Send Message
-              </Button>
-            </div>
+            <Form
+              onSubmit={(event) => {
+                event.preventDefault();
+                this.client.sendMessage($(`#${lobby.chatInput}`).val());
+                $(`#${lobby.chatInput}`).val("");
+                $(`#${lobby.chatInput}`).focus();
+              }}
+            >
+              <div id={`${lobby.sendbar}`}>
+                <input
+                  placeholder="Type a message..."
+                  type="text"
+                  id={`${lobby.chatInput}`}
+                />
+                <Button
+                  variant="outline-dark"
+                  id={`${lobby.chatEnter}`}
+                  type="submit"
+                >
+                  Send Message
+                </Button>
+              </div>
+            </Form>
           </Col>
         </Row>
       </div>
