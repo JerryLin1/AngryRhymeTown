@@ -109,7 +109,11 @@ class WritingPhase extends React.Component {
             {this.displayWords(i)}
           </Form.Label>
           <Col xs="5">
-            <Form.Control id={"barInput_" + i} autoComplete="off" />
+            <Form.Control
+              id={"barInput_" + i}
+              autoComplete="off"
+              disabled={this.state.currentLine !== i}
+            />
           </Col>
           <Col xs="4">
             <Button
@@ -150,36 +154,9 @@ class WritingPhase extends React.Component {
           <Col style={{ textAlign: "center" }}>
             <Button
               id={`${game.finishWriting}`}
-              variant="danger"
-              onMouseOver={() => {
-                anime({
-                  targets: `#${game.finishWriting}`,
-                  backgroundColor: "#fff",
-                  border: "1px solid #198754",
-                  color: "#198754",
-                  duration: 150,
-                });
-              }}
-              onMouseOut={() => {
-                if ($(`#${game.finishWriting}`).css("background-color") === "rgb(25, 135, 84)") {
-                  return;
-                }
-                anime({
-                  targets: `#${game.finishWriting}`,
-                  backgroundColor: "#dc3545",
-                  border: "1px solid #dc3545",
-                  color: "#fff",
-                  duration: 150,
-                });
-              }}
+              variant="outline-success"
               onClick={() => {
-                anime({
-                  targets: `#${game.finishWriting}`,
-                  backgroundColor: "#198754",
-                  border: "1px solid #198754",
-                  color: "#fff",
-                  duration: 150,
-                });
+                $(`#${game.finishWriting}`).attr("class", "btn btn-success");
               }}
             >
               Finish Spitting
@@ -313,19 +290,19 @@ export default class Game extends React.Component {
   };
 
   setPhase = () => {
-    // if (this.state.phase === "Pairing") {
-    //   return <PairingPhase socket={this.client.socket} />;
-    // } else if (this.state.phase === "Writing") {
-    return <WritingPhase socket={this.client.socket} />;
-    // } else if (this.state.phase === "Voting") {
-    //   return <VotingPhase socket={this.client.socket} />;
-    // } else if (this.state.phase == "VotingResults") {
-    //   return <VotingResultsPhase />;
-    // } else if (this.state.phase == "RoundResults") {
-    //   return <RoundResultsPhase />;
-    // } else if (this.state.phase == "GameResults") {
-    //   return <GameResultsPhase />;
-    // }
+    if (this.state.phase === "Pairing") {
+      return <PairingPhase socket={this.client.socket} />;
+    } else if (this.state.phase === "Writing") {
+      return <WritingPhase socket={this.client.socket} />;
+    } else if (this.state.phase === "Voting") {
+      return <VotingPhase socket={this.client.socket} />;
+    } else if (this.state.phase == "VotingResults") {
+      return <VotingResultsPhase />;
+    } else if (this.state.phase == "RoundResults") {
+      return <RoundResultsPhase />;
+    } else if (this.state.phase == "GameResults") {
+      return <GameResultsPhase />;
+    }
   };
 
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////

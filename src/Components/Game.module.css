@@ -25,11 +25,28 @@ html {
 }
 
 #finishWriting {
+    position: relative;
     font-size: 1.5em;
-    width: 25em;
+    padding: 0 1em 0 1em;
     height: 150%;
+    overflow: hidden;
 }
 
-#finishWriting:focus {
-    outline: none;
+#finishWriting:after {
+    content: "";
+    background: #ffffff;
+    display: block;
+    position: absolute;
+    width: 150%;
+    padding-top: 200%;
+    margin-left: -50%;
+    margin-top: -50%;
+    opacity: 0;
+    transition: all 0.8s;
+}
+
+#finishWriting:active::after {
+    width: 0%;
+    opacity: 1;
+    transition: 0s;
 }
