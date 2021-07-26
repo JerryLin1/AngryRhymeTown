@@ -1,6 +1,7 @@
 import React from "react";
 import $ from "jquery";
 import Countdown from "./Countdown.jsx";
+import anime from "animejs";
 import { Button, Card, Col, Form, FormGroup, Row } from "react-bootstrap";
 import game from "./Game.module.css";
 
@@ -18,8 +19,6 @@ class PairingPhase extends React.Component {
       this.forceUpdate();
     });
   }
-
-
 
   render() {
     return (
@@ -58,7 +57,6 @@ class PairingPhase extends React.Component {
   }
 }
 
-
 // ANCHOR: Writing Phase
 class WritingPhase extends React.Component {
   constructor(props) {
@@ -67,6 +65,7 @@ class WritingPhase extends React.Component {
       words: [],
       displayWords: [],
       nextWords: [true, false, false, false, false],
+      currentLine: 0,
     };
 
     this.props.socket.on("receiveWords", (newWords) => {
@@ -98,14 +97,11 @@ class WritingPhase extends React.Component {
   };
 
   sendBarsToServer = (index) => {
-    this.props.socket.emit(
-      "sendBars",
-      $("#barInput_" + index).val()
-    );
-  }
+    this.props.socket.emit("sendBars", $("#barInput_" + index).val());
+  };
 
   generateInputFields = () => {
-    let arr = []
+    let arr = [];
     for (let i = 0; i < 4; i++) {
       arr.push(
         <Form.Group as={Row}>
@@ -113,25 +109,27 @@ class WritingPhase extends React.Component {
             {this.displayWords(i)}
           </Form.Label>
           <Col xs="5">
-            <Form.Control id={"barInput_" + i} />
+            <Form.Control id={"barInput_" + i} autoComplete="off" />
           </Col>
           <Col xs="4">
             <Button
               variant="outline-dark"
-              disabled={this.state.nextWords[i + 1]}
+              disabled={this.state.currentLine !== i}
               onClick={() => {
                 this.showNextWords(i);
                 this.sendBarsToServer(i);
+                $(".btn-outline-dark:first").attr("class", "btn btn-success");
+                this.setState({ currentLine: this.state.currentLine + 1 });
               }}
             >
               Submit tha bar
             </Button>
           </Col>
         </Form.Group>
-      )
+      );
     }
     return arr;
-  }
+  };
 
   render() {
     return (
@@ -146,20 +144,47 @@ class WritingPhase extends React.Component {
           <Countdown time={10} />
         </Row>
 
-        <div id={`${game.promptContainer}`}>
-          {this.generateInputFields()}
-        </div>
+        <div id={`${game.promptContainer}`}>{this.generateInputFields()}</div>
 
         <Row>
-          <Col>
+          <Col style={{ textAlign: "center" }}>
             <Button
-              variant="outline-dark"
-
+              id={`${game.finishWriting}`}
+              variant="danger"
+              onMouseOver={() => {
+                anime({
+                  targets: `#${game.finishWriting}`,
+                  backgroundColor: "#fff",
+                  border: "1px solid #198754",
+                  color: "#198754",
+                  duration: 150,
+                });
+              }}
+              onMouseOut={() => {
+                if ($(`#${game.finishWriting}`).css("background-color") === "rgb(25, 135, 84)") {
+                  return;
+                }
+                anime({
+                  targets: `#${game.finishWriting}`,
+                  backgroundColor: "#dc3545",
+                  border: "1px solid #dc3545",
+                  color: "#fff",
+                  duration: 150,
+                });
+              }}
+              onClick={() => {
+                anime({
+                  targets: `#${game.finishWriting}`,
+                  backgroundColor: "#198754",
+                  border: "1px solid #198754",
+                  color: "#fff",
+                  duration: 150,
+                });
+              }}
             >
               Finish Spitting
             </Button>
           </Col>
-
         </Row>
       </div>
     );
@@ -169,9 +194,14 @@ class WritingPhase extends React.Component {
 class VotingPhase extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { matchup: [{nickname: "Loading", bars: "Loading"}, {nickname: "Loading", bars: "Loading"}] }
+    this.state = {
+      matchup: [
+        { nickname: "Loading", bars: "Loading" },
+        { nickname: "Loading", bars: "Loading" },
+      ],
+    };
 
-    this.props.socket.on("receiveBattle", battle => {
+    this.props.socket.on("receiveBattle", (battle) => {
       if (battle === "finished") {
         // handle here
       } else {
@@ -183,16 +213,15 @@ class VotingPhase extends React.Component {
 
   componentDidMount() {
     this.getNextBattle();
-
   }
 
   getNextBattle = () => {
     this.props.socket.emit("getBattle");
-  }
+  };
 
   vote = (rapper) => {
     this.props.socket.emit("receiveVote", rapper);
-  }
+  };
 
   render() {
     return (
@@ -216,30 +245,29 @@ class VotingPhase extends React.Component {
           <Col xs="5">
             {this.state.matchup[1].nickname}
             <div>{this.state.matchup[1].bars}</div>
-            </Col>
+          </Col>
         </Row>
 
         <Row>
           <Col xs="3" sm={{ offset: 4 }}>
-<<<<<<< HEAD
-            <Button variant="outline-success">VOTE</Button>
-          </Col>
-          <Col xs="3">
-            <Button variant="outline-success">VOTE</Button>
-=======
-            <Button 
-            style={{ justifyContent: "center" }}
-            onClick = {() => {this.vote(1)}}>
+            <Button
+              style={{ justifyContent: "center" }}
+              onClick={() => {
+                this.vote(1);
+              }}
+            >
               Vote for {this.state.matchup[0].nickname}'s rap!
             </Button>
           </Col>
           <Col xs="3">
-          <Button 
-            style={{ justifyContent: "center" }}
-            onClick = {() => {this.vote(2)}}>
-            Vote for {this.state.matchup[1].nickname}'s rap!
-          </Button>
->>>>>>> b4736379a3edd3cbb1830a6d9a567380c71c06f8
+            <Button
+              style={{ justifyContent: "center" }}
+              onClick={() => {
+                this.vote(2);
+              }}
+            >
+              Vote for {this.state.matchup[1].nickname}'s rap!
+            </Button>
           </Col>
         </Row>
       </div>
@@ -278,7 +306,6 @@ export default class Game extends React.Component {
     this.state = { phase: "Pairing" };
     this.switchPhase = this.switchPhase.bind(this);
     this.client.switchPhase = this.switchPhase;
-
   }
 
   switchPhase = (newPhase) => {
@@ -286,19 +313,19 @@ export default class Game extends React.Component {
   };
 
   setPhase = () => {
-    if (this.state.phase === "Pairing") {
-      return <PairingPhase socket={this.client.socket} />;
-    } else if (this.state.phase === "Writing") {
-      return <WritingPhase socket={this.client.socket} />;
-    } else if (this.state.phase === "Voting") {
-      return <VotingPhase socket={this.client.socket} />;
-    } else if (this.state.phase == "VotingResults") {
-      return <VotingResultsPhase />;
-    } else if (this.state.phase == "RoundResults") {
-      return <RoundResultsPhase />;
-    } else if (this.state.phase == "GameResults") {
-      return <GameResultsPhase />;
-    }
+    // if (this.state.phase === "Pairing") {
+    //   return <PairingPhase socket={this.client.socket} />;
+    // } else if (this.state.phase === "Writing") {
+    return <WritingPhase socket={this.client.socket} />;
+    // } else if (this.state.phase === "Voting") {
+    //   return <VotingPhase socket={this.client.socket} />;
+    // } else if (this.state.phase == "VotingResults") {
+    //   return <VotingResultsPhase />;
+    // } else if (this.state.phase == "RoundResults") {
+    //   return <RoundResultsPhase />;
+    // } else if (this.state.phase == "GameResults") {
+    //   return <GameResultsPhase />;
+    // }
   };
 
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////

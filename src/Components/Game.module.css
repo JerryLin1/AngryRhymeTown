@@ -16,10 +16,20 @@ html {
     font-size: 3em;
 }
 
-#promptContainer > div {
+#promptContainer>div {
     margin-bottom: 0.5em;
 }
 
 .timePrompt {
     font-size: 2.5em;
+}
+
+#finishWriting {
+    font-size: 1.5em;
+    width: 25em;
+    height: 150%;
+}
+
+#finishWriting:focus {
+    outline: none;
 }
