@@ -22,3 +22,20 @@
 #joinRoom {
     margin-left: 0.5em;
 }
+
+#credits {
+    position: fixed;
+    width: 100%;
+    bottom: 0.5em;
+}
+
+#gitBtn {
+    border-radius: 25%;
+}
+
+#gitBtn:hover {
+    cursor: pointer;
+    fill: #fff; 
+    background: linear-gradient(#e66465, #9198e5);
+    transition: 0.3s;
+}

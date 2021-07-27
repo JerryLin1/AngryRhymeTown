@@ -1,12 +1,30 @@
 import React from "react";
-import game from "./Game.module.css"
+import anime from "animejs";
+import game from "./Game.module.css";
 
 // displays text that counts down. I figured someone would need to do it eventually
+
 export default class Countdown extends React.Component {
   constructor(props) {
     super(props);
   }
   componentDidMount() {
+    setTimeout(() => {
+      const animation = anime.timeline({
+        targets: `.${game.Countdown}`,
+        loop: true,
+        duration: 1000
+      });
+
+      animation
+        .add({
+          color: "rgb(255,0,0)",
+        })
+        .add({
+          color: "rgb(0,0,0)",
+        });
+    }, this.props.time * 1000 - 14500);
+
     this.startingTime = Date.now();
     this.secondsLeft = parseInt(this.props.time);
     this.interval = setInterval(() => {
@@ -26,9 +44,11 @@ export default class Countdown extends React.Component {
   }
 
   render() {
+    const { before, after } = this.props;
+
     return (
-      <div className="countdown" id={game.countdown}>
-        {this.secondsLeft}
+      <div className={`${game.Countdown}`}>
+        {before} {this.secondsLeft} seconds {after}
       </div>
     );
   }

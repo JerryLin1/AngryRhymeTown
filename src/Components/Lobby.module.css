@@ -57,7 +57,7 @@ input {
     border: none;
     text-align-last: left;
     margin-right: 0.5em;
-    width: 15em !important;
+    width: 14em !important;
 }
 
 /******* Row 2 *******/
@@ -70,8 +70,9 @@ input {
 
 #chatInput {
     width: 70%;
+    margin-right: 1%;
 }
 
 #chatEnter {
-    width: 30%;
+    width: 29%;
 }

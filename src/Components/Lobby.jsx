@@ -165,6 +165,7 @@ export default class Lobby extends React.Component {
               <Card.Body id="chat" style={{ overflowY: "scroll" }}></Card.Body>
             </Card>
             <Form
+              autoComplete="off"
               onSubmit={(event) => {
                 event.preventDefault();
                 this.client.sendMessage($(`#${lobby.chatInput}`).val());

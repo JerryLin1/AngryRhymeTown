@@ -2,10 +2,10 @@ html {
     margin: 1em 0 0 1em;
 }
 
-#countdown {
+.Countdown {
+    font-size: 1.5em;
     text-align: center;
-    margin-bottom: 2em;
-    display: inline-block;
+    margin-bottom: 1em;
 }
 
 #matchups {
@@ -14,14 +14,11 @@ html {
 
 #header {
     font-size: 3em;
+    text-align: center;
 }
 
 #promptContainer>div {
     margin-bottom: 0.5em;
-}
-
-.timePrompt {
-    font-size: 2.5em;
 }
 
 #finishWriting {
