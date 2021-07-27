@@ -112,6 +112,7 @@ io.on('connection', socket => {
     socket.on("startGame", () => {
         if (rooms[socket.room].gameState === gameState.LOBBY && rooms[socket.room].clients[socket.id].isHost === true) {
             // TODO: if (rooms[socket.room].length %% 2 === 0) Must be even number of players. unless we code bot?
+            io.to(socket.room).emit("receiveRoomSettings", rooms[socket.room].settings);
             io.to(socket.room).emit("startGame");
             // rooms[socket.room].gameState = gameState.START; ??
 

@@ -11,6 +11,7 @@ export default class Client extends React.Component {
         this.socket = io();
         this.name = "";
         this.room = [];
+        this.roomSettings = {};
 
         // At start, attempt to join the room ID from the URL
         this.roomId = (window.location.pathname + window.location.search).substring(1);
@@ -88,6 +89,9 @@ export default class Client extends React.Component {
 
             if (autoScroll === true) jsele.scrollTo(0, jsele.scrollHeight);
         });
+        this.socket.on("receiveRoomSettings", roomSettings => {
+            this.roomSettings = roomSettings;
+        })
     }
 
     setNick = (name) => {

@@ -43,7 +43,7 @@ export default class VotingPhase extends React.Component {
         </Row>
         <Row>
           <Countdown
-            time={10}
+            time={this.props.roomSettings.votingTime/1000}
             before="You have"
             after="left to vote for your favorite rap!"
           />
