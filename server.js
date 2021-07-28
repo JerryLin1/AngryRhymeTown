@@ -184,9 +184,7 @@ io.on('connection', socket => {
     }
 
     function startBattle() {
-        hf.logObj(rooms[socket.room],'\n');
         const battles = Object.keys(rooms[socket.room].pairings);
-        console.log(battles, '\n');
         rooms[socket.room].rapper1 = battles[rooms[socket.room].battle];
         rooms[socket.room].rapper2 =
             rooms[socket.room]
@@ -290,10 +288,10 @@ io.on('connection', socket => {
 });
 
 // Server debug messages
-// setInterval(() => {
-//     console.log(`${io.engine.clientsCount} clients.`);
-//     hf.logObj(rooms)
-// }, 10000)
+setInterval(() => {
+    console.log(`${io.engine.clientsCount} clients.`);
+    hf.logObj(rooms)
+}, 10000)
 
 function numberOfClientsInRoom(roomId) {
     return Object.keys(rooms[roomId].clients).length;
