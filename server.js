@@ -62,6 +62,7 @@ io.on('connection', socket => {
         rooms[roomId].pairings = {};
         rooms[roomId].battle = 0;
         rooms[roomId].currentRound = 0;
+        rooms[roomId].votesCast = 0;
         rooms[roomId].rapper1 = "";
         rooms[roomId].rapper2 = "";
         rooms[roomId].settings = DEFAULT_ROOM_SETTINGS;
@@ -226,6 +227,7 @@ io.on('connection', socket => {
     }
 
     socket.on("receiveVote", rapper => {
+        rooms[socket.room].votesCast += 1;
         (rapper === 1) ?
             rooms[socket.room]
                 .clients[rooms[socket.room].rapper1]
@@ -236,10 +238,15 @@ io.on('connection', socket => {
                 .score += 1;
 
         // Check if all votes have been submitted
-        if (rooms[socket.room].clients[rooms[socket.room].rapper1].score
-            + rooms[socket.room].clients[rooms[socket.room].rapper2].score
-            == Object.keys(rooms[socket.room].clients).length-2) {
-            startBattle();
+        if (rooms[socket.room].votesCast == Object.keys(rooms[socket.room].clients).length-2) {
+            rooms[socket.room].votesCast = 0;
+
+            // Check if the next round or the next battle should start
+            if (rooms[socket.room].currentRound == rooms[socket.room].rounds.length) {
+                startRound();
+            } else {
+                startBattle();
+            }
         }
     })
 
