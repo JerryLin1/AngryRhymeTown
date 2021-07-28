@@ -38,7 +38,7 @@ export default class Home extends React.Component {
               }}
               id={`${home.joinRoom}`}
             >
-              Join Room
+              Join Lobby
             </Button>
           </Col>
         </Row>

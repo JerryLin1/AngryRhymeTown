@@ -37,7 +37,7 @@ export default class VotingPhase extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={`${game.votePhase}`}>
         <Row>
           <div id={`${game.header}`}>Time To Vote!</div>
         </Row>

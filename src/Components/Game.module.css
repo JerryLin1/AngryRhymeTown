@@ -8,14 +8,18 @@ html {
     margin-bottom: 1em;
 }
 
-#matchups {
-    height: 75vh;
-}
-
 #header {
     font-size: 3em;
     text-align: center;
 }
+
+/* Pairing phase */
+
+#matchups {
+    height: 75vh;
+}
+
+/* Writing Phase */
 
 #promptContainer>div {
     margin-bottom: 0.5em;
@@ -47,3 +51,5 @@ html {
     opacity: 1;
     transition: 0s;
 }
+
+/* Voting Phase */
