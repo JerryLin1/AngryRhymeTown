@@ -11,25 +11,20 @@ export default class VotingPhase extends React.Component {
         { nickname: "Loading", bars: "Loading" },
         { nickname: "Loading", bars: "Loading" },
       ],
+      voted: false
     };
 
     this.props.socket.on("receiveBattle", (battle) => {
       if (battle === "finished") {
+        console.log(battle);
         // handle here
       } else {
         this.setState({ matchup: battle });
+        this.setState({voted: false});
         console.log(this.state.matchup);
       }
     });
   }
-
-  componentDidMount() {
-    this.getNextBattle();
-  }
-
-  getNextBattle = () => {
-    this.props.socket.emit("getBattle");
-  };
 
   vote = (rapper) => {
     this.props.socket.emit("receiveVote", rapper);
@@ -66,8 +61,11 @@ export default class VotingPhase extends React.Component {
             <Button
               variant="outline-success"
               style={{ justifyContent: "center" }}
+              disabled = {this.state.voted}
               onClick={() => {
                 this.vote(1);
+                this.setState({voted: true});
+
               }}
             >
               Vote for {this.state.matchup[0].nickname}'s rap!
@@ -77,8 +75,10 @@ export default class VotingPhase extends React.Component {
             <Button
               variant="outline-success"
               style={{ justifyContent: "center" }}
+              disabled = {this.state.voted}
               onClick={() => {
                 this.vote(2);
+                this.setState({voted: true});
               }}
             >
               Vote for {this.state.matchup[1].nickname}'s rap!
