@@ -78,6 +78,22 @@ html {
 }
 
 /* Round results */
+
 #rapperList {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 1.5em;
+    width: 75%;
+}
+
+#rapperList>div {
+    margin: 0.5em 0 0.5em 0;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+}
+
+#rapperList>div:hover {
+    transform: scale(1.2);
+    transition: 0.3s;
 }
