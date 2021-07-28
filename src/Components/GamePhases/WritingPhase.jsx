@@ -97,7 +97,7 @@ export default class WritingPhase extends React.Component {
         </Row>
 
         <Row>
-          <Countdown time={18} before="You have " after=" to spit some bars!" />
+          <Countdown time={this.props.roomSettings.writingTime/1000} before="You have " after=" to spit some bars!" />
         </Row>
 
         <div id={`${game.promptContainer}`}>{this.generateInputFields()}</div>
