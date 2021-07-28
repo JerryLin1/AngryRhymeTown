@@ -62,6 +62,7 @@ io.on('connection', socket => {
         rooms[roomId].pairings = {};
         rooms[roomId].battle = 0;
         rooms[roomId].currentRound = 0;
+        rooms[roomId].votesCast = 0;
         rooms[roomId].rapper1 = "";
         rooms[roomId].rapper2 = "";
         rooms[roomId].settings = DEFAULT_ROOM_SETTINGS;
@@ -178,49 +179,55 @@ io.on('connection', socket => {
         io.to(socket.room).emit("startVotePhase");
         setGameState(socket.room, gameState.VOTING);
         let t = rooms[socket.room].settings.votingTime;
+        startBattle();
         // TODO: end voting phase on rap presentation finish
         // setTimeout(() => { startVoteResultsPhase() }, t);
     }
 
-    socket.on("getBattle", () => {
-        if (rooms[socket.room].clients[socket.id].isHost) {
-            const battles = Object.keys(rooms[socket.room].pairings);
-            rooms[socket.room].rapper1 = battles[rooms[socket.room].battle];
-            rooms[socket.room].rapper2 =
-                rooms[socket.room]
-                    .rounds[rooms[socket.room].currentRound][battles[rooms[socket.room].battle]]
-                    .opponent;;
-            rooms[socket.room].battle += 1;
-            if (rooms[socket.room].battle == battles.length) {
-                io.to(socket.room).emit("receiveBattle", "finished");
-                rooms[socket.room].battle = 0;
+    function startBattle() {
+        const battles = Object.keys(rooms[socket.room].pairings);
+        rooms[socket.room].rapper1 = battles[rooms[socket.room].battle];
+        rooms[socket.room].rapper2 =
+            rooms[socket.room]
+                .rounds[rooms[socket.room].currentRound][battles[rooms[socket.room].battle]]
+                .opponent;
+
+
+        const matchup = [
+            {
+                nickname: rooms[socket.room]
+                    .clients[rooms[socket.room].rapper1]
+                    .name,
+                bars: rooms[socket.room]
+                    .rounds[rooms[socket.room].currentRound][rooms[socket.room].rapper1]
+                    .bars
+            },
+            {
+                nickname: rooms[socket.room]
+                    .clients[rooms[socket.room].rapper2]
+                    .name,
+                bars: rooms[socket.room]
+                    .rounds[rooms[socket.room].currentRound][rooms[socket.room].rapper2]
+                    .bars
             }
+        ]
 
-            const matchup = [
-                {
-                    nickname: rooms[socket.room]
-                        .clients[rooms[socket.room].rapper1]
-                        .name,
-                    bars: rooms[socket.room]
-                        .rounds[rooms[socket.room].currentRound][rooms[socket.room].rapper1]
-                        .bars
-                },
-                {
-                    nickname: rooms[socket.room]
-                        .clients[rooms[socket.room].rapper2]
-                        .name,
-                    bars: rooms[socket.room]
-                        .rounds[rooms[socket.room].currentRound][rooms[socket.room].rapper2]
-                        .bars
-                }
-            ]
-
-            io.to(socket.room).emit("receiveBattle", matchup);
+        // Go to next battle and check if all battles in the round are over
+        // If so, go to next round 
+        rooms[socket.room].battle += 1;
+        if (rooms[socket.room].battle == battles.length) {
+            io.to(socket.room).emit("receiveBattle", "finished");
+            rooms[socket.room].battle = 0;
+            rooms[socket.room].currentRound += 1;
+            // TODO: Check for round limit and end game
         }
+        io.to(socket.room).emit("receiveBattle", matchup);
+        
 
-    })
+    }
 
     socket.on("receiveVote", rapper => {
+        rooms[socket.room].votesCast += 1;
         (rapper === 1) ?
             rooms[socket.room]
                 .clients[rooms[socket.room].rapper1]
@@ -229,6 +236,18 @@ io.on('connection', socket => {
             rooms[socket.room]
                 .clients[rooms[socket.room].rapper2]
                 .score += 1;
+
+        // Check if all votes have been submitted
+        if (rooms[socket.room].votesCast == Object.keys(rooms[socket.room].clients).length-2) {
+            rooms[socket.room].votesCast = 0;
+
+            // Check if the next round or the next battle should start
+            if (rooms[socket.room].currentRound == rooms[socket.room].rounds.length) {
+                startRound();
+            } else {
+                startBattle();
+            }
+        }
     })
 
     function startVoteResultsPhase() {
