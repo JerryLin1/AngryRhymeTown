@@ -48,7 +48,7 @@ export default class Game extends React.Component {
     } else if (this.state.phase === "Writing") {
       return <WritingPhase socket={this.client.socket} roomSettings={this.client.roomSettings}/>;
     } else if (this.state.phase === "Voting") {
-      return <VotingPhase socket={this.client.socket} roomSettings={this.client.roomSettings}/>;
+      return <VotingPhase client = {this.client} roomSettings={this.client.roomSettings}/>;
     } else if (this.state.phase == "VotingResults") {
       return <VotingResultsPhase />;
     } else if (this.state.phase == "RoundResults") {
