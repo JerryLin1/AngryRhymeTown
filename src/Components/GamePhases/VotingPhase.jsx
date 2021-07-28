@@ -6,6 +6,8 @@ import game from "../Game.module.css";
 export default class VotingPhase extends React.Component {
   constructor(props) {
     super(props);
+    this.client = this.props.client;
+    this.socket = this.props.client.socket;
     this.state = {
       matchup: [
         { nickname: "Loading", bars: "Loading" },
@@ -14,20 +16,16 @@ export default class VotingPhase extends React.Component {
       voted: false
     };
 
-    this.props.socket.on("receiveBattle", (battle) => {
-      if (battle === "finished") {
-        console.log(battle);
-        // handle here
-      } else {
-        this.setState({ matchup: battle });
-        this.setState({voted: false});
-        console.log(this.state.matchup);
-      }
+    this.socket.on("receiveBattle", (battle) => {
+      
+      this.setState({ matchup: battle });
+      this.setState({voted: (this.client.name === battle[0].nickname || this.client.name === battle[1].nickname)});
+      
     });
   }
 
   vote = (rapper) => {
-    this.props.socket.emit("receiveVote", rapper);
+    this.socket.emit("receiveVote", rapper);
   };
 
   render() {

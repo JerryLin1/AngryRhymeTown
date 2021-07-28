@@ -6,14 +6,19 @@ import game from "../Game.module.css";
 export default class PairingPhase extends React.Component {
   constructor(props) {
     super(props);
-    this.matchups = [];
-    this.props.socket.on("startPairPhase", (pairs, pairDisplay) => {
+    this.state = {matchups: []};
+    
+  }
+
+  componentDidMount() {
+    this.props.socket.on("sendPairings", (pairDisplay) => {
+      let matchups = [];
       for (let pair of pairDisplay) {
-        this.matchups.push(
+        matchups.push(
           <Card.Body>{`${pair[0]} vs. ${pair[1]}`}</Card.Body>
         );
       }
-      this.forceUpdate();
+      this.setState({matchups: matchups});
     });
   }
 
@@ -45,7 +50,7 @@ export default class PairingPhase extends React.Component {
               <Card.Title>
                 <strong>GET READY FOR YOUR MATCHUP</strong>
               </Card.Title>
-              <div>{this.matchups}</div>
+              <div>{this.state.matchups}</div>
             </Card>
           </Col>
         </Row>

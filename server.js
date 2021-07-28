@@ -139,6 +139,11 @@ io.on('connection', socket => {
     }
 
     function startPairPhase() {
+        io.to(socket.room).emit("startPairPhase");
+        setGameState(socket.room, gameState.PAIRING);
+        let t = rooms[socket.room].settings.pairingTime;
+        setTimeout(() => { startWritePhase() }, t);
+
         let pairings = hf.GeneratePairs(Object.keys(rooms[socket.room].clients));
         rooms[socket.room].pairings = pairings;
 
@@ -148,7 +153,8 @@ io.on('connection', socket => {
             let newV = (v === "filler") ? "filler" : rooms[socket.room].clients[v].name;
             return [newK, newV];
         });
-        io.to(socket.room).emit("startPairPhase", pairings, pairingsOfNames);
+
+        io.to(socket.room).emit("sendPairings", pairingsOfNames);
 
         for (let rapper of Object.keys(pairings)) {
 
@@ -163,9 +169,7 @@ io.on('connection', socket => {
                 .rounds[rooms[socket.room].currentRound][pairings[rapper]]
                 .opponent = rapper;
         }
-        setGameState(socket.room, gameState.PAIRING);
-        let t = rooms[socket.room].settings.pairingTime;
-        setTimeout(() => { startWritePhase() }, t);
+        
     }
 
     function startWritePhase() {
@@ -216,7 +220,6 @@ io.on('connection', socket => {
         // If so, go to next round 
         rooms[socket.room].battle += 1;
         if (rooms[socket.room].battle == battles.length) {
-            io.to(socket.room).emit("receiveBattle", "finished");
             rooms[socket.room].battle = 0;
             rooms[socket.room].currentRound += 1;
             // TODO: Check for round limit and end game
