@@ -25,7 +25,7 @@ export default class PairingPhase extends React.Component {
           <Col id={`${game.mainGame}`}>
             <Row>
               <Col id={`${game.countdown}`}>
-                <div id={`${game.header}`}>
+                <div className={`${game.header}`}>
                   <Countdown time={this.props.roomSettings.pairingTime/1000} before="The game starts in" />
                 </div>
               </Col>

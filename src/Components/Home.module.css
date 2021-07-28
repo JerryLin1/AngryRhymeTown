@@ -26,17 +26,23 @@
 #credits {
     position: fixed;
     width: 100%;
-    bottom: 0.5em;
+    bottom: 3.5em;
 }
 
-#gitBtn {
-    border-radius: 25%;
+#repoLink {
+    position: absolute;
+    padding: 8px;
+    bottom: -2.5em;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ccc;
     transition: 0.3s;
+    border-radius: 1em;
 }
 
-#gitBtn:hover {
+#repoLink:hover {
     cursor: pointer;
-    fill: #fff; 
+    fill: #fff;
     background: linear-gradient(#e66465, #9198e5);
     transition: 0.3s;
 }

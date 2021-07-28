@@ -23,7 +23,7 @@ export default class Countdown extends React.Component {
         .add({
           color: "rgb(0,0,0)",
         });
-    }, this.props.time * 1000 - 14500);
+    }, Math.max(this.props.time * 1000 - 14500, 0));
 
     this.startingTime = Date.now();
     this.secondsLeft = parseInt(this.props.time);

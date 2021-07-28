@@ -1,6 +1,5 @@
 import React from "react";
 import Countdown from "../Countdown.jsx";
-import anime from "animejs";
 import $ from "jquery";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import game from "../Game.module.css";
@@ -92,7 +91,7 @@ export default class WritingPhase extends React.Component {
       <div className="writingPhase">
         <Row>
           <Col>
-            <div id={`${game.header}`}>Write your rhyme!</div>
+            <div className={`${game.header}`}>Write your rhyme!</div>
           </Col>
         </Row>
 
