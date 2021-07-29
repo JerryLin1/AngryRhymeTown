@@ -6,8 +6,12 @@ import game from "../Game.module.css";
 export default class PairingPhase extends React.Component {
   constructor(props) {
     super(props);
+    this.client = this.props.client;
+    this.socket = this.props.client.socket;
+    this.roomSettings = this.props.client.roomSettings;
+
     this.state = {matchups: []};
-    this.props.socket.on("sendPairings", (pairDisplay) => {
+    this.socket.on("sendPairings", (pairDisplay) => {
       let matchups = [];
       for (let pair of pairDisplay) {
         matchups.push(
@@ -29,7 +33,7 @@ export default class PairingPhase extends React.Component {
             <Row>
               <Col id={`${game.countdown}`}>
                 <div className={`${game.header}`}>
-                  <Countdown time={this.props.roomSettings.pairingTime/1000} before="The game starts in" />
+                  <Countdown time={this.roomSettings.pairingTime/1000} before="The game starts in" />
                 </div>
               </Col>
             </Row>

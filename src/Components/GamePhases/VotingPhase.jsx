@@ -8,6 +8,7 @@ export default class VotingPhase extends React.Component {
     super(props);
     this.client = this.props.client;
     this.socket = this.props.client.socket;
+    this.roomSettings = this.props.client.roomSettings;
 
     const fontColors = [
       "rgb(0, 119, 255)",
@@ -59,7 +60,7 @@ export default class VotingPhase extends React.Component {
         </Row>
         <Row>
           <Countdown
-            time={this.props.roomSettings.votingTime / 1000}
+            time={this.roomSettings.votingTime / 1000}
             before="You have"
             after="left to vote for your favorite rap!"
           />
