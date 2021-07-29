@@ -23,7 +23,7 @@ const rooms = {};
 io.on('connection', socket => {
     console.log(`${socket.id} has connected.`);
     socket.room = undefined;
-    socket.name = "New Player #" + socket.id.substring(0, 4).toUpperCase();
+    socket.name = "Player #" + socket.id.substring(0, 4).toUpperCase();
 
     socket.on('disconnect', () => {
         console.log(`${socket.id} has disconnected.`);
