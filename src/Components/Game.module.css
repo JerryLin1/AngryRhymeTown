@@ -63,20 +63,6 @@ html {
     font-size: 2.5em;
 }
 
-/* Voting Results Phase */
-
-.voters {
-    margin-bottom: 1.5em;
-}
-
-.voters>div {
-    display: inline-block;
-    margin: 0 0.5em 0 0.5em;
-    width: 10em;
-    height: 1.5em;
-    outline: 1px solid #ccc;
-}
-
 /* Round results */
 
 #rapperList {
@@ -94,6 +80,61 @@ html {
 }
 
 #rapperList>div:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
     transition: 0.3s;
+}
+
+/* Game Results */
+
+#podium {
+    display: flex;
+    height: 25em;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+
+#podium>div {
+    display: inline-block;
+    text-align: center;
+    font-size: 1.5em;
+    width: 10em;
+    margin: 0 1em 0 1em;
+}
+
+#podium>div:hover {
+    transition: 0.3s;
+    transform: scale(1.05);
+}
+
+/* Podium spots */
+
+#firstP {
+    height: 16em;
+    background-color: #ffed48;
+    transition: 0.3s;
+}
+
+#firstP:hover {
+    filter: drop-shadow(0 0 1.5em #ffed48);
+}
+
+#secondP {
+    height: 13em;
+    background-color: #C0C0C0;
+    transition: 0.3s;
+}
+
+#secondP:hover {
+    filter: drop-shadow(0 0 1.5em #C0C0C0);
+}
+
+#thirdP {
+    height: 10em;
+    background-color: #cd7f32;
+    transition: 0.3s;
+}
+
+#thirdP:hover {
+    filter: drop-shadow(0 0 1.5em #cd7f32);
 }

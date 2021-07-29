@@ -8,27 +8,7 @@ export default class VotingPhase extends React.Component {
     super(props);
     this.client = this.props.client;
     this.socket = this.props.client.socket;
-    this.state = {
-      matchup: [
-        { nickname: "Loading", bars: "Loading" },
-        { nickname: "Loading", bars: "Loading" },
-      ],
-      voted: false
-    };
 
-    this.socket.on("receiveBattle", (battle) => {
-      
-      this.setState({ matchup: battle });
-      this.setState({voted: (this.client.name === battle[0].nickname || this.client.name === battle[1].nickname)});
-      
-    });
-  }
-
-  vote = (rapper) => {
-    this.socket.emit("receiveVote", rapper);
-  };
-
-  render() {
     const fontColors = [
       "rgb(0, 119, 255)",
       "rgb(0, 192, 26)",
@@ -44,6 +24,34 @@ export default class VotingPhase extends React.Component {
       color2 = Math.floor(Math.random() * 5);
     }
 
+    this.state = {
+      matchup: [
+        { nickname: "Loading", bars: "Loading" },
+        { nickname: "Loading", bars: "Loading" },
+      ],
+      voted: false,
+      color1: fontColors[color1],
+      color2: fontColors[color2],
+    };
+
+    this.socket.on("receiveBattle", (battle) => {
+      this.setState({ matchup: battle });
+      this.setState({
+        voted:
+          this.client.name === battle[0].nickname ||
+          this.client.name === battle[1].nickname,
+      });
+    });
+  }
+
+  vote = (rapper) => {
+    this.socket.emit("receiveVote", rapper);
+  };
+
+  render() {
+    const color1 = this.state.color1;
+    const color2 = this.state.color2;
+
     return (
       <div className={`${game.votePhase}`}>
         <Row>
@@ -58,14 +66,14 @@ export default class VotingPhase extends React.Component {
         </Row>
 
         <Row>
-          <Col xs="5" sm={{ offset: 2 }} style={{ color: fontColors[color1] }}>
+          <Col xs="5" sm={{ offset: 2 }} style={{ color: color1 }}>
             <div className={`${game.rapperName}`}>
               {this.state.matchup[0].nickname}
             </div>
             <div className={`${game.rap}`}>{this.state.matchup[0].bars}</div>
           </Col>
 
-          <Col xs="5" style={{ color: fontColors[color2] }}>
+          <Col xs="5" style={{ color: color2 }}>
             <div className={`${game.rapperName}`}>
               {this.state.matchup[1].nickname}
             </div>
@@ -76,13 +84,15 @@ export default class VotingPhase extends React.Component {
         <Row>
           <Col xs="3" sm={{ offset: 2 }}>
             <Button
-              variant="outline-success"
-              style={{ justifyContent: "center" }}
-              disabled = {this.state.voted}
+              variant="outline-dark"
+              style={{
+                color: color1,
+                border: `1px solid ${color1}`,
+              }}
+              disabled={this.state.voted}
               onClick={() => {
                 this.vote(1);
-                this.setState({voted: true});
-
+                this.setState({ voted: true });
               }}
             >
               Vote for {this.state.matchup[0].nickname}'s rap!
@@ -90,12 +100,15 @@ export default class VotingPhase extends React.Component {
           </Col>
           <Col xs="3" sm={{ offset: 2 }}>
             <Button
-              variant="outline-success"
-              style={{ justifyContent: "center" }}
-              disabled = {this.state.voted}
+              variant="outline-dark"
+              style={{
+                color: color2,
+                border: `1px solid ${color2}`,
+              }}
+              disabled={this.state.voted}
               onClick={() => {
                 this.vote(2);
-                this.setState({voted: true});
+                this.setState({ voted: true });
               }}
             >
               Vote for {this.state.matchup[1].nickname}'s rap!
