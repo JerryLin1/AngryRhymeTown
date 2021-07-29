@@ -61,7 +61,7 @@ io.on('connection', socket => {
         rooms[roomId].rounds = [];
         rooms[roomId].pairings = {};
         rooms[roomId].battle = 0;
-        rooms[roomId].currentRound = 0;
+        rooms[roomId].currentRound = -1;
         rooms[roomId].votesCast = 0;
         rooms[roomId].rapper1 = "";
         rooms[roomId].rapper2 = "";
@@ -126,6 +126,8 @@ io.on('connection', socket => {
     });
 
     function startRound() {
+        rooms[socket.room].currentRound += 1;
+        rooms[socket.room].battle = 0;
         rooms[socket.room].rounds.push({});
 
 
@@ -169,7 +171,7 @@ io.on('connection', socket => {
                 .rounds[rooms[socket.room].currentRound][pairings[rapper]]
                 .opponent = rapper;
         }
-        
+
     }
 
     function startWritePhase() {
@@ -219,13 +221,8 @@ io.on('connection', socket => {
         // Go to next battle and check if all battles in the round are over
         // If so, go to next round 
         rooms[socket.room].battle += 1;
-        if (rooms[socket.room].battle == battles.length) {
-            rooms[socket.room].battle = 0;
-            rooms[socket.room].currentRound += 1;
-            // TODO: Check for round limit and end game
-        }
         io.to(socket.room).emit("receiveBattle", matchup);
-        
+
 
     }
 
@@ -241,24 +238,28 @@ io.on('connection', socket => {
                 .score += 1;
 
         // Check if all votes have been submitted
-        if (rooms[socket.room].votesCast == Object.keys(rooms[socket.room].clients).length-2) {
+        if (rooms[socket.room].votesCast == Object.keys(rooms[socket.room].clients).length - 2) {
             rooms[socket.room].votesCast = 0;
 
+            // TODO: Display results of voting, wait X seconds
+
             // Check if the next round or the next battle should start
-            if (rooms[socket.room].currentRound == rooms[socket.room].rounds.length) {
-                startRound();
-            } else {
-                startBattle();
-            }
+            StartNext();
         }
     })
 
-    function startVoteResultsPhase() {
-        io.to(socket.room).emit("startVoteResultsPhase");
-        setGameState(socket.room, gameState.VOTING_RESULTS)
-        let t = rooms[socket.room].settings.votingResultsTime;
-        // TODO: if last round, go to gameresults. Otherwise go to roundresults
-        setTimeout(() => { startGameResultsPhase() }, t);
+    // Check if the next round or the next battle should start, or end game
+    function StartNext() {
+        if (Object.keys(rooms[socket.room].pairings).length === rooms[socket.room].battle) {
+            if (rooms[socket.room].currentRound === rooms[socket.room].settings.numberOfRounds - 1) {
+                startGameResultsPhase();
+            }
+            else {
+                startRoundResultsPhase();
+            }
+        } else if (Object.keys(rooms[socket.room].pairings).length > rooms[socket.room].battle) {
+            startBattle();
+        }
     }
 
     function startRoundResultsPhase() {
