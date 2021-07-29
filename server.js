@@ -253,14 +253,6 @@ io.on('connection', socket => {
         }
     })
 
-    function startVoteResultsPhase() {
-        io.to(socket.room).emit("startVoteResultsPhase");
-        setGameState(socket.room, gameState.VOTING_RESULTS)
-        let t = rooms[socket.room].settings.votingResultsTime;
-        // TODO: if last round, go to gameresults. Otherwise go to roundresults
-        setTimeout(() => { startGameResultsPhase() }, t);
-    }
-
     function startRoundResultsPhase() {
         io.to(socket.room).emit("startRoundResultsPhase");
         setGameState(socket.room, gameState.ROUND_RESULTS);

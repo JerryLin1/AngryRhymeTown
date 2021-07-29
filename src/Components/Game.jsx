@@ -4,7 +4,6 @@ import PairingPhase from "./GamePhases/PairingPhase.jsx";
 import WritingPhase from "./GamePhases/WritingPhase.jsx";
 import VotingPhase from "./GamePhases/VotingPhase.jsx";
 
-import VotingResultsPhase from "./ResultPhases/VotingResultsPhase.jsx";
 import RoundResultsPhase from "./ResultPhases/RoundResultsPhase.jsx";
 import GameResultsPhase from "./ResultPhases/GameResultsPhase.jsx";
 
@@ -28,8 +27,6 @@ export default class Game extends React.Component {
       return <WritingPhase socket={this.client.socket} roomSettings={this.client.roomSettings}/>;
     } else if (this.state.phase === "Voting") {
       return <VotingPhase client = {this.client} roomSettings={this.client.roomSettings}/>;
-    } else if (this.state.phase == "VotingResults") {
-    return <VotingResultsPhase />;
     } else if (this.state.phase == "RoundResults") {
     return <RoundResultsPhase />;
     } else if (this.state.phase == "GameResults") {

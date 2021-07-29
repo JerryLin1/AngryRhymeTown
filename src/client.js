@@ -58,9 +58,6 @@ export default class Client extends React.Component {
         this.socket.on("startVotePhase", () => {
             this.switchPhase("Voting");
         })
-        this.socket.on("startVoteResultsPhase", () => {
-            this.switchPhase("VotingResults");
-        })
         this.socket.on("startRoundResultsPhase", () => {
             this.switchPhase("RoundResults");
         })
