@@ -5,7 +5,32 @@ import game from "../Game.module.css";
 export default class GameResultsPhase extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      results: [{ name: "Loading", score: "Loading" },
+      { name: "Loading", score: "Loading" },
+      { name: "Loading", score: "Loading" }], 
+      otherRappers: []
+    }
+
+    this.props.socket.on("sendResults", results => {
+      this.setState({ results: results });
+      this.setState({otherRappers: this.generateOtherRappers()});
+    })
   }
+
+  generateOtherRappers = () => {
+    let otherRappers = [];
+    for (let i = 3; i < this.state.results.length; i++) {
+      otherRappers.push(
+        <Row>
+          <Col xs="8">{i + 1}. {this.state.results[i].name}</Col>
+          <Col>{this.state.results[i].score}</Col>
+        </Row>
+      )
+    }
+    return otherRappers;
+  }
+
   render() {
     return (
       <div>
@@ -13,31 +38,23 @@ export default class GameResultsPhase extends React.Component {
         <div id={`${game.podium}`}>
           <div id={`${game.secondP}`}>
             <strong>2nd</strong>
-            <div>linjerr492</div>
+            <div>{this.state.results[1].name}</div>
+            <div>{this.state.results[1].score}</div>
           </div>
           <div id={`${game.firstP}`}>
             <strong>1st</strong>
-            <div>linrose362</div>
+            <div>{this.state.results[0].name}</div>
+            <div>{this.state.results[0].score}</div>
           </div>
           <div id={`${game.thirdP}`}>
             <strong>3rd</strong>
-            <div>P.han.tom</div>
+            <div>{this.state.results[2].name}</div>
+            <div>{this.state.results[2].score}</div>
           </div>
         </div>
 
         <div id={game.rapperList}>
-          <Row>
-            <Col xs="8">4. linrose362</Col>
-            <Col>100 points</Col>
-          </Row>
-          <Row>
-            <Col xs="8">5. linjerr492</Col>
-            <Col>75 points</Col>
-          </Row>
-          <Row>
-            <Col xs="8">6. p.han.tom</Col>
-            <Col>50 points</Col>
-          </Row>
+          {this.state.otherRappers}
         </div>
       </div>
     );

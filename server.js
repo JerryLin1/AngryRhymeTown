@@ -23,7 +23,7 @@ const rooms = {};
 io.on('connection', socket => {
     console.log(`${socket.id} has connected.`);
     socket.room = undefined;
-    socket.name = "New Player #" + socket.id.substring(0, 4).toUpperCase();
+    socket.name = "Player #" + socket.id.substring(0, 4).toUpperCase();
 
     socket.on('disconnect', () => {
         console.log(`${socket.id} has disconnected.`);
@@ -238,18 +238,19 @@ io.on('connection', socket => {
                 .score += 1;
 
         // Check if all votes have been submitted
-        if (rooms[socket.room].votesCast == Object.keys(rooms[socket.room].clients).length - 2) {
+        // TODO REPLACE Object.keys(rooms[socket.room].clients).length - 2
+        if (rooms[socket.room].votesCast == 1) {
             rooms[socket.room].votesCast = 0;
 
             // TODO: Display results of voting, wait X seconds
 
             // Check if the next round or the next battle should start
-            StartNext();
+            startNext();
         }
     })
 
     // Check if the next round or the next battle should start, or end game
-    function StartNext() {
+    function startNext() {
         if (Object.keys(rooms[socket.room].pairings).length === rooms[socket.room].battle) {
             if (rooms[socket.room].currentRound === rooms[socket.room].settings.numberOfRounds - 1) {
                 startGameResultsPhase();
@@ -272,6 +273,16 @@ io.on('connection', socket => {
     function startGameResultsPhase() {
         io.to(socket.room).emit("startGameResultsPhase");
         setGameState(socket.room, gameState.GAME_RESULTS);
+
+
+        let results = [];
+        for (let client of Object.keys(rooms[socket.room].clients)) {
+            let name = rooms[socket.room].clients[client].name;
+            let score = rooms[socket.room].clients[client].score;
+            results.push({name: name, score: score});
+        }
+        results.sort((a, b) => (a.score > b.score) ? -1 : 1);
+        io.to(socket.room).emit("sendResults", results);
 
         // TODO: In addition to or instead of these timeouts, 
         // have a button to go immediately to the next phase
