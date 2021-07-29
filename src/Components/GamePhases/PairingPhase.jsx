@@ -7,10 +7,6 @@ export default class PairingPhase extends React.Component {
   constructor(props) {
     super(props);
     this.state = {matchups: []};
-    
-  }
-
-  componentDidMount() {
     this.props.socket.on("sendPairings", (pairDisplay) => {
       let matchups = [];
       for (let pair of pairDisplay) {
@@ -21,6 +17,8 @@ export default class PairingPhase extends React.Component {
       this.setState({matchups: matchups});
     });
   }
+
+ 
 
   render() {
     return (
