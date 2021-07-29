@@ -17,7 +17,7 @@ export default class VotingPhase extends React.Component {
       "rgb(228, 0, 209)",
       "rgb(0, 228, 179)",
     ];
-    // this portion generates 2 colors that are guarenteed to be different from each other
+    // this portion generates 2 colors that are guaranteed to be different from each other
     let color1 = Math.floor(Math.random() * 5),
       color2 = Math.floor(Math.random() * 5);
 
