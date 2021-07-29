@@ -8,27 +8,24 @@ export default class GameResultsPhase extends React.Component {
     this.state = {
       results: [{ name: "Loading", score: "Loading" },
       { name: "Loading", score: "Loading" },
-      { name: "Loading", score: "Loading" }], 
+      { name: "Loading", score: "Loading" }],
       otherRappers: []
     }
 
-    this.props.socket.on("sendResults", results => {
+    this.props.socket.on("sendGameResults", results => {
       this.setState({ results: results });
-      this.setState({otherRappers: this.generateOtherRappers()});
-    })
-  }
 
-  generateOtherRappers = () => {
-    let otherRappers = [];
-    for (let i = 3; i < this.state.results.length; i++) {
-      otherRappers.push(
-        <Row>
-          <Col xs="8">{i + 1}. {this.state.results[i].name}</Col>
-          <Col>{this.state.results[i].score}</Col>
-        </Row>
-      )
-    }
-    return otherRappers;
+      let otherRappers = [];
+      for (let i = 3; i < results.length; i++) {
+        otherRappers.push(
+          <Row>
+            <Col xs="8">{i + 1}. {results[i].name}</Col>
+            <Col>{results[i].score}</Col>
+          </Row>
+        )
+      }
+      this.setState({ otherRappers: otherRappers });
+    })
   }
 
   render() {

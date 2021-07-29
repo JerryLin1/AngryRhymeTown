@@ -28,7 +28,7 @@ export default class Game extends React.Component {
     } else if (this.state.phase === "Voting") {
       return <VotingPhase client={this.client} roomSettings={this.client.roomSettings} />;
     } else if (this.state.phase == "RoundResults") {
-      return <RoundResultsPhase />;
+      return <RoundResultsPhase socket = {this.client.socket}/>;
     } else if (this.state.phase == "GameResults") {
       return <GameResultsPhase socket = {this.client.socket}/>;
     }
