@@ -34,7 +34,6 @@ export default class RoundResultsPhase extends React.Component {
             <Col xs="8">
               3. p.han.tom <Award style={{ color: "#cd7f32 " }} />
             </Col>
-
             <Col>50 points</Col>
           </Row>
         </div>
