@@ -6,6 +6,10 @@ import game from "../Game.module.css";
 export default class RoundResultsPhase extends React.Component {
   constructor(props) {
     super(props);
+    this.client = this.props.client;
+    this.socket = this.props.client.socket;
+    this.roomSettings = this.props.client.roomSettings;
+
     this.state = {
       results: [{ name: "Loading", score: "Loading" },
       { name: "Loading", score: "Loading" },
@@ -14,7 +18,7 @@ export default class RoundResultsPhase extends React.Component {
       round: 0
     }
 
-    this.props.socket.on("sendRoundResults", results => {
+    this.socket.on("sendRoundResults", results => {
       this.setState({ results: results });
       this.setState({round: this.state.round+1});
       let otherRappers = [];

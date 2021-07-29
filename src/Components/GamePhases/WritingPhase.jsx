@@ -7,6 +7,10 @@ import game from "../Game.module.css";
 export default class WritingPhase extends React.Component {
   constructor(props) {
     super(props);
+    this.client = this.props.client;
+    this.socket = this.props.client.socket;
+    this.roomSettings = this.props.client.roomSettings;
+
     this.state = {
       words: [],
       displayWords: [],
@@ -14,7 +18,7 @@ export default class WritingPhase extends React.Component {
       currentLine: 0,
     };
 
-    this.props.socket.on("receiveWords", (newWords) => {
+    this.socket.on("receiveWords", (newWords) => {
       this.setState({ words: newWords });
 
       let toDisplayWords = [];
@@ -48,7 +52,7 @@ export default class WritingPhase extends React.Component {
   };
 
   sendBarsToServer = (index) => {
-    this.props.socket.emit("sendBars", $("#barInput_" + index).val());
+    this.socket.emit("sendBars", $("#barInput_" + index).val());
   };
 
   generateInputFields = () => {
@@ -96,7 +100,7 @@ export default class WritingPhase extends React.Component {
         </Row>
 
         <Row>
-          <Countdown time={this.props.roomSettings.writingTime/1000} before="You have " after=" to spit some bars!" />
+          <Countdown time={this.roomSettings.writingTime/1000} before="You have " after=" to spit some bars!" />
         </Row>
 
         <div id={`${game.promptContainer}`}>{this.generateInputFields()}</div>

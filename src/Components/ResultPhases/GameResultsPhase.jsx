@@ -5,6 +5,10 @@ import game from "../Game.module.css";
 export default class GameResultsPhase extends React.Component {
   constructor(props) {
     super(props);
+    this.client = this.props.client;
+    this.socket = this.props.client.socket;
+    this.roomSettings = this.props.client.roomSettings;
+
     this.state = {
       results: [{ name: "Loading", score: "Loading" },
       { name: "Loading", score: "Loading" },
@@ -12,7 +16,7 @@ export default class GameResultsPhase extends React.Component {
       otherRappers: []
     }
 
-    this.props.socket.on("sendGameResults", results => {
+    this.socket.on("sendGameResults", results => {
       this.setState({ results: results });
 
       let otherRappers = [];
