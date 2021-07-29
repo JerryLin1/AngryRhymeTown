@@ -27,8 +27,8 @@ export default class VotingPhase extends React.Component {
 
     this.state = {
       matchup: [
-        { nickname: "Loading", bars: ["deez", "nuts", "deez", "nuts"] },
-        { nickname: "Loading", bars: ["deez", "nuts", "deez", "nuts"] },
+        { nickname: "Loading", bars: ["Loading", "Loading", "Loading", "Loading"] },
+        { nickname: "Loading", bars: ["Loading", "Loading", "Loading", "Loading"] },
       ],
       voted: false,
       color1: fontColors[color1],

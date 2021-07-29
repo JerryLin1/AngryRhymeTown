@@ -32,11 +32,11 @@ export default class Client extends React.Component {
         // Update the player list in the client's room
         this.socket.on("updateClientList", (room) => {
             $('#lobbyList').html("");
-            this.name = room.clients[this.socket.id].name;
+            this.name = room[this.socket.id].name;
 
             this.room = room;
 
-            for (let client of Object.values(room.clients)) {
+            for (let client of Object.values(room)) {
                 $("#lobbyList").append("<div>" + client.name + "</div>");
             }
         })
@@ -93,7 +93,7 @@ export default class Client extends React.Component {
 
     setNick = (name) => {
         if (name.trim() === "" || name.trim().length <= 12) {
-            if (Object.values(this.room.clients).map(client => client.name).includes(name)) {
+            if (Object.values(this.room).map(client => client.name).includes(name)) {
                 // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE. Already functional but an alert would be good
             } else {
                 this.name = name;

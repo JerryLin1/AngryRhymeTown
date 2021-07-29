@@ -37,16 +37,12 @@ io.on('connection', socket => {
             delete rooms[socket.room].clients[socket.id];
 
             if (numberOfClientsInRoom(socket.room) > 0) {
-                if (transferHost === true) {
+                if (transferHost) {
                     Object.values(rooms[socket.room].clients)[0].isHost = true;
                 }
-
-                io.to(socket.room).emit("updateClientList", rooms[socket.room]);
+                io.to(socket.room).emit("updateClientList", rooms[socket.room].clients);
             }
             // TODO: Delete room when empty. Currently, just this will cause errors
-            // else {
-            //     delete rooms[socket.room];
-            // }
         }
     });
 
@@ -63,6 +59,8 @@ io.on('connection', socket => {
         rooms[roomId].battle = 0;
         rooms[roomId].currentRound = -1;
         rooms[roomId].votesCast = 0;
+        rooms[roomId].finishedSpittin = 0;
+        rooms[roomId].nextPhase = null;
         rooms[roomId].rapper1 = "";
         rooms[roomId].rapper2 = "";
         rooms[roomId].settings = DEFAULT_ROOM_SETTINGS;
@@ -86,7 +84,8 @@ io.on('connection', socket => {
             }
             hf.logObj(rooms);
             socket.room = roomId;
-            io.to(socket.room).emit("updateClientList", rooms[roomId]);
+            io.to(socket.room).emit("joinedLobby");
+            io.to(socket.room).emit("updateClientList", rooms[roomId].clients);
         }
         // Else redirect them back to home
         else {
@@ -99,7 +98,7 @@ io.on('connection', socket => {
         if (rooms[socket.room].gameState === gameState.LOBBY) {
             socket.name = name;
             rooms[socket.room].clients[socket.id].name = socket.name;
-            io.to(socket.room).emit("updateClientList", rooms[socket.room]);
+            io.to(socket.room).emit("updateClientList", rooms[socket.room].clients);
         }
     })
 
@@ -144,7 +143,7 @@ io.on('connection', socket => {
         io.to(socket.room).emit("startPairPhase");
         setGameState(socket.room, gameState.PAIRING);
         let t = rooms[socket.room].settings.pairingTime;
-        setTimeout(() => { startWritePhase() }, t);
+        rooms[socket.room].nextPhase = setTimeout(() => { startWritePhase() }, t);
 
         let pairings = hf.GeneratePairs(Object.keys(rooms[socket.room].clients));
         rooms[socket.room].pairings = pairings;
@@ -178,19 +177,29 @@ io.on('connection', socket => {
         io.to(socket.room).emit("startWritePhase");
         setGameState(socket.room, gameState.WRITING);
         let t = rooms[socket.room].settings.writingTime;
-        setTimeout(() => { startVotePhase() }, t);
+        rooms[socket.room].nextPhase = setTimeout(() => { startVotePhase() }, t);
     };
+
+    socket.on("finishedSpittin", () => {
+        rooms[socket.room].finishedSpittin += 1;
+        if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room)) {
+            clearTimeout(rooms[socket.room].nextPhase);
+            startVotePhase();
+        }
+    })
 
     function startVotePhase() {
         io.to(socket.room).emit("startVotePhase");
         setGameState(socket.room, gameState.VOTING);
-        let t = rooms[socket.room].settings.votingTime;
         startBattle();
         // TODO: end voting phase on rap presentation finish
         // setTimeout(() => { startVoteResultsPhase() }, t);
     }
 
     function startBattle() {
+        let t = rooms[socket.room].settings.votingTime; 
+        rooms[socket.room].nextPhase = setTimeout(() => {startNext()}, t)
+
         const battles = Object.keys(rooms[socket.room].pairings);
         rooms[socket.room].rapper1 = battles[rooms[socket.room].battle];
         rooms[socket.room].rapper2 =
@@ -223,7 +232,6 @@ io.on('connection', socket => {
         rooms[socket.room].battle += 1;
         io.to(socket.room).emit("receiveBattle", matchup);
 
-
     }
 
     socket.on("receiveVote", rapper => {
@@ -238,9 +246,8 @@ io.on('connection', socket => {
                 .score += 1;
 
         // Check if all votes have been submitted
-        // TODO REPLACE Object.keys(rooms[socket.room].clients).length - 2
+        // TODO REPLACE numberOfClientsInRoom(socket.room) - 2
         if (rooms[socket.room].votesCast == 1) {
-            rooms[socket.room].votesCast = 0;
 
             // TODO: Display results of voting, wait X seconds
 
@@ -251,6 +258,8 @@ io.on('connection', socket => {
 
     // Check if the next round or the next battle should start, or end game
     function startNext() {
+        rooms[socket.room].votesCast = 0;
+        clearTimeout(rooms[socket.room].nextPhase);
         if (Object.keys(rooms[socket.room].pairings).length === rooms[socket.room].battle) {
             if (rooms[socket.room].currentRound === rooms[socket.room].settings.numberOfRounds - 1) {
                 startGameResultsPhase();

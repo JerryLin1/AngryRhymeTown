@@ -18,6 +18,13 @@ export default class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
+    this.state = {numPlayers: 0}
+
+    this.client.socket.on("joinedLobby", () => {
+      this.setState({numPlayers: this.state.numPlayers + 1});
+      console.log(this.state.numPlayers);
+
+    })
   }
 
   render() {
@@ -108,7 +115,12 @@ export default class Lobby extends React.Component {
               <Button
                 variant="success"
                 onClick={() => {
-                  this.client.startGame();
+                  console.log(this.state.numPlayers);
+                  if (this.state.numPlayers % 2 == 0 && this.state.numPlayers >= 4) {
+                    this.client.startGame();
+                  } else {
+                    //ROSEAK HANDLE ERROR MESSAGE
+                  }
                 }}
                 id={`${lobby.startGame}`}
                 size="lg"

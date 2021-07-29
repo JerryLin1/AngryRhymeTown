@@ -55,6 +55,10 @@ export default class WritingPhase extends React.Component {
     this.socket.emit("sendBars", $("#barInput_" + index).val());
   };
 
+  finishedSpittin = () => {
+    this.socket.emit("finishedSpittin");
+  }
+
   generateInputFields = () => {
     let arr = [];
     for (let i = 0; i < 4; i++) {
@@ -110,9 +114,10 @@ export default class WritingPhase extends React.Component {
             <Button
               id={`${game.finishWriting}`}
               variant="outline-success"
-              disabled={this.state.currentLine !== 4}
+              // disabled={this.state.currentLine !== 4}
               onClick={() => {
                 $(`#${game.finishWriting}`).attr("class", "btn btn-success");
+                this.finishedSpittin();
               }}
             >
               Finish Spitting
