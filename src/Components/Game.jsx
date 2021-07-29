@@ -21,17 +21,17 @@ export default class Game extends React.Component {
   };
 
   setPhase = () => {
-    if (this.state.phase === "Pairing") {
-      return <PairingPhase socket={this.client.socket} roomSettings={this.client.roomSettings}/>;
-    } else if (this.state.phase === "Writing") {
-      return <WritingPhase socket={this.client.socket} roomSettings={this.client.roomSettings}/>;
-    } else if (this.state.phase === "Voting") {
-      return <VotingPhase client = {this.client} roomSettings={this.client.roomSettings}/>;
-    } else if (this.state.phase == "RoundResults") {
+    // if (this.state.phase === "Pairing") {
+    //   return <PairingPhase socket={this.client.socket} roomSettings={this.client.roomSettings}/>;
+    // } else if (this.state.phase === "Writing") {
+    //   return <WritingPhase socket={this.client.socket} roomSettings={this.client.roomSettings}/>;
+    // } else if (this.state.phase === "Voting") {
+    //   return <VotingPhase client = {this.client} roomSettings={this.client.roomSettings}/>;
+    // } else if (this.state.phase == "RoundResults") {
     return <RoundResultsPhase />;
-    } else if (this.state.phase == "GameResults") {
-      return <GameResultsPhase />;
-    }
+    // } else if (this.state.phase == "GameResults") {
+      // return <GameResultsPhase />;
+    // }
   };
 
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////
