@@ -98,7 +98,7 @@ export default class VotingPhase extends React.Component {
         <Row>
           <Col xs="3" sm={{ offset: 2 }}>
             <Button
-              variant="outline-dark"
+              variant="outline-light"
               style={{
                 color: color1,
                 border: `1px solid ${color1}`,
@@ -114,7 +114,7 @@ export default class VotingPhase extends React.Component {
           </Col>
           <Col xs="3" sm={{ offset: 2 }}>
             <Button
-              variant="outline-dark"
+              variant="outline-light"
               style={{
                 color: color2,
                 border: `1px solid ${color2}`,
