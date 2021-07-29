@@ -27,8 +27,8 @@ export default class VotingPhase extends React.Component {
 
     this.state = {
       matchup: [
-        { nickname: "Loading", bars: "Loading" },
-        { nickname: "Loading", bars: "Loading" },
+        { nickname: "Loading", bars: ["deez", "nuts", "deez", "nuts"] },
+        { nickname: "Loading", bars: ["deez", "nuts", "deez", "nuts"] },
       ],
       voted: false,
       color1: fontColors[color1],
@@ -47,6 +47,12 @@ export default class VotingPhase extends React.Component {
 
   vote = (rapper) => {
     this.socket.emit("receiveVote", rapper);
+  };
+
+  renderBars = (matchup) => {
+    return this.state.matchup[matchup].bars.map((bar, key) => {
+      return <div key={key}>{bar}</div>;
+    });
   };
 
   render() {
@@ -71,14 +77,14 @@ export default class VotingPhase extends React.Component {
             <div className={`${game.rapperName}`}>
               {this.state.matchup[0].nickname}
             </div>
-            <div className={`${game.rap}`}>{this.state.matchup[0].bars}</div>
+            <div className={`${game.rap}`}>{this.renderBars(0)}</div>
           </Col>
 
           <Col xs="5" style={{ color: color2 }}>
             <div className={`${game.rapperName}`}>
               {this.state.matchup[1].nickname}
             </div>
-            <div className={`${game.rap}`}>{this.state.matchup[1].bars}</div>
+            <div className={`${game.rap}`}>{this.renderBars(1)}</div>
           </Col>
         </Row>
         <br />
