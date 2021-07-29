@@ -263,18 +263,8 @@ io.on('connection', socket => {
         }
     }
 
-    function startRoundResultsPhase() {
-        io.to(socket.room).emit("startRoundResultsPhase");
-        setGameState(socket.room, gameState.ROUND_RESULTS);
-        let t = rooms[socket.room].settings.roundResultsTime;
-        // Start next round (which starts at pairing phase)
-        setTimeout(() => { startRound() }, t);
-    }
-    function startGameResultsPhase() {
-        io.to(socket.room).emit("startGameResultsPhase");
-        setGameState(socket.room, gameState.GAME_RESULTS);
-
-
+    // Get, sort, and return results
+    function getResults() {
         let results = [];
         for (let client of Object.keys(rooms[socket.room].clients)) {
             let name = rooms[socket.room].clients[client].name;
@@ -282,7 +272,24 @@ io.on('connection', socket => {
             results.push({name: name, score: score});
         }
         results.sort((a, b) => (a.score > b.score) ? -1 : 1);
-        io.to(socket.room).emit("sendResults", results);
+        return results;
+    }
+
+    function startRoundResultsPhase() {
+        io.to(socket.room).emit("startRoundResultsPhase");
+        setGameState(socket.room, gameState.ROUND_RESULTS);
+        let t = rooms[socket.room].settings.roundResultsTime;
+
+        io.to(socket.room).emit("sendRoundResults", getResults());
+
+        // Start next round (which starts at pairing phase)
+        setTimeout(() => { startRound() }, t);
+    }
+    function startGameResultsPhase() {
+        io.to(socket.room).emit("startGameResultsPhase");
+        setGameState(socket.room, gameState.GAME_RESULTS);
+        
+        io.to(socket.room).emit("sendGameResults", getResults());
 
         // TODO: In addition to or instead of these timeouts, 
         // have a button to go immediately to the next phase
