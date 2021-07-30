@@ -55,10 +55,24 @@ html {
 
 /* Rapping phase */
 
-#rapDisplay {
-    display: flex;
+.rapPhase {
+    margin: -1em 0 0 -1em;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
     justify-content: center;
-    align-items: center;
+}
+
+#rapDisplay {
+    text-align: center;
+    border-radius: 0.5em;
+    color: #fff;
+    border: 1px solid rgb(145, 145, 145);
+    backdrop-filter: blur(0.5em) brightness(0.75);
+}
+
+#rapDisplay>div {
+    font-size: 2em;
 }
 
 /* Voting Phase */

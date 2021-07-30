@@ -113,24 +113,23 @@ export default class Lobby extends React.Component {
               <Button
                 variant="success"
                 onClick={() => {
-                  console.log(this.state.numPlayers);
-                  if (
-                    this.state.numPlayers % 2 === 0 &&
-                    this.state.numPlayers >= 4
-                  ) {
+                  // if (
+                  //   this.state.numPlayers % 2 === 0 &&
+                  //   this.state.numPlayers >= 4
+                  // ) {
                     this.client.startGame();
-                  } else {
-                    if (this.state.numPlayers < 4) {
-                      $(`.${lobby.ErrorMsgBg} span`).text(
-                        "There aren't enough players to start the game! There must have at least 4 before we can start!"
-                      );
-                    } else {
-                      $(`.${lobby.ErrorMsgBg} span`).text(
-                        "There aren't an even number of players in the lobby! Try looking for 1 more or kicking someone out!"
-                      );
-                    }
-                    $(`.${lobby.ErrorMsgBg}`).fadeIn();
-                  }
+                  // } else {
+                  //   if (this.state.numPlayers < 4) {
+                  //     $(`.${lobby.ErrorMsgBg} span`).text(
+                  //       "There aren't enough players to start the game! There must have at least 4 before we can start!"
+                  //     );
+                  //   } else {
+                  //     $(`.${lobby.ErrorMsgBg} span`).text(
+                  //       "There aren't an even number of players in the lobby! Try looking for 1 more or kicking someone out!"
+                  //     );
+                  //   }
+                  //   $(`.${lobby.ErrorMsgBg}`).fadeIn();
+                  // }
                 }}
                 id={`${lobby.startGame}`}
                 size="lg"
@@ -192,7 +191,6 @@ export default class Lobby extends React.Component {
                 event.preventDefault();
                 this.client.sendMessage($(`#${lobby.chatInput}`).val());
                 $(`#${lobby.chatInput}`).val("");
-                $(`#${lobby.chatInput}`).focus();
               }}
             >
               <div id={`${lobby.sendbar}`}>
