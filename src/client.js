@@ -53,6 +53,9 @@ export default class Client extends React.Component {
 
             this.socket.emit("requestWords");
         })
+        this.socket.on("startRapPhase", () => {
+            this.switchPhase("Rapping");
+        })
         // Clientside timer should end about the same time as they receive startVotePhase from server
         this.socket.on("startVotePhase", () => {
             this.switchPhase("Voting");
