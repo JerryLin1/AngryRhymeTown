@@ -289,7 +289,7 @@ io.on('connection', socket => {
         setGameState(socket.room, gameState.ROUND_RESULTS);
         let t = rooms[socket.room].settings.roundResultsTime;
 
-        io.to(socket.room).emit("sendRoundResults", getResults());
+        io.to(socket.room).emit("sendRoundResults", getResults(), rooms[socket.room].rounds.length);
 
         // Start next round (which starts at pairing phase)
         setTimeout(() => { startRound() }, t);

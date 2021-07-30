@@ -2,7 +2,6 @@ import React from "react";
 import Countdown from "../Countdown.jsx";
 import { Button, Col, Row } from "react-bootstrap";
 import game from "../Game.module.css";
-import tts from "../../tts.js";
 
 export default class VotingPhase extends React.Component {
   constructor(props) {
@@ -10,6 +9,7 @@ export default class VotingPhase extends React.Component {
     this.client = this.props.client;
     this.socket = this.props.client.socket;
     this.roomSettings = this.props.client.roomSettings;
+    this.restartTimer = 0;
 
     const fontColors = [
       "rgb(0, 119, 255)",
@@ -18,7 +18,7 @@ export default class VotingPhase extends React.Component {
       "rgb(228, 0, 209)",
       "rgb(0, 228, 179)",
     ];
-    // this portion generates 2 colors that are guaranteed to be different from each other
+    // this portion generates 2 colors that are guarenteed to be different from each other
     let color1 = Math.floor(Math.random() * 5),
       color2 = Math.floor(Math.random() * 5);
 
@@ -28,14 +28,13 @@ export default class VotingPhase extends React.Component {
 
     this.state = {
       matchup: [
-
-        { nickname: "Loading", bars: ["", "", "", ""] },
-        { nickname: "Loading", bars: ["", "", "", ""] },
-
+        { nickname: "Loading", bars: ["Loading", "Loading", "Loading", "Loading"] },
+        { nickname: "Loading", bars: ["Loading", "Loading", "Loading", "Loading"] },
       ],
       voted: false,
       color1: fontColors[color1],
       color2: fontColors[color2],
+      countdown: ""
     };
 
     this.socket.on("receiveBattle", (battle) => {
@@ -45,13 +44,17 @@ export default class VotingPhase extends React.Component {
           this.client.name === battle[0].nickname ||
           this.client.name === battle[1].nickname,
       });
-
-      this.ttsRaps();
+      this.restartTimer++;
+      this.setState({
+        countdown: <Countdown
+          key = {this.restartTimer}
+          time={this.roomSettings.votingTime / 1000}
+          before="You have"
+          after="left to vote for your favorite rap!"
+        />
+      })
+      this.forceUpdate();
     });
-  }
-  async ttsRaps() {
-    await tts.rap(this.state.matchup[0].bars);
-    setTimeout(tts.rap(this.state.matchup[1].bars), 5000);
   }
 
   vote = (rapper) => {
@@ -74,11 +77,7 @@ export default class VotingPhase extends React.Component {
           <div className={`${game.header}`}>Time To Vote!</div>
         </Row>
         <Row>
-          <Countdown
-            time={this.roomSettings.votingTime / 1000}
-            before="You have"
-            after="left to vote for your favorite rap!"
-          />
+          {this.state.countdown}
         </Row>
 
         <Row>
@@ -100,7 +99,7 @@ export default class VotingPhase extends React.Component {
         <Row>
           <Col xs="3" sm={{ offset: 2 }}>
             <Button
-              variant="outline-light"
+              variant="outline-dark"
               style={{
                 color: color1,
                 border: `1px solid ${color1}`,
@@ -116,7 +115,7 @@ export default class VotingPhase extends React.Component {
           </Col>
           <Col xs="3" sm={{ offset: 2 }}>
             <Button
-              variant="outline-light"
+              variant="outline-dark"
               style={{
                 color: color2,
                 border: `1px solid ${color2}`,

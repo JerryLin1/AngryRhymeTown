@@ -15,7 +15,7 @@ class Director extends React.Component {
     super(props);
     this.state = { inGame: false };
     this.switchState = this.switchState.bind(this);
-    this.client = new Client({ switchState: this.switchState });
+    this.client = new Client({ switchState: this.switchState }, {test: "test"});
   }
 
   switchState = (inGame) => {

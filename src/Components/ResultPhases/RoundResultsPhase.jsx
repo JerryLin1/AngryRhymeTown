@@ -15,12 +15,13 @@ export default class RoundResultsPhase extends React.Component {
       { name: "Loading", score: "Loading" },
       { name: "Loading", score: "Loading" }],
       otherRappers: [],
-      round: 0
+      round: ""
     }
 
-    this.socket.on("sendRoundResults", results => {
+    this.socket.on("sendRoundResults", (results, round) => {
       this.setState({ results: results });
-      this.setState({round: this.state.round+1});
+      this.setState({round: round});
+      
       let otherRappers = [];
       for (let i = 3; i < results.length; i++) {
         otherRappers.push(
