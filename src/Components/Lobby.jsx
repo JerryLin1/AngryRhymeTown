@@ -18,13 +18,12 @@ export default class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
-    this.state = {numPlayers: 0}
+    this.state = { numPlayers: 0 };
 
     this.client.socket.on("joinedLobby", () => {
-      this.setState({numPlayers: this.state.numPlayers + 1});
+      this.setState({ numPlayers: this.state.numPlayers + 1 });
       console.log(this.state.numPlayers);
-
-    })
+    });
   }
 
   render() {
@@ -36,7 +35,6 @@ export default class Lobby extends React.Component {
             event.preventDefault();
             const nickname = $(`#${lobby.inputNickname}`).val();
             if ($(`#${lobby.nameWarning}`).css("display") !== "none") {
-              console.log(nickname);
               anime({
                 targets: `#${lobby.nameWarning}`,
                 keyframes: [
@@ -116,10 +114,22 @@ export default class Lobby extends React.Component {
                 variant="success"
                 onClick={() => {
                   console.log(this.state.numPlayers);
-                  if (this.state.numPlayers % 2 == 0 && this.state.numPlayers >= 4) {
+                  if (
+                    this.state.numPlayers % 2 === 0 &&
+                    this.state.numPlayers >= 4
+                  ) {
                     this.client.startGame();
                   } else {
-                    //ROSEAK HANDLE ERROR MESSAGE
+                    if (this.state.numPlayers < 4) {
+                      $(`.${lobby.ErrorMsgBg} span`).text(
+                        "There aren't enough players to start the game! There must have at least 4 before we can start!"
+                      );
+                    } else {
+                      $(`.${lobby.ErrorMsgBg} span`).text(
+                        "There aren't an even number of players in the lobby! Try looking for 1 more or kicking someone out!"
+                      );
+                    }
+                    $(`.${lobby.ErrorMsgBg}`).fadeIn();
                   }
                 }}
                 id={`${lobby.startGame}`}
@@ -202,7 +212,26 @@ export default class Lobby extends React.Component {
             </Form>
           </Col>
         </Row>
+        <ErrorMsg />
       </div>
     );
   }
 }
+
+const ErrorMsg = () => {
+  return (
+    <div className={`${lobby.ErrorMsgBg}`}>
+      <div className={`${lobby.ErrorMsgText}`}>
+        <span />
+        <div
+          id={`${lobby.closeErr}`}
+          onClick={() => {
+            $(`.${lobby.ErrorMsgBg}`).fadeOut();
+          }}
+        >
+          &times;
+        </div>
+      </div>
+    </div>
+  );
+};

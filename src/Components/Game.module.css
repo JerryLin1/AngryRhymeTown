@@ -53,6 +53,14 @@ html {
     transition: 0s;
 }
 
+/* Rapping phase */
+
+#rapDisplay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* Voting Phase */
 
 .rap {

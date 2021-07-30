@@ -1,6 +1,6 @@
 /******* Global settings *******/
 
-* {
+html {
     max-width: 98vw;
 }
 
@@ -12,9 +12,10 @@ input {
     border-radius: 0.25em;
     border: 1px solid #ccc;
 }
+
 /******* Row 1 *******/
 
-.lobby > form:first-child {
+.lobby>form:first-child {
     margin-bottom: 0.5em;
 }
 
@@ -75,4 +76,48 @@ input {
 
 #chatEnter {
     width: 29%;
+}
+
+/******* Error Message *******/
+
+.ErrorMsgBg {
+    display: none;
+    width: 100vw !important;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.ErrorMsgText {
+    position: absolute;
+    width: 25%;
+    height: 10em;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    z-index: 1;
+    background-color: #fff;
+}
+
+.ErrorMsgText>span {
+    position: absolute;
+    text-align: center;
+    width: 75%;
+    font-size: 1.25em;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+#closeErr {
+    position: absolute;
+    right: 0.5em;
+    font-size: 2em;
+}
+
+#closeErr:hover {
+    cursor: pointer;
+    transform: scale(1.1);
 }
