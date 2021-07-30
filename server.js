@@ -184,6 +184,7 @@ io.on('connection', socket => {
         rooms[socket.room].finishedSpittin += 1;
         if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room)) {
             clearTimeout(rooms[socket.room].nextPhase);
+            rooms[socket.room].finishedSpittin = 0;
             startVotePhase();
         }
     })
