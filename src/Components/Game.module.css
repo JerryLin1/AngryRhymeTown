@@ -59,6 +59,7 @@ html {
     margin: -1em 0 0 -1em;
     width: 100vw;
     height: 100vh;
+    background-repeat: no-repeat;
     overflow: hidden;
     justify-content: center;
 }

@@ -113,11 +113,12 @@ export default class Lobby extends React.Component {
               <Button
                 variant="success"
                 onClick={() => {
-                  // if (
-                  //   this.state.numPlayers % 2 === 0 &&
-                  //   this.state.numPlayers >= 4
-                  // ) {
+                  if (
+                    this.state.numPlayers % 2 === 0
+                    // && this.state.numPlayers >= 4
+                  ) {
                     this.client.startGame();
+                  }
                   // } else {
                   //   if (this.state.numPlayers < 4) {
                   //     $(`.${lobby.ErrorMsgBg} span`).text(
