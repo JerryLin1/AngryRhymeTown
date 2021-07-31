@@ -22,23 +22,21 @@ export default class RappingPhase extends React.Component {
         "I take a bath inside my tub",
       ],
     };
+    this.linesText = ["", "", "", ""];
   }
 
   displayBarLine(line) {
     $(`#${game.rapDisplay}>div`).eq(line).style("display", "block");
   }
 
-  displayPlayerBars = (player) => {
-    // let promise = tts.speak(this.state.bars[0]);
-    // for (let i = 1; i < 4; i++) {
-    //   promise.then(() => {
-    //     tts.speak(this.state.bars[i]);
-    //   });
-    // }
+  displayPlayerBars(player) {
+    $(`#${game.rapDisplay}`).append("<div>lol</div>");
+  }
 
-    // promise.catch((err) => {
-    //   console.log(err);
-    // });
+  async readLines(player) {
+    for (let i = 0; i < 4; i++) {
+      await tts.speak(this.state.bars[i]);
+    }
 
     return this.state.bars.map((bar, key) => {
       return (
@@ -47,7 +45,7 @@ export default class RappingPhase extends React.Component {
         </div>
       );
     });
-  };
+  }
 
   // It's supposed to play each rap and switch after the tts is over but idk how to figure out when tts is over
   render() {
@@ -68,7 +66,7 @@ export default class RappingPhase extends React.Component {
         <br />
         <Row>
           <Col xs={{ offset: 4, span: 4 }} id={`${game.rapDisplay}`}>
-            {this.displayPlayerBars(0)}
+            {this.readLines(0)}
           </Col>
         </Row>
       </div>
