@@ -1,6 +1,6 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import $ from "jquery";
+import tts from "../../tts";
 import game from "../Game.module.css";
 import tts from "../../tts.js";
 
@@ -21,32 +21,27 @@ export default class RappingPhase extends React.Component {
         "Every time I get that dub",
         "I take a bath inside my tub",
       ],
+      bars: [],
+      barDivs: [],
     };
-    this.linesText = ["", "", "", ""];
+    this.state.bars = [
+      "Hey my name is Jerry Lin",
+      "Everyday I only win",
+      "Every time I get that dub",
+      "I take a bath inside my tub",
+    ];
+    // TODO: socket.on for incoming matchup. readBars for both raps, with a delay in between.
+    this.readBars();
   }
-
-  displayBarLine(line) {
-    $(`#${game.rapDisplay}>div`).eq(line).style("display", "block");
-  }
-
-  displayPlayerBars(player) {
-    $(`#${game.rapDisplay}`).append("<div>lol</div>");
-  }
-
-  async readLines(player) {
-    for (let i = 0; i < 4; i++) {
-      await tts.speak(this.state.bars[i]);
+  async readBars() {
+    this.state.ssu = tts.newSSU();
+    for (let bar of this.state.bars) {
+      this.state.barDivs.push(<div>{bar}</div>);
+      this.forceUpdate();
+      if (!document.hidden)
+        await tts.speak(this.state.ssu, bar);
     }
-
-    return this.state.bars.map((bar, key) => {
-      return (
-        <div key={key} style={{ display: "none" }}>
-          {bar}
-        </div>
-      );
-    });
   }
-
   // It's supposed to play each rap and switch after the tts is over but idk how to figure out when tts is over
   render() {
     const background = this.state.backgroundImgs[Math.floor(Math.random() * 4)];
@@ -66,7 +61,7 @@ export default class RappingPhase extends React.Component {
         <br />
         <Row>
           <Col xs={{ offset: 4, span: 4 }} id={`${game.rapDisplay}`}>
-            {this.readLines(0)}
+            {this.state.barDivs}
           </Col>
         </Row>
       </div>
