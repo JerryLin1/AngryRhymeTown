@@ -181,6 +181,7 @@ io.on('connection', socket => {
     };
 
     socket.on("finishedSpittin", () => {
+        // TODO: Verification: a hacker could finish spitting more than once
         rooms[socket.room].finishedSpittin += 1;
         if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room)) {
             clearTimeout(rooms[socket.room].nextPhase);
@@ -252,6 +253,7 @@ io.on('connection', socket => {
     }
 
     socket.on("receiveVote", rapper => {
+        // TOOD: vote verification. a hacker could vote more than once 
         rooms[socket.room].votesCast += 1;
         (rapper === 1) ?
             rooms[socket.room]
@@ -285,7 +287,7 @@ io.on('connection', socket => {
                 startRoundResultsPhase();
             }
         } else if (Object.keys(rooms[socket.room].pairings).length > rooms[socket.room].battle) {
-            startBattle();
+            startRapPhase();
         }
     }
 
