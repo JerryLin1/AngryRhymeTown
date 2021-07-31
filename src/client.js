@@ -28,18 +28,6 @@ export default class Client extends React.Component {
             this.redirect(id);
         });
 
-        // Update the player list in the client's room
-        this.socket.on("updateClientList", (room) => {
-            $('#lobbyList').html("");
-            this.name = room[this.socket.id].name;
-
-            this.room = room;
-
-            for (let client of Object.values(room)) {
-                $("#lobbyList").append("<div>" + client.name + "</div>");
-            }
-        })
-
         // ANCHOR: Game state handlers
         this.socket.on("startGame", () => {
             this.props.switchState(true);
