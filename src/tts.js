@@ -5,17 +5,20 @@ export default {
     //         // await this.timeout(3000);
     //     }
     // },
-    async speak(string) {
-        if (document.hasFocus()) {
-            let ssu = new SpeechSynthesisUtterance()
-            ssu.text = string;
-            ssu.rate = 0.9;
-            window.speechSynthesis.speak(ssu);
+    // TODO: Pass in voice parameters
+    newSSU() {
+        let ssu = new SpeechSynthesisUtterance();
+        ssu.rate = 0.9;
+        return ssu;
+    },
+    async speak(ssu, string) {
+        // ssu is SpeechSynthesisUtterance()
+        ssu.text = string;
+        window.speechSynthesis.speak(ssu);
 
-            return new Promise(resolve => {
-                ssu.onend = resolve
-            })
-        }
+        return new Promise(resolve => {
+            ssu.onend = resolve
+        })
     },
     // timeout(ms) {
     //     return new Promise(resolve => setTimeout(resolve, ms));

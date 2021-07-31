@@ -196,7 +196,7 @@ io.on('connection', socket => {
 
         // TODO: Host client emits "finishedListenin" after tts raps are over
         // For now, it goes to voting after 10 seconds for testing.
-        rooms[socket.room].nextPhase = setTimeout(() => { startVotePhase() }, 10000);
+        // rooms[socket.room].nextPhase = setTimeout(() => { startVotePhase() }, 10000);
     }
     socket.on("finishedListenin", () => {
         // Goes to next phase if tts on host machine is done
