@@ -24,6 +24,21 @@ export default class Lobby extends React.Component {
       this.setState({ numPlayers: this.state.numPlayers + 1 });
       console.log(this.state.numPlayers);
     });
+    
+    // Update the player list in the client's room
+    this.client.socket.on("updateClientList", (room) => {
+      $("#lobbyList").html("");
+      this.name = room[this.client.socket.id].name;
+
+      this.room = room;
+
+      for (let client of Object.values(room)) {
+        $("#lobbyList").append("<div>" + client.name + "</div>");
+      }
+      if (room[this.client.socket.id].isHost === true) {
+        $(`#${lobby.startGame}`).css("display", "initial");
+      }
+    });
   }
 
   render() {
@@ -117,7 +132,7 @@ export default class Lobby extends React.Component {
                   //   this.state.numPlayers % 2 === 0 &&
                   //   this.state.numPlayers >= 4
                   // ) {
-                    this.client.startGame();
+                  this.client.startGame();
                   // } else {
                   //   if (this.state.numPlayers < 4) {
                   //     $(`.${lobby.ErrorMsgBg} span`).text(

@@ -37,7 +37,8 @@ input {
 #startGame {
     position: absolute;
     left: 50%;
-    transform: translate(-50%, -25%)
+    transform: translate(-50%, -25%);
+    display:none;
 }
 
 #copyCode {
