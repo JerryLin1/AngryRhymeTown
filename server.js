@@ -177,7 +177,7 @@ io.on('connection', socket => {
         io.to(socket.room).emit("startWritePhase");
         setGameState(socket.room, gameState.WRITING);
         let t = rooms[socket.room].settings.writingTime;
-        rooms[socket.room].nextPhase = setTimeout(() => { startVotePhase() }, t);
+        rooms[socket.room].nextPhase = setTimeout(() => { startRapPhase() }, t);
     };
 
     socket.on("finishedSpittin", () => {
@@ -185,6 +185,22 @@ io.on('connection', socket => {
         if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room)) {
             clearTimeout(rooms[socket.room].nextPhase);
             rooms[socket.room].finishedSpittin = 0;
+            startRapPhase();
+        }
+    })
+
+    function startRapPhase() {
+        io.to(socket.room).emit("startRapPhase");
+        setGameState(socket.room, gameState.RAPPING);
+
+        // TODO: Host client emits "finishedListenin" after tts raps are over
+        // For now, it goes to voting after 10 seconds for testing.
+        rooms[socket.room].nextPhase = setTimeout(() => { startVotePhase() }, 10000);
+    }
+    socket.on("finishedListenin", () => {
+        // Goes to next phase if tts on host machine is done
+        if (rooms[socket.room].clients.isHost === true) {
+            clearTimeout(rooms[socket.room].nextPhase);
             startVotePhase();
         }
     })
@@ -198,8 +214,8 @@ io.on('connection', socket => {
     }
 
     function startBattle() {
-        let t = rooms[socket.room].settings.votingTime; 
-        rooms[socket.room].nextPhase = setTimeout(() => {startNext()}, t)
+        let t = rooms[socket.room].settings.votingTime;
+        rooms[socket.room].nextPhase = setTimeout(() => { startNext() }, t)
 
         const battles = Object.keys(rooms[socket.room].pairings);
         rooms[socket.room].rapper1 = battles[rooms[socket.room].battle];
@@ -279,7 +295,7 @@ io.on('connection', socket => {
         for (let client of Object.keys(rooms[socket.room].clients)) {
             let name = rooms[socket.room].clients[client].name;
             let score = rooms[socket.room].clients[client].score;
-            results.push({name: name, score: score});
+            results.push({ name: name, score: score });
         }
         results.sort((a, b) => (a.score > b.score) ? -1 : 1);
         return results;
@@ -298,7 +314,7 @@ io.on('connection', socket => {
     function startGameResultsPhase() {
         io.to(socket.room).emit("startGameResultsPhase");
         setGameState(socket.room, gameState.GAME_RESULTS);
-        
+
         io.to(socket.room).emit("sendGameResults", getResults());
 
         // TODO: In addition to or instead of these timeouts, 
