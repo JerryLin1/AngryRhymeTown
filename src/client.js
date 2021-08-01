@@ -68,10 +68,23 @@ export default class Client extends React.Component {
             if (jsele.scrollHeight - jsele.scrollTop === jsele.clientHeight) {
                 autoScroll = true;
             }
-            let chatMsg = chatInfo["name"] + ": " + chatInfo["msg"];
-
+            let chatMsg;
+            let color;
+            
+            if (chatInfo.type === "SERVER") {
+                chatMsg = chatInfo.msg;
+                color = "blue";
+            }
+            else if (chatInfo.type === "SERVERDC"){
+                chatMsg = chatInfo.msg;
+                color = "red";
+            }
+            else {
+                chatMsg = chatInfo.nickname + ": " + chatInfo.msg;
+                color = "black";
+            }
             $("#chat").append(
-                "<div>" + chatMsg + "</div>"
+                `<div style="color: ${color}"> ${chatMsg} </div>`
             );
 
             if (autoScroll === true) jsele.scrollTo(0, jsele.scrollHeight);
