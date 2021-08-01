@@ -57,38 +57,43 @@ export default class WritingPhase extends React.Component {
 
   finishedSpittin = () => {
     this.socket.emit("finishedSpittin");
-  }
+  };
 
   generateInputFields = () => {
     let arr = [];
     for (let i = 0; i < 4; i++) {
       arr.push(
-        <Form.Group as={Row}>
-          <Form.Label column xs="3">
-            {this.displayWords(i)}
-          </Form.Label>
-          <Col xs="5">
-            <Form.Control
-              id={"barInput_" + i}
-              autoComplete="off"
-              disabled={this.state.currentLine !== i}
-            />
-          </Col>
-          <Col xs="4">
-            <Button
-              variant="outline-dark"
-              disabled={this.state.currentLine !== i}
-              onClick={() => {
-                this.showNextWords(i);
-                this.sendBarsToServer(i);
-                $(".btn-outline-dark:first").attr("class", "btn btn-success");
-                this.setState({ currentLine: this.state.currentLine + 1 });
-              }}
-            >
-              Submit tha bar
-            </Button>
-          </Col>
-        </Form.Group>
+        <Form
+          onSubmit={(event) => {
+            event.preventDefault();
+            this.showNextWords(i);
+            this.sendBarsToServer(i);
+            $(".btn-outline-dark:first").attr("class", "btn btn-success");
+            this.setState({ currentLine: this.state.currentLine + 1 });
+          }}
+        >
+          <Form.Group as={Row}>
+            <Form.Label column xs="3">
+              {this.displayWords(i)}
+            </Form.Label>
+            <Col xs="5">
+              <Form.Control
+                id={"barInput_" + i}
+                autoComplete="off"
+                disabled={this.state.currentLine !== i}
+              />
+            </Col>
+            <Col xs="4">
+              <Button
+                variant="outline-dark"
+                disabled={this.state.currentLine !== i}
+                type="submit"
+              >
+                Submit tha bar
+              </Button>
+            </Col>
+          </Form.Group>
+        </Form>
       );
     }
     return arr;
@@ -104,7 +109,11 @@ export default class WritingPhase extends React.Component {
         </Row>
 
         <Row>
-          <Countdown time={this.roomSettings.writingTime/1000} before="You have " after=" to spit some bars!" />
+          <Countdown
+            time={this.roomSettings.writingTime / 1000}
+            before="You have "
+            after=" to spit some bars!"
+          />
         </Row>
 
         <div id={`${game.promptContainer}`}>{this.generateInputFields()}</div>
