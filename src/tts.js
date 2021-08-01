@@ -17,7 +17,7 @@ export default {
         window.speechSynthesis.speak(ssu);
 
         return new Promise(resolve => {
-            ssu.onend = resolve
+            ssu.onend = resolve;
         })
     },
     // timeout(ms) {

@@ -37,7 +37,7 @@ export default class VotingPhase extends React.Component {
       countdown: ""
     };
 
-    this.socket.on("receiveBattle", (battle) => {
+    this.socket.on("receiveBattleVoting", (battle) => {
       this.setState({ matchup: battle });
       this.setState({
         voted:
