@@ -186,7 +186,7 @@ export default class Lobby extends React.Component {
         <Row>
           {/* Player list */}
           <Col xs="6">
-            <Card style={{ height: "48em" }}>
+            <Card style={{ height: "28em" }}>
               <Card.Header style={{ fontSize: "2em " }}>
                 Player List
               </Card.Header>
@@ -196,7 +196,7 @@ export default class Lobby extends React.Component {
 
           {/* Lobby Chat */}
           <Col>
-            <Card style={{ height: "24em", marginBottom: "0.25em" }}>
+            <Card style={{ height: "28em", marginBottom: "0.25em" }}>
               <Card.Header style={{ fontSize: "2em" }}>Chat</Card.Header>
               <Card.Body id="chat" style={{ overflowY: "scroll" }}></Card.Body>
             </Card>
