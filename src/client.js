@@ -9,6 +9,8 @@ export default class Client extends React.Component {
         super(props);
         this.socket = io();
         this.name = "";
+
+        // this.room is actually clients (rooms[roomId].clients)
         this.room = [];
         this.roomSettings = {};
 
