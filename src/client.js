@@ -68,7 +68,7 @@ export default class Client extends React.Component {
             if (jsele.scrollHeight - jsele.scrollTop === jsele.clientHeight) {
                 autoScroll = true;
             }
-            let chatMsg = chatInfo["sender"] + ": " + chatInfo["msg"];
+            let chatMsg = chatInfo["name"] + ": " + chatInfo["msg"];
 
             $("#chat").append(
                 "<div>" + chatMsg + "</div>"
@@ -93,9 +93,8 @@ export default class Client extends React.Component {
     }
 
     sendMessage = (msg) => {
-        console.log(msg + " " + this.name);
         if (msg != "") {
-            this.socket.emit("sendMessage", { "msg": msg, "sender": this.name });
+            this.socket.emit("sendMessage", msg);
         }
     }
 
