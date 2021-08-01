@@ -63,8 +63,16 @@ export default class WritingPhase extends React.Component {
     let arr = [];
     for (let i = 0; i < 4; i++) {
       arr.push(
-        <Form.Group>
-          <Row>
+        <Form
+          onSubmit={(event) => {
+            event.preventDefault();
+            this.showNextWords(i);
+            this.sendBarsToServer(i);
+            $(".btn-outline-dark:first").attr("class", "btn btn-success");
+            this.setState({ currentLine: this.state.currentLine + 1 });
+          }}
+        >
+          <Form.Group as={Row}>
             <Form.Label column xs="3">
               {this.displayWords(i)}
             </Form.Label>
@@ -79,18 +87,13 @@ export default class WritingPhase extends React.Component {
               <Button
                 variant="outline-dark"
                 disabled={this.state.currentLine !== i}
-                onClick={() => {
-                  this.showNextWords(i);
-                  this.sendBarsToServer(i);
-                  $(".btn-outline-dark:first").attr("class", "btn btn-success");
-                  this.setState({ currentLine: this.state.currentLine + 1 });
-                }}
+                type="submit"
               >
                 Submit tha bar
               </Button>
             </Col>
-          </Row>
-        </Form.Group>
+          </Form.Group>
+        </Form>
       );
     }
     return arr;
