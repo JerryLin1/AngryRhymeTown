@@ -105,16 +105,21 @@ io.on('connection', socket => {
     // Receives and sends message to all clients in a room
     socket.on("sendMessage", (chatInfo) => {
         let chatMsg = { "msg": chatInfo["msg"], "sender": chatInfo["sender"] };
-        rooms[socket.room].chatHistory.push(chatMsg);
-        io.to(socket.room).emit("receiveMessage", chatMsg);
+        rooms[socket.room].chatHistory.push(chatInfo);
+        io.to(socket.room).emit("receiveMessage", chatInfo);
     })
-
+    function sendToChat(msg) {
+        rooms[socket.room].chatHistory.push(msg);
+        io.to(socket.room).emit("receiveMessage", msg);
+    }
     socket.on("startGame", () => {
         if (rooms[socket.room].gameState === gameState.LOBBY && rooms[socket.room].clients[socket.id].isHost === true) {
             // TODO: if (rooms[socket.room].length %% 2 === 0) Must be even number of players. unless we code bot?
+            // TODO: Emit room settings whenever they are changed by host (once that is implemented)
             io.to(socket.room).emit("receiveRoomSettings", rooms[socket.room].settings);
             io.to(socket.room).emit("startGame");
-            // rooms[socket.room].gameState = gameState.START; ??
+
+            rooms[roomId].rounds = [];
 
             // Set player scores to 0
             for (let client of Object.values(rooms[socket.room].clients)) {
