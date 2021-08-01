@@ -1,6 +1,6 @@
 import React from "react";
+import $ from "jquery";
 import { Col, Row } from "react-bootstrap";
-import tts from "../../tts";
 import game from "../Game.module.css";
 import tts from "../../tts.js";
 
@@ -23,6 +23,7 @@ export default class RappingPhase extends React.Component {
       ],
       bars: [],
       barDivs: [],
+      pageBG: Math.floor(Math.random() * 4),
     };
     this.state.bars = [
       "Hey my name is Jerry Lin",
@@ -38,18 +39,16 @@ export default class RappingPhase extends React.Component {
     for (let bar of this.state.bars) {
       this.state.barDivs.push(<div>{bar}</div>);
       this.forceUpdate();
-      if (!document.hidden)
-        await tts.speak(this.state.ssu, bar);
+      if (!document.hidden) await tts.speak(this.state.ssu, bar);
     }
   }
-  // It's supposed to play each rap and switch after the tts is over but idk how to figure out when tts is over
+
   render() {
-    const background = this.state.backgroundImgs[Math.floor(Math.random() * 4)];
     return (
       <div
         className={`${game.rapPhase}`}
         style={{
-          background: `url(${background})`,
+          background: `url(${this.state.backgroundImgs[this.state.pageBG]})`,
         }}
       >
         <div

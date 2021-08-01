@@ -28,13 +28,26 @@ export default class VotingPhase extends React.Component {
 
     this.state = {
       matchup: [
-        { nickname: "Loading", bars: ["Loading", "Loading", "Loading", "Loading"] },
-        { nickname: "Loading", bars: ["Loading", "Loading", "Loading", "Loading"] },
+        {
+          nickname: "Loading",
+          bars: ["Loading", "Loading", "Loading", "Loading"],
+        },
+        {
+          nickname: "Loading",
+          bars: ["Loading", "Loading", "Loading", "Loading"],
+        },
       ],
       voted: false,
       color1: fontColors[color1],
       color2: fontColors[color2],
-      countdown: ""
+      countdown: (
+        <Countdown
+          key={this.restartTimer}
+          time={this.roomSettings.votingTime / 1000}
+          before="You have"
+          after="left to vote for your favorite rap!"
+        />
+      ),
     };
 
     this.socket.on("receiveBattle", (battle) => {
@@ -45,14 +58,6 @@ export default class VotingPhase extends React.Component {
           this.client.name === battle[1].nickname,
       });
       this.restartTimer++;
-      this.setState({
-        countdown: <Countdown
-          key = {this.restartTimer}
-          time={this.roomSettings.votingTime / 1000}
-          before="You have"
-          after="left to vote for your favorite rap!"
-        />
-      })
       this.forceUpdate();
     });
   }
@@ -76,9 +81,7 @@ export default class VotingPhase extends React.Component {
         <Row>
           <div className={`${game.header}`}>Time To Vote!</div>
         </Row>
-        <Row>
-          {this.state.countdown}
-        </Row>
+        <Row>{this.state.countdown}</Row>
 
         <Row>
           <Col xs="5" sm={{ offset: 2 }} style={{ color: color1 }}>
@@ -99,7 +102,7 @@ export default class VotingPhase extends React.Component {
         <Row>
           <Col xs="3" sm={{ offset: 2 }}>
             <Button
-              variant="outline-dark"
+              variant="outline-light"
               style={{
                 color: color1,
                 border: `1px solid ${color1}`,
@@ -115,7 +118,7 @@ export default class VotingPhase extends React.Component {
           </Col>
           <Col xs="3" sm={{ offset: 2 }}>
             <Button
-              variant="outline-dark"
+              variant="outline-light"
               style={{
                 color: color2,
                 border: `1px solid ${color2}`,
