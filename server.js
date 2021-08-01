@@ -191,33 +191,33 @@ io.on('connection', socket => {
     })
 
     function startRapPhase() {
+        if (rooms[socket.room].nextPhase !== null) clearTimeout(rooms[socket.room].nextPhase);
         io.to(socket.room).emit("startRapPhase");
         setGameState(socket.room, gameState.RAPPING);
-
-        // TODO: Host client emits "finishedListenin" after tts raps are over
-        // For now, it goes to voting after 10 seconds for testing.
-        // rooms[socket.room].nextPhase = setTimeout(() => { startVotePhase() }, 10000);
+        startBattle();
     }
+
     socket.on("finishedListenin", () => {
         // Goes to next phase if tts on host machine is done
-        if (rooms[socket.room].clients.isHost === true) {
-            clearTimeout(rooms[socket.room].nextPhase);
+        if (rooms[socket.room].clients[socket.id].isHost) {
+            console.log("what the fuck");
             startVotePhase();
         }
+        
     })
 
     function startVotePhase() {
         io.to(socket.room).emit("startVotePhase");
         setGameState(socket.room, gameState.VOTING);
         startBattle();
-        // TODO: end voting phase on rap presentation finish
-        // setTimeout(() => { startVoteResultsPhase() }, t);
     }
 
     function startBattle() {
         let t = rooms[socket.room].settings.votingTime;
-        rooms[socket.room].nextPhase = setTimeout(() => { startNext() }, t)
-
+        if (rooms[socket.room].gameState == gameState.VOTING) {
+            console.log(rooms[socket.room].gameState + " " + gameState.VOTING);
+            rooms[socket.room].nextPhase = setTimeout(() => { startNext() }, t)
+        }
         const battles = Object.keys(rooms[socket.room].pairings);
         rooms[socket.room].rapper1 = battles[rooms[socket.room].battle];
         rooms[socket.room].rapper2 =
@@ -247,8 +247,13 @@ io.on('connection', socket => {
 
         // Go to next battle and check if all battles in the round are over
         // If so, go to next round 
-        rooms[socket.room].battle += 1;
-        io.to(socket.room).emit("receiveBattle", matchup);
+        if (rooms[socket.room].gameState == gameState.VOTING) {
+            rooms[socket.room].battle += 1;
+            io.to(socket.room).emit("receiveBattleVoting", matchup);
+        } else {
+            io.to(socket.room).emit("receiveBattleRapping", matchup);
+        }
+            
 
     }
 
@@ -279,6 +284,8 @@ io.on('connection', socket => {
     function startNext() {
         rooms[socket.room].votesCast = 0;
         clearTimeout(rooms[socket.room].nextPhase);
+
+        // If all battles have completed:
         if (Object.keys(rooms[socket.room].pairings).length === rooms[socket.room].battle) {
             if (rooms[socket.room].currentRound === rooms[socket.room].settings.numberOfRounds - 1) {
                 startGameResultsPhase();
@@ -345,10 +352,10 @@ io.on('connection', socket => {
 });
 
 // Server debug messages
-setInterval(() => {
-    console.log(`${io.engine.clientsCount} clients.`);
-    hf.logObj(rooms)
-}, 10000)
+// setInterval(() => {
+//     console.log(`${io.engine.clientsCount} clients.`);
+//     hf.logObj(rooms)
+// }, 10000)
 
 function numberOfClientsInRoom(roomId) {
     return Object.keys(rooms[roomId].clients).length;

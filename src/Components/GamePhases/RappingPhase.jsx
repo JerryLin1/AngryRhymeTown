@@ -7,6 +7,8 @@ import tts from "../../tts.js";
 export default class RappingPhase extends React.Component {
   constructor(props) {
     super(props);
+    this.client = this.props.client;
+    this.socket = this.props.client.socket;
 
     this.state = {
       backgroundImgs: [
@@ -21,26 +23,45 @@ export default class RappingPhase extends React.Component {
         "Every time I get that dub",
         "I take a bath inside my tub",
       ],
-      bars: [],
+      currentBattle: 0,
+      matchup: [
+        { nickname: "", bars: ["", "", "", ""] },
+        { nickname: "", bars: ["", "", "", ""] },
+      ],
       barDivs: [],
       pageBG: Math.floor(Math.random() * 4),
+      ssu: tts.newSSU()
     };
-    this.state.bars = [
-      "Hey my name is Jerry Lin",
-      "Everyday I only win",
-      "Every time I get that dub",
-      "I take a bath inside my tub",
-    ];
+
     // TODO: socket.on for incoming matchup. readBars for both raps, with a delay in between.
-    this.readBars();
+    this.socket.on("receiveBattleRapping", matchup => {
+      this.setState({ currentBattle: 0 });
+      this.setState({ barDivs: [] });
+      this.setState({ matchup: matchup });
+
+      this.readBars();
+    })
+
   }
+
   async readBars() {
-    this.state.ssu = tts.newSSU();
-    for (let bar of this.state.bars) {
+    for (let bar of this.state.matchup[this.state.currentBattle].bars) {
       this.state.barDivs.push(<div>{bar}</div>);
       this.forceUpdate();
       if (!document.hidden) await tts.speak(this.state.ssu, bar);
     }
+
+    if (this.state.currentBattle < 1) {
+      this.setState({ currentBattle: this.state.currentBattle + 1 });
+      this.setState({ barDivs: [] });
+      this.readBars();
+    } else {
+
+      this.socket.emit("finishedListenin");
+
+    }
+    return;
+
   }
 
   render() {
@@ -49,13 +70,15 @@ export default class RappingPhase extends React.Component {
         className={`${game.rapPhase}`}
         style={{
           background: `url(${this.state.backgroundImgs[this.state.pageBG]})`,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
         }}
       >
         <div
           className={`${game.header}`}
           style={{ backdropFilter: "blur(0.1em)" }}
         >
-          Let's hear those bars!
+          Let's hear those bars from {this.state.matchup[this.state.currentBattle].nickname}!
         </div>
         <br />
         <Row>
