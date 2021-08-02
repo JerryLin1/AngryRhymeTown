@@ -94,6 +94,7 @@ export default class Lobby extends React.Component {
               <Form.Control
                 placeholder="Nickname"
                 id={`${lobby.inputNickname}`}
+                autoComplete="off"
                 onChange={() => {
                   let input = $(`#${lobby.inputNickname}`);
                   // if statements to check if name is empty or too long
