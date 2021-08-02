@@ -136,7 +136,7 @@ export default class VotingPhase extends React.Component {
 
         <Row>
           <div id={`${game.votePrompt}`}>
-            4 people have voted so far! Make sure you vote!
+            **number** people have voted so far! Make sure you vote!
           </div>
           {/* TOM OR JERRY: figure out which who they voted for, return 1 or 2, and then the prompt will be the color of that rap */}
           <div
