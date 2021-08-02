@@ -21,7 +21,7 @@ export default class WritingPhase extends React.Component {
     this.socket.on("receiveWords", (newWords) => {
       this.setState({ words: newWords });
 
-      let toDisplayWords = [];
+      let toDisplayWords = []
       for (let i = 0; i < newWords.length; i++) {
         let display = "";
         for (let j = 0; j < newWords[i].length; j++) {
@@ -69,8 +69,11 @@ export default class WritingPhase extends React.Component {
             this.showNextWords(i);
             this.sendBarsToServer(i);
             $(".btn-outline-dark:first").attr("class", "btn btn-success");
-            this.setState({ currentLine: this.state.currentLine + 1 });
+            this.setState({ currentLine: this.state.currentLine + 1 }, () => {
+              $(`.${game.writingRow} input`).eq(i + 1).focus();
+            });
           }}
+          className={`${game.writingRow}`}
         >
           <Form.Group as={Row}>
             <Form.Label column xs="3">
@@ -116,20 +119,7 @@ export default class WritingPhase extends React.Component {
           />
         </Row>
 
-        <Form
-          onSubmit={(event) => {
-            event.preventDefault();
-            const line = this.state.currentLine;
-            console.log("SUBMITTED");
-            this.showNextWords(line);
-            this.sendBarsToServer(line);
-            $(".btn-outline-dark:first").attr("class", "btn btn-success");
-            this.setState({ currentLine: this.state.currentLine + 1 });
-          }}
-          id={`${game.promptContainer}`}
-        >
-          {this.generateInputFields()}
-        </Form>
+        <div id={`${game.promptContainer}`}>{this.generateInputFields()}</div>
 
         <Row>
           <Col style={{ textAlign: "center" }}>

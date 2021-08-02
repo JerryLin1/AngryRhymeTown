@@ -35,14 +35,16 @@ export default class Lobby extends React.Component {
       for (let client of Object.values(clients)) {
         if (client.isHost === true) {
           $("#lobbyList").append(
-            `<div> ${client.name} <span style="color: #b59700">HOST</span></div>`
+            `<div>${client.name} <span style="color: #b59700">HOST</span></div>`
           );
         } else {
           $("#lobbyList").append(`<div> ${client.name}</div>`);
         }
       }
       if (clients[this.client.socket.id].isHost === true) {
-        $(`#${lobby.startGame}`).css("display", "initial");
+        $(`#${lobby.startGame}`).css("display", "inline");
+      } else {
+        $(`#${lobby.waitingMsg}`).css("display", "inline");
       }
     });
   }
@@ -157,6 +159,7 @@ export default class Lobby extends React.Component {
               >
                 Start Game
               </Button>
+              <div id={`${lobby.waitingMsg}`}>Waiting for host to start!</div>
             </Col>
             <Col>
               <Form.Group id={`${lobby.copyCode}`}>

@@ -19,9 +19,23 @@ html {
     height: 75vh;
 }
 
+#opponentCardRow {
+    width: 100%;
+    justify-content: center;
+}
+
+#opponentCard {
+    width: 50%;
+    align-items: center;
+}
+
 /* Writing Phase */
 
 #promptContainer>div {
+    margin-bottom: 0.5em;
+}
+
+.writingRow {
     margin-bottom: 0.5em;
 }
 
@@ -84,6 +98,17 @@ html {
 
 .rapperName {
     font-size: 2.5em;
+}
+
+#votePrompt {
+    margin-top: 1.5em;
+    text-align: center;
+    font-size: 2em;
+}
+
+#voteConfirmation {
+    text-align: center;
+    font-size: 1.25em;
 }
 
 /* Round results */

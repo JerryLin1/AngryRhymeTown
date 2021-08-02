@@ -30,18 +30,17 @@ export default class RappingPhase extends React.Component {
       ],
       barDivs: [],
       pageBG: Math.floor(Math.random() * 4),
-      ssu: tts.newSSU()
+      ssu: tts.newSSU(),
     };
 
     // TODO: socket.on for incoming matchup. readBars for both raps, with a delay in between.
-    this.socket.on("receiveBattleRapping", matchup => {
+    this.socket.on("receiveBattleRapping", (matchup) => {
       this.setState({ currentBattle: 0 });
       this.setState({ barDivs: [] });
       this.setState({ matchup: matchup });
 
       this.readBars();
-    })
-
+    });
   }
 
   async readBars() {
@@ -56,12 +55,9 @@ export default class RappingPhase extends React.Component {
       this.setState({ barDivs: [] });
       this.readBars();
     } else {
-
       this.socket.emit("finishedListenin");
-
     }
     return;
-
   }
 
   render() {
@@ -78,7 +74,8 @@ export default class RappingPhase extends React.Component {
           className={`${game.header}`}
           style={{ backdropFilter: "blur(0.1em)" }}
         >
-          Let's hear those bars from {this.state.matchup[this.state.currentBattle].nickname}!
+          Let's hear those bars from{" "}
+          {this.state.matchup[this.state.currentBattle].nickname}!
         </div>
         <br />
         <Row>
