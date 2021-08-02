@@ -2,7 +2,6 @@ import React from "react";
 import Countdown from "../Countdown.jsx";
 import { Card, Col, Row } from "react-bootstrap";
 import game from "../Game.module.css";
-import { CardChecklist } from "react-bootstrap-icons";
 
 export default class PairingPhase extends React.Component {
   constructor(props) {
@@ -17,7 +16,24 @@ export default class PairingPhase extends React.Component {
     this.socket.on("sendPairings", (pairDisplay) => {
       let matchups = [];
       for (let pair of pairDisplay) {
-        matchups.push(<Card.Body>{`${pair[0]} vs. ${pair[1]}`}</Card.Body>);
+        // bold the current player's matchup
+        if (
+          (this.client.name === "" &&
+            (pair[0] ===
+              `Player #${this.socket.id.substring(0, 4).toUpperCase()}` ||
+              pair[1] ===
+                `Player #${this.socket.id.substring(0, 4).toUpperCase()}`)) ||
+          this.client.name === pair[0] ||
+          this.client.name === pair[1]
+        ) {
+          matchups.push(
+            <Card.Body>
+              <strong>{`${pair[0]} vs. ${pair[1]}`}</strong>
+            </Card.Body>
+          );
+        } else {
+          matchups.push(<Card.Body>{`${pair[0]} vs. ${pair[1]}`}</Card.Body>);
+        }
       }
       this.setState({ matchups: matchups });
     });
@@ -28,6 +44,7 @@ export default class PairingPhase extends React.Component {
   }
 
   render() {
+    console.log(this.socket.id);
     return (
       <div>
         <Row>

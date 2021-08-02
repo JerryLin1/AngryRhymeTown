@@ -1,7 +1,6 @@
 import React from "react";
 import io from "socket.io-client";
 import $ from "jquery";
-import { Card } from "react-bootstrap";
 
 export default class Client extends React.Component {
 

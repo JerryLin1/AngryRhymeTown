@@ -1,7 +1,7 @@
 import React from "react";
 import Countdown from "../Countdown.jsx";
 import $ from "jquery";
-import { Button, Col, Form, Row, InputGroup } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import game from "../Game.module.css";
 
 export default class WritingPhase extends React.Component {

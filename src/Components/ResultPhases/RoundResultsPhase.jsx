@@ -38,7 +38,6 @@ export default class RoundResultsPhase extends React.Component {
     })
   }
 
-
   render() {
     return (
       <div>

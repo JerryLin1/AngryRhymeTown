@@ -37,6 +37,7 @@ export default class Game extends React.Component {
     } else if (this.state.phase == "GameResults") {
       return <GameResultsPhase client={this.client} />;
     }
+
   };
 
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////
