@@ -4,7 +4,6 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import home from "./Home.module.css";
-import anime from "animejs";
 
 export default class Home extends React.Component {
   constructor(props) {

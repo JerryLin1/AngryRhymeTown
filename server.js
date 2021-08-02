@@ -115,7 +115,7 @@ io.on('connection', socket => {
         sendToChat(msg, "USER", socket.nickname, socket.id);
     })
     function sendToChat(msg, type, senderNickname, senderId) {
-        let chatMsg = {msg: msg, type: type, nickname: senderNickname, id: senderId};
+        let chatMsg = { msg: msg, type: type, nickname: senderNickname, id: senderId };
         rooms[socket.room].chatHistory.push(chatMsg);
         io.to(socket.room).emit("receiveMessage", chatMsg);
     }
@@ -215,7 +215,7 @@ io.on('connection', socket => {
             console.log("what the fuck");
             startVotePhase();
         }
-        
+
     })
 
     function startVotePhase() {
@@ -265,7 +265,7 @@ io.on('connection', socket => {
         } else {
             io.to(socket.room).emit("receiveBattleRapping", matchup);
         }
-            
+
 
     }
 

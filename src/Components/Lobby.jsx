@@ -42,9 +42,9 @@ export default class Lobby extends React.Component {
         }
       }
       if (clients[this.client.socket.id].isHost === true) {
-        $(`#${lobby.startGame}`).css("display", "inline");
+        $(`#${lobby.startGame}`).css("display", "initial");
       } else {
-        $(`#${lobby.waitingMsg}`).css("display", "inline");
+        $(`#${lobby.waitingMsg}`).css("display", "initial");
       }
     });
   }

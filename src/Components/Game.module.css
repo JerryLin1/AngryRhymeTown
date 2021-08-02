@@ -164,7 +164,7 @@ html {
 }
 
 #firstP:hover {
-    filter: drop-shadow(0 0 1.5em #ffed48);
+    filter: drop-shadow(0 0 1em #ffed48);
 }
 
 #secondP {
@@ -174,7 +174,7 @@ html {
 }
 
 #secondP:hover {
-    filter: drop-shadow(0 0 1.5em #C0C0C0);
+    filter: drop-shadow(0 0 1em #C0C0C0);
 }
 
 #thirdP {
@@ -184,5 +184,5 @@ html {
 }
 
 #thirdP:hover {
-    filter: drop-shadow(0 0 1.5em #cd7f32);
+    filter: drop-shadow(0 0 1em #cd7f32);
 }
