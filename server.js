@@ -28,7 +28,7 @@ io.on('connection', socket => {
     socket.on('disconnect', () => {
         console.log(`${socket.id} has disconnected.`);
         if (socket.room in rooms) {
-            sendToChat(`${socket.nickname} has left.`, "SERVERDC");
+            sendToChat(`${socket.nickname} has left.`, "SERVER_RED");
             // If host disconnects, transfer host to the next client
             let transferHost = false;
             if (rooms[socket.room].clients[socket.id].isHost === true && numberOfClientsInRoom(socket.room) > 1) {

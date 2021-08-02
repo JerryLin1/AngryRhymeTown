@@ -77,7 +77,7 @@ export default class Client extends React.Component {
                 chatMsg = chatInfo.msg;
                 color = "blue";
             }
-            else if (chatInfo.type === "SERVERDC"){
+            else if (chatInfo.type === "SERVER_RED"){
                 chatMsg = chatInfo.msg;
                 color = "red";
             }

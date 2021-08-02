@@ -35,7 +35,7 @@ export default class Lobby extends React.Component {
       for (let client of Object.values(clients)) {
         if (client.isHost === true) {
           $("#lobbyList").append(
-            `<div> ${client.name} <span style="color: #fab234"> - HOST</span></div>`
+            `<div> ${client.name} <span style="color: #b59700">HOST</span></div>`
           );
         } else {
           $("#lobbyList").append(`<div> ${client.name}</div>`);
