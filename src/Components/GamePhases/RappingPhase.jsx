@@ -44,19 +44,22 @@ export default class RappingPhase extends React.Component {
   }
 
   async readBars() {
-    for (let bar of this.state.matchup[this.state.currentBattle].bars) {
+    for (let bar of this.state.matchup[0].bars) {
       this.state.barDivs.push(<div>{bar}</div>);
       this.forceUpdate();
-      if (!document.hidden) await tts.speak(this.state.ssu, bar);
+      // await tts.speak(this.state.ssu, bar);
+      await tts.speakResponsiveVoice(bar);
     }
 
-    if (this.state.currentBattle < 1) {
-      this.setState({ currentBattle: this.state.currentBattle + 1 });
-      this.setState({ barDivs: [] });
-      this.readBars();
-    } else {
-      this.socket.emit("finishedListenin");
+    this.setState({ barDivs: [] });
+    for (let bar of this.state.matchup[1].bars) {
+      this.state.barDivs.push(<div>{bar}</div>);
+      this.forceUpdate();
+      // await tts.speak(this.state.ssu, bar);
+      await tts.speakResponsiveVoice(bar);
     }
+
+    this.socket.emit("finishedListenin");
     return;
   }
 

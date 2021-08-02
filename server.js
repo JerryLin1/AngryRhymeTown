@@ -61,6 +61,7 @@ io.on('connection', socket => {
         rooms[roomId].currentRound = -1;
         rooms[roomId].votesCast = 0;
         rooms[roomId].finishedSpittin = 0;
+        rooms[roomId].finishedListenin = 0;
         rooms[roomId].nextPhase = null;
         rooms[roomId].rapper1 = "";
         rooms[roomId].rapper2 = "";
@@ -211,11 +212,12 @@ io.on('connection', socket => {
 
     socket.on("finishedListenin", () => {
         // Goes to next phase if tts on host machine is done
-        if (rooms[socket.room].clients[socket.id].isHost) {
-            console.log("what the fuck");
+        rooms[socket.room].finishedListenin += 1;
+        if (rooms[socket.room].finishedListenin === numberOfClientsInRoom(socket.room)) {
+            clearTimeout(rooms[socket.room].nextPhase);
+            rooms[socket.room].finishedListenin = 0;
             startVotePhase();
         }
-
     })
 
     function startVotePhase() {
