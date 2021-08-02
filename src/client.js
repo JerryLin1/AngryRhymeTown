@@ -9,6 +9,8 @@ export default class Client extends React.Component {
         super(props);
         this.socket = io();
         this.name = "";
+
+        // this.room is actually clients (rooms[roomId].clients)
         this.room = [];
         this.roomSettings = {};
 
@@ -68,10 +70,23 @@ export default class Client extends React.Component {
             if (jsele.scrollHeight - jsele.scrollTop === jsele.clientHeight) {
                 autoScroll = true;
             }
-            let chatMsg = chatInfo["sender"] + ": " + chatInfo["msg"];
-
+            let chatMsg;
+            let color;
+            
+            if (chatInfo.type === "SERVER") {
+                chatMsg = chatInfo.msg;
+                color = "blue";
+            }
+            else if (chatInfo.type === "SERVER_RED"){
+                chatMsg = chatInfo.msg;
+                color = "red";
+            }
+            else {
+                chatMsg = chatInfo.nickname + ": " + chatInfo.msg;
+                color = "black";
+            }
             $("#chat").append(
-                "<div>" + chatMsg + "</div>"
+                `<div style="color: ${color}"> ${chatMsg} </div>`
             );
 
             if (autoScroll === true) jsele.scrollTo(0, jsele.scrollHeight);
@@ -93,9 +108,8 @@ export default class Client extends React.Component {
     }
 
     sendMessage = (msg) => {
-        console.log(msg + " " + this.name);
         if (msg != "") {
-            this.socket.emit("sendMessage", { "msg": msg, "sender": this.name });
+            this.socket.emit("sendMessage", msg);
         }
     }
 

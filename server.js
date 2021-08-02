@@ -23,11 +23,12 @@ const rooms = {};
 io.on('connection', socket => {
     console.log(`${socket.id} has connected.`);
     socket.room = undefined;
-    socket.name = "Player #" + socket.id.substring(0, 4).toUpperCase();
+    socket.nickname = "Player #" + socket.id.substring(0, 4).toUpperCase();
 
     socket.on('disconnect', () => {
         console.log(`${socket.id} has disconnected.`);
         if (socket.room in rooms) {
+            sendToChat(`${socket.nickname} has left.`, "SERVER_RED");
             // If host disconnects, transfer host to the next client
             let transferHost = false;
             if (rooms[socket.room].clients[socket.id].isHost === true && numberOfClientsInRoom(socket.room) > 1) {
@@ -74,7 +75,7 @@ io.on('connection', socket => {
         if (roomId in rooms) {
             socket.join(roomId);
             rooms[roomId].clients[socket.id] = {};
-            rooms[roomId].clients[socket.id].name = socket.name;
+            rooms[roomId].clients[socket.id].name = socket.nickname;
 
             if (numberOfClientsInRoom(roomId) === 1) {
                 rooms[roomId].clients[socket.id].isHost = true;
@@ -86,6 +87,12 @@ io.on('connection', socket => {
             socket.room = roomId;
             io.to(socket.room).emit("joinedLobby");
             io.to(socket.room).emit("updateClientList", rooms[roomId].clients);
+
+            // Update chat history. 
+            for (chatMsg of rooms[roomId].chatHistory) {
+                io.to(socket.id).emit("receiveMessage", chatMsg);
+            }
+            sendToChat(`${socket.nickname} has joined.`, "SERVER");
         }
         // Else redirect them back to home
         else {
@@ -96,25 +103,30 @@ io.on('connection', socket => {
     // Update's client's nickname and updates client list on client side for all clients
     socket.on("updateNickname", name => {
         if (rooms[socket.room].gameState === gameState.LOBBY) {
-            socket.name = name;
-            rooms[socket.room].clients[socket.id].name = socket.name;
+            sendToChat(`${socket.nickname} has been renamed to ${name}.`, "SERVER");
+            socket.nickname = name;
+            rooms[socket.room].clients[socket.id].name = socket.nickname;
             io.to(socket.room).emit("updateClientList", rooms[socket.room].clients);
         }
     })
 
     // Receives and sends message to all clients in a room
-    socket.on("sendMessage", (chatInfo) => {
-        let chatMsg = { "msg": chatInfo["msg"], "sender": chatInfo["sender"] };
+    socket.on("sendMessage", (msg) => {
+        sendToChat(msg, "USER", socket.nickname, socket.id);
+    })
+    function sendToChat(msg, type, senderNickname, senderId) {
+        let chatMsg = {msg: msg, type: type, nickname: senderNickname, id: senderId};
         rooms[socket.room].chatHistory.push(chatMsg);
         io.to(socket.room).emit("receiveMessage", chatMsg);
-    })
-
+    }
     socket.on("startGame", () => {
         if (rooms[socket.room].gameState === gameState.LOBBY && rooms[socket.room].clients[socket.id].isHost === true) {
             // TODO: if (rooms[socket.room].length %% 2 === 0) Must be even number of players. unless we code bot?
+            // TODO: Emit room settings whenever they are changed by host (once that is implemented)
             io.to(socket.room).emit("receiveRoomSettings", rooms[socket.room].settings);
             io.to(socket.room).emit("startGame");
-            // rooms[socket.room].gameState = gameState.START; ??
+
+            rooms[socket.room].rounds = [];
 
             // Set player scores to 0
             for (let client of Object.values(rooms[socket.room].clients)) {

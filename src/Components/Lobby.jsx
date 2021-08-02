@@ -24,18 +24,24 @@ export default class Lobby extends React.Component {
       this.setState({ numPlayers: this.state.numPlayers + 1 });
       console.log(this.state.numPlayers);
     });
-    
+
     // Update the player list in the client's room
-    this.client.socket.on("updateClientList", (room) => {
+    this.client.socket.on("updateClientList", (clients) => {
       $("#lobbyList").html("");
-      this.name = room[this.client.socket.id].name;
+      this.name = clients[this.client.socket.id].name;
 
-      this.room = room;
+      this.room = clients;
 
-      for (let client of Object.values(room)) {
-        $("#lobbyList").append("<div>" + client.name + "</div>");
+      for (let client of Object.values(clients)) {
+        if (client.isHost === true) {
+          $("#lobbyList").append(
+            `<div> ${client.name} <span style="color: #b59700">HOST</span></div>`
+          );
+        } else {
+          $("#lobbyList").append(`<div> ${client.name}</div>`);
+        }
       }
-      if (room[this.client.socket.id].isHost === true) {
+      if (clients[this.client.socket.id].isHost === true) {
         $(`#${lobby.startGame}`).css("display", "initial");
       }
     });
@@ -186,7 +192,7 @@ export default class Lobby extends React.Component {
         <Row>
           {/* Player list */}
           <Col xs="6">
-            <Card style={{ height: "48em" }}>
+            <Card style={{ height: "28em" }}>
               <Card.Header style={{ fontSize: "2em " }}>
                 Player List
               </Card.Header>
@@ -196,7 +202,7 @@ export default class Lobby extends React.Component {
 
           {/* Lobby Chat */}
           <Col>
-            <Card style={{ height: "24em", marginBottom: "0.25em" }}>
+            <Card style={{ height: "28em", marginBottom: "0.25em" }}>
               <Card.Header style={{ fontSize: "2em" }}>Chat</Card.Header>
               <Card.Body id="chat" style={{ overflowY: "scroll" }}></Card.Body>
             </Card>
