@@ -40,17 +40,12 @@ export default class VotingPhase extends React.Component {
       voted: false,
       color1: fontColors[color1],
       color2: fontColors[color2],
-      countdown: (
-        <Countdown
-          key={this.restartTimer}
-          time={this.roomSettings.votingTime / 1000}
-          before="You have"
-          after="left to vote for your favorite rap!"
-        />
-      ),
+      selected: undefined,
+      numVoted: 0
     };
 
     this.socket.on("receiveBattleVoting", (battle) => {
+      this.setState({numVoted: 0});
       this.setState({ matchup: battle });
       this.setState({
         voted:
@@ -60,10 +55,15 @@ export default class VotingPhase extends React.Component {
       this.restartTimer++;
       this.forceUpdate();
     });
+
+    this.socket.on("numVotedSoFar", numVoted => {
+      this.setState({numVoted: numVoted});
+    })
+
   }
 
   vote = (rapper) => {
-    this.socket.emit("receiveVote", rapper);
+    this.socket.emit("receiveVote", rapper)
   };
 
   renderBars = (matchup) => {
@@ -71,6 +71,22 @@ export default class VotingPhase extends React.Component {
       return <div key={key}>{bar}</div>;
     });
   };
+
+  displayVoteConfirmation = () => {
+    if (this.state.selected !== undefined) {
+      return (
+        <div
+          id={`${game.voteConfirmation}`}
+          style={{
+            color: (this.state.selected == 0) ? this.state.color1 : this.state.color2,
+            display: this.state.voted ? "initial" : "none",
+          }}
+        >
+          You voted for {this.state.matchup[this.state.selected].nickname}'s rap!
+        </div>
+      )
+    }
+  }
 
   render() {
     const color1 = this.state.color1;
@@ -81,7 +97,14 @@ export default class VotingPhase extends React.Component {
         <Row>
           <div className={`${game.header}`}>Time To Vote!</div>
         </Row>
-        <Row>{this.state.countdown}</Row>
+        <Row>
+          <Countdown
+            key={this.restartTimer}
+            time={this.roomSettings.votingTime / 1000}
+            before="You have"
+            after="left to vote for your favorite rap!"
+          />
+        </Row>
 
         <Row>
           <Col xs="5" sm={{ offset: 2 }} style={{ color: color1 }}>
@@ -111,6 +134,7 @@ export default class VotingPhase extends React.Component {
               onClick={() => {
                 this.vote(1);
                 this.setState({ voted: true });
+                this.setState({ selected: 0 });
               }}
             >
               Vote for {this.state.matchup[0].nickname}'s rap!
@@ -127,6 +151,8 @@ export default class VotingPhase extends React.Component {
               onClick={() => {
                 this.vote(2);
                 this.setState({ voted: true });
+                this.setState({ selected: 1 });
+
               }}
             >
               Vote for {this.state.matchup[1].nickname}'s rap!
@@ -136,18 +162,9 @@ export default class VotingPhase extends React.Component {
 
         <Row>
           <div id={`${game.votePrompt}`}>
-            **number** people have voted so far! Make sure you vote!
+            {this.state.numVoted} people have voted so far! Make sure you vote!
           </div>
-          {/* TOM OR JERRY: figure out which who they voted for, return 1 or 2, and then the prompt will be the color of that rap */}
-          <div
-            id={`${game.voteConfirmation}`}
-            style={{
-              color: color1 /* Get color */,
-              display: this.state.voted ? "initial" : "none",
-            }}
-          >
-            You voted for **player**'s rap!
-          </div>
+          {this.displayVoteConfirmation()}
         </Row>
       </div>
     );

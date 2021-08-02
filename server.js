@@ -10,7 +10,8 @@ const io = new Server(server);
 const wordFunctions = require("./server/wordFunctions.js");
 const gameState = require("./server/gameState.js");
 const hf = require("./server/helperFunctions.js");
-const DEFAULT_ROOM_SETTINGS = require("./server/defaultRoomSettings.js")
+const DEFAULT_ROOM_SETTINGS = require("./server/defaultRoomSettings.js");
+const { Callbacks } = require('jquery');
 
 const port = process.env.PORT || 6567;
 server.listen(port, () => {
@@ -116,7 +117,7 @@ io.on('connection', socket => {
         sendToChat(msg, "USER", socket.nickname, socket.id);
     })
     function sendToChat(msg, type, senderNickname, senderId) {
-        let chatMsg = {msg: msg, type: type, nickname: senderNickname, id: senderId};
+        let chatMsg = { msg: msg, type: type, nickname: senderNickname, id: senderId };
         rooms[socket.room].chatHistory.push(chatMsg);
         io.to(socket.room).emit("receiveMessage", chatMsg);
     }
@@ -183,6 +184,10 @@ io.on('connection', socket => {
                 .rounds[rooms[socket.room].currentRound][pairings[rapper]]
                 .opponent = rapper;
         }
+        socket.emit("sendOpponent",
+            rooms[socket.room].clients[rooms[socket.room]
+                .rounds[rooms[socket.room].currentRound][socket.id]
+                .opponent].name);
 
     }
 
@@ -190,7 +195,7 @@ io.on('connection', socket => {
         io.to(socket.room).emit("startWritePhase");
         setGameState(socket.room, gameState.WRITING);
         let t = rooms[socket.room].settings.writingTime;
-        rooms[socket.room].nextPhase = setTimeout(() => { startRapPhase() }, t);
+        rooms[socket.room].nextPhase = setTimeout(() => { startVotePhase() }, t);
     };
 
     socket.on("finishedSpittin", () => {
@@ -199,7 +204,7 @@ io.on('connection', socket => {
         if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room)) {
             clearTimeout(rooms[socket.room].nextPhase);
             rooms[socket.room].finishedSpittin = 0;
-            startRapPhase();
+            startVotePhase();
         }
     })
 
@@ -267,11 +272,11 @@ io.on('connection', socket => {
         } else {
             io.to(socket.room).emit("receiveBattleRapping", matchup);
         }
-            
+
 
     }
 
-    socket.on("receiveVote", rapper => {
+    socket.on("receiveVote", (rapper) => {
         // TOOD: vote verification. a hacker could vote more than once 
         rooms[socket.room].votesCast += 1;
         (rapper === 1) ?
@@ -282,12 +287,10 @@ io.on('connection', socket => {
             rooms[socket.room]
                 .clients[rooms[socket.room].rapper2]
                 .score += 1;
-
+        io.to(socket.room).emit("numVotedSoFar", rooms[socket.room].votesCast);
         // Check if all votes have been submitted
-        // TODO REPLACE numberOfClientsInRoom(socket.room) - 2
-        if (rooms[socket.room].votesCast == 1) {
-
-            // TODO: Display results of voting, wait X seconds
+        // TODO REPLACE numberOfClientsInRoom(socket.room) - 2 or 1 for debugging
+        if (rooms[socket.room].votesCast == numberOfClientsInRoom(socket.room) - 2) {
 
             // Check if the next round or the next battle should start
             startNext();
@@ -301,6 +304,7 @@ io.on('connection', socket => {
 
         // If all battles have completed:
         if (Object.keys(rooms[socket.room].pairings).length === rooms[socket.room].battle) {
+            rooms[socket.room].battle = 0;
             if (rooms[socket.room].currentRound === rooms[socket.room].settings.numberOfRounds - 1) {
                 startGameResultsPhase();
             }
@@ -308,7 +312,7 @@ io.on('connection', socket => {
                 startRoundResultsPhase();
             }
         } else if (Object.keys(rooms[socket.room].pairings).length > rooms[socket.room].battle) {
-            startRapPhase();
+            startBattle();
         }
     }
 

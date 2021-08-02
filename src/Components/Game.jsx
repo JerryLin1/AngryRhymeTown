@@ -26,9 +26,11 @@ export default class Game extends React.Component {
       return <PairingPhase client={this.client} />;
     } else if (this.state.phase === "Writing") {
       return <WritingPhase client={this.client} />;
-    } else if (this.state.phase === "Rapping") {
-      return <RappingPhase client={this.client} />;
-    } else if (this.state.phase === "Voting") {
+    } 
+    // else if (this.state.phase === "Rapping") {
+    //   return <RappingPhase client={this.client} />;
+    // }
+     else if (this.state.phase === "Voting") {
       return <VotingPhase client={this.client} />;
     } else if (this.state.phase == "RoundResults") {
       return <RoundResultsPhase client={this.client} />;

@@ -11,6 +11,8 @@ export default class PairingPhase extends React.Component {
     this.socket = this.props.client.socket;
     this.roomSettings = this.props.client.roomSettings;
 
+    this.state = {opponent: ""}
+
     this.state = { matchups: [] };
     this.socket.on("sendPairings", (pairDisplay) => {
       let matchups = [];
@@ -19,6 +21,10 @@ export default class PairingPhase extends React.Component {
       }
       this.setState({ matchups: matchups });
     });
+
+    this.socket.on("sendOpponent", opponent => {
+      this.setState({opponent: opponent});
+    }) 
   }
 
   render() {
@@ -38,8 +44,8 @@ export default class PairingPhase extends React.Component {
             </Row>
             <Row id={`${game.opponentCardRow}`}>
               <Card id={`${game.opponentCard}`} className="text-center">
-                <Card.Title>Your opponent is: **name**!</Card.Title>
-                <Card.Text>Think you can beat them? (in game)</Card.Text>
+                <Card.Title>Your opponent is: {this.state.opponent}!</Card.Title>
+                <Card.Text>Think you can beat them? (in game ofc.)</Card.Text>
                 <Card.Img
                   id={`${game.opponentCard}`}
                   src="https://i.redd.it/5andi3picpy61.jpg"
