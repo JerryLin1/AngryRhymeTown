@@ -16,14 +16,14 @@ export default class WritingPhase extends React.Component {
       displayWords: [],
       nextWords: [true, false, false, false, false],
       currentLine: 0,
-      potentialPoints: ["","","",""],
-      opponent: ""
+      potentialPoints: ["", "", "", ""],
+      opponent: "",
     };
 
     this.socket.on("receiveWritingInfo", (newWords, opponent) => {
       this.setState({ words: newWords });
-      this.setState({opponent: opponent});
-      let toDisplayWords = []
+      this.setState({ opponent: opponent });
+      let toDisplayWords = [];
       for (let i = 0; i < newWords.length; i++) {
         let display = "";
         for (let j = 0; j < newWords[i].length; j++) {
@@ -62,19 +62,21 @@ export default class WritingPhase extends React.Component {
   };
 
   displayBonuses = (index) => {
-    let currentValue = $("#barInput_" + index).val().toLowerCase();
+    let currentValue = $("#barInput_" + index)
+      .val()
+      .toLowerCase();
     let potential = 0;
     for (let word of this.state.words[index]) {
       if (currentValue.includes(word)) {
         potential += 50;
       }
     }
-    potential = (potential == 200) ? 300: potential;
+    potential = potential == 200 ? 300 : potential;
 
     let potentialPoints = [...this.state.potentialPoints];
     potentialPoints[index] = potential + " points from your words!";
-    this.setState({potentialPoints: potentialPoints});
-  }
+    this.setState({ potentialPoints: potentialPoints });
+  };
 
   generateInputFields = () => {
     let arr = [];
@@ -87,7 +89,9 @@ export default class WritingPhase extends React.Component {
             this.sendBarsToServer(i);
             $(".btn-outline-dark:first").attr("class", "btn btn-success");
             this.setState({ currentLine: this.state.currentLine + 1 }, () => {
-              $(`.${game.writingRow} input`).eq(i + 1).focus();
+              $(`.${game.writingRow} input`)
+                .eq(i + 1)
+                .focus();
             });
           }}
           className={`${game.writingRow}`}
@@ -101,20 +105,14 @@ export default class WritingPhase extends React.Component {
                 id={"barInput_" + i}
                 autoComplete="off"
                 disabled={this.state.currentLine !== i}
-
-                onChange = {
-                  () => {
-                    this.displayBonuses(i);
-                  }
-                }
-
-                onBlur = {
-                  () => {
-                    let potentialPoints = [...this.state.potentialPoints];
-                    potentialPoints[i] = "";
-                    this.setState({potentialPoints: potentialPoints});
-                  }
-                }
+                onChange={() => {
+                  this.displayBonuses(i);
+                }}
+                onBlur={() => {
+                  let potentialPoints = [...this.state.potentialPoints];
+                  potentialPoints[i] = "";
+                  this.setState({ potentialPoints: potentialPoints });
+                }}
               />
             </Col>
             <Col xs="auto">
@@ -126,9 +124,7 @@ export default class WritingPhase extends React.Component {
                 Submit tha bar
               </Button>
             </Col>
-            <Col xs="4">
-              {this.state.potentialPoints[i]}
-            </Col>
+            <Col xs="4">{this.state.potentialPoints[i]}</Col>
           </Form.Group>
         </Form>
       );
@@ -147,7 +143,15 @@ export default class WritingPhase extends React.Component {
 
         <Row>
           <Col>
-            <div className = {`${game.header}`}>Your opponent is: {this.state.opponent}</div>
+            <div
+              style={{
+                fontSize: "1.5em",
+                textAlign: "center",
+                marginBottom: "1em",
+              }}
+            >
+              Your opponent is: {this.state.opponent}
+            </div>
           </Col>
         </Row>
 
