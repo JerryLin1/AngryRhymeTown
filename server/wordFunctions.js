@@ -17,7 +17,6 @@ module.exports = {
         // Get points for every word used
         let countUsed = 0;
         for (let word of words) {
-            console.log(word);
             word.toLowerCase();
             if (sentence.includes(word)) {
                 points += 50;

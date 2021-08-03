@@ -4,5 +4,5 @@ module.exports = DEFAULT_ROOM_SETTINGS = {
     writingTime: 60000,
     votingTime: 10000,
     votingResultsTime: 3000,
-    roundResultsTime: 5000
+    roundResultsTime: 10000
 }

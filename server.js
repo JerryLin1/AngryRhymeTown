@@ -79,6 +79,7 @@ io.on('connection', socket => {
             rooms[roomId].clients[socket.id] = {};
             rooms[roomId].clients[socket.id].name = socket.nickname;
 
+
             if (numberOfClientsInRoom(roomId) === 1) {
                 rooms[roomId].clients[socket.id].isHost = true;
             }
@@ -133,6 +134,7 @@ io.on('connection', socket => {
             // Set player scores to 0
             for (let client of Object.values(rooms[socket.room].clients)) {
                 client.score = 0;
+                client.wordBonuses = 0;
             }
             startRound();
         }
@@ -209,20 +211,20 @@ io.on('connection', socket => {
     })
 
     function startRapPhase() {
-        if (rooms[socket.room].nextPhase !== null) clearTimeout(rooms[socket.room].nextPhase);
-        io.to(socket.room).emit("startRapPhase");
-        setGameState(socket.room, gameState.RAPPING);
-        startBattle();
+        // if (rooms[socket.room].nextPhase !== null) clearTimeout(rooms[socket.room].nextPhase);
+        // io.to(socket.room).emit("startRapPhase");
+        // setGameState(socket.room, gameState.RAPPING);
+        // startBattle();
     }
 
     socket.on("finishedListenin", () => {
         // Goes to next phase if tts on host machine is done
-        rooms[socket.room].finishedListenin += 1;
-        if (rooms[socket.room].finishedListenin === numberOfClientsInRoom(socket.room)) {
-            clearTimeout(rooms[socket.room].nextPhase);
-            rooms[socket.room].finishedListenin = 0;
-            startVotePhase();
-        }
+        // rooms[socket.room].finishedListenin += 1;
+        // if (rooms[socket.room].finishedListenin === numberOfClientsInRoom(socket.room)) {
+        //     clearTimeout(rooms[socket.room].nextPhase);
+        //     rooms[socket.room].finishedListenin = 0;
+        //     startVotePhase();
+        // }
     })
 
     function startVotePhase() {
@@ -234,7 +236,6 @@ io.on('connection', socket => {
     function startBattle() {
         let t = rooms[socket.room].settings.votingTime;
         if (rooms[socket.room].gameState == gameState.VOTING) {
-            console.log(rooms[socket.room].gameState + " " + gameState.VOTING);
             rooms[socket.room].nextPhase = setTimeout(() => { startNext() }, t)
         }
         const battles = Object.keys(rooms[socket.room].pairings);
@@ -322,7 +323,8 @@ io.on('connection', socket => {
         for (let client of Object.keys(rooms[socket.room].clients)) {
             let name = rooms[socket.room].clients[client].name;
             let score = rooms[socket.room].clients[client].score;
-            results.push({ name: name, score: score });
+            let wordBonuses = rooms[socket.room].clients[client].wordBonuses;
+            results.push({ name: name, score: score, wordBonuses: wordBonuses });
         }
         results.sort((a, b) => (a.score > b.score) ? -1 : 1);
         return results;
@@ -361,7 +363,9 @@ io.on('connection', socket => {
             words.push(wordFunctions.getRandomWords());
         }
         rooms[socket.room].clients[socket.id].words = words;
-        socket.emit("receiveWords", words);
+        socket.emit("receiveWritingInfo", words, rooms[socket.room].clients[rooms[socket.room]
+            .rounds[rooms[socket.room].currentRound][socket.id]
+            .opponent].name);
     })
 
     socket.on("sendBars", (bars) => {
@@ -370,13 +374,21 @@ io.on('connection', socket => {
             .rounds[rooms[socket.room].currentRound][socket.id]
             .bars.push(bars);
 
-        rooms[socket.room]
-            .clients[socket.id]
-            .score += wordFunctions.calculatePoints(bars, rooms[socket.room]
+        let wordBonuses = wordFunctions.calculatePoints(bars,
+            rooms[socket.room]
                 .clients[socket.id]
                 .words[rooms[socket.room]
                     .rounds[rooms[socket.room].currentRound][socket.id]
                     .bars.length - 1]);
+
+        rooms[socket.room]
+            .clients[socket.id]
+            .score += wordBonuses;
+
+        rooms[socket.room]
+            .clients[socket.id]
+            .wordBonuses += wordBonuses;
+
     })
 });
 
