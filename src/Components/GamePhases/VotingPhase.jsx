@@ -1,4 +1,6 @@
 import React from "react";
+import $ from "jquery";
+import anime from "animejs";
 import Countdown from "../Countdown.jsx";
 import { Button, Col, Row } from "react-bootstrap";
 import game from "../Game.module.css";
@@ -41,11 +43,11 @@ export default class VotingPhase extends React.Component {
       color1: fontColors[color1],
       color2: fontColors[color2],
       selected: undefined,
-      numVoted: 0
+      numVoted: 0,
     };
 
     this.socket.on("receiveBattleVoting", (battle) => {
-      this.setState({numVoted: 0});
+      this.setState({ numVoted: 0 });
       this.setState({ matchup: battle });
       this.setState({
         voted:
@@ -56,14 +58,13 @@ export default class VotingPhase extends React.Component {
       this.forceUpdate();
     });
 
-    this.socket.on("numVotedSoFar", numVoted => {
-      this.setState({numVoted: numVoted});
-    })
-
+    this.socket.on("numVotedSoFar", (numVoted) => {
+      this.setState({ numVoted: numVoted });
+    });
   }
 
   vote = (rapper) => {
-    this.socket.emit("receiveVote", rapper)
+    this.socket.emit("receiveVote", rapper);
   };
 
   renderBars = (matchup) => {
@@ -78,15 +79,17 @@ export default class VotingPhase extends React.Component {
         <div
           id={`${game.voteConfirmation}`}
           style={{
-            color: (this.state.selected == 0) ? this.state.color1 : this.state.color2,
+            color:
+              this.state.selected == 0 ? this.state.color1 : this.state.color2,
             display: this.state.voted ? "initial" : "none",
           }}
         >
-          You voted for {this.state.matchup[this.state.selected].nickname}'s rap!
+          You voted for {this.state.matchup[this.state.selected].nickname}'s
+          rap!
         </div>
-      )
+      );
     }
-  }
+  };
 
   render() {
     const color1 = this.state.color1;
@@ -109,21 +112,21 @@ export default class VotingPhase extends React.Component {
         <Row>
           <Col xs="5" sm={{ offset: 2 }} style={{ color: color1 }}>
             <div className={`${game.rapperName}`}>
-              {this.state.matchup[0].nickname}
+              {this.state.matchup[0].nickname}'s bars
             </div>
             <div className={`${game.rap}`}>{this.renderBars(0)}</div>
           </Col>
 
           <Col xs="5" style={{ color: color2 }}>
             <div className={`${game.rapperName}`}>
-              {this.state.matchup[1].nickname}
+              {this.state.matchup[1].nickname}'s bars
             </div>
             <div className={`${game.rap}`}>{this.renderBars(1)}</div>
           </Col>
         </Row>
         <br />
         <Row>
-          <Col xs="3" sm={{ offset: 2 }}>
+          <Col xs="3" sm={{ offset: 2 }} id="rap_1">
             <Button
               variant="outline-light"
               style={{
@@ -131,6 +134,24 @@ export default class VotingPhase extends React.Component {
                 border: `1px solid ${color1}`,
               }}
               disabled={this.state.voted}
+              onMouseOver={() => {
+                anime({
+                  targets: `#rap_1 .btn-outline-light`,
+                  backgroundColor: color1,
+                  color: "#fff",
+                  scale: 1.1,
+                  duration: 150,
+                });
+              }}
+              onMouseOut={() => {
+                anime({
+                  targets: `#rap_1 .btn-outline-light`,
+                  backgroundColor: "#fff",
+                  color: color1,
+                  scale: 1.0,
+                  duration: 150,
+                });
+              }}
               onClick={() => {
                 this.vote(1);
                 this.setState({ voted: true });
@@ -140,9 +161,27 @@ export default class VotingPhase extends React.Component {
               Vote for {this.state.matchup[0].nickname}'s rap!
             </Button>
           </Col>
-          <Col xs="3" sm={{ offset: 2 }}>
+          <Col xs="3" sm={{ offset: 2 }} id="rap_2">
             <Button
               variant="outline-light"
+              onMouseOver={() => {
+                anime({
+                  targets: `#rap_2 .btn-outline-light`,
+                  backgroundColor: color2,
+                  color: "#fff",
+                  scale: 1.1,
+                  duration: 150,
+                });
+              }}
+              onMouseOut={() => {
+                anime({
+                  targets: `#rap_2 .btn-outline-light`,
+                  backgroundColor: "#fff",
+                  color: color2,
+                  scale: 1.0,
+                  duration: 150,
+                });
+              }}
               style={{
                 color: color2,
                 border: `1px solid ${color2}`,
@@ -152,7 +191,6 @@ export default class VotingPhase extends React.Component {
                 this.vote(2);
                 this.setState({ voted: true });
                 this.setState({ selected: 1 });
-
               }}
             >
               Vote for {this.state.matchup[1].nickname}'s rap!
@@ -162,7 +200,9 @@ export default class VotingPhase extends React.Component {
 
         <Row>
           <div id={`${game.votePrompt}`}>
-            {this.state.numVoted} people have voted so far! Make sure you vote!
+            {this.state.numVoted}{" "}
+            {this.state.numVoted === 1 ? "person" : "people"} have voted so far!
+            Make sure you vote!
           </div>
           {this.displayVoteConfirmation()}
         </Row>

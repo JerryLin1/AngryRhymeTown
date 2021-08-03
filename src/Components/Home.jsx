@@ -45,7 +45,7 @@ export default class Home extends React.Component {
         <div id={home.credits}>
           <Row>
             <Col>
-              <h4>Game created by: Tom Han, Jerry Lin, Roseak Lin</h4>
+              <h4>Game created by: Tom Han, Jerry Lin, and Roseak Lin</h4>
             </Col>
           </Row>
           <div

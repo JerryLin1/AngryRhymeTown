@@ -11,31 +11,35 @@ export default class RoundResultsPhase extends React.Component {
     this.roomSettings = this.props.client.roomSettings;
 
     this.state = {
-      results: [{ name: "Loading", score: "Loading" },
-      { name: "Loading", score: "Loading" },
-      { name: "Loading", score: "Loading" }],
+      results: [
+        { name: "Loading", score: "Loading" },
+        { name: "Loading", score: "Loading" },
+        { name: "Loading", score: "Loading" },
+        { name: "Loading", score: "Loading" },
+        { name: "Loading", score: "Loading" },
+      ],
       otherRappers: [],
-      round: ""
-    }
+      round: "",
+    };
 
     this.socket.on("sendRoundResults", (results, round) => {
       this.setState({ results: results });
-      this.setState({round: round});
-      
+      this.setState({ round: round });
+
       let otherRappers = [];
       for (let i = 3; i < results.length; i++) {
         otherRappers.push(
           <Row>
             <Col xs="8">
-              {i+1}. {results[i].name}
+              {i + 1}. {results[i].name}
             </Col>
             <Col>{results[i].score} points</Col>
           </Row>
-        )
+        );
       }
 
-      this.setState({otherRappers: otherRappers});
-    })
+      this.setState({ otherRappers: otherRappers });
+    });
   }
 
   render() {
@@ -50,19 +54,22 @@ export default class RoundResultsPhase extends React.Component {
         <div id={`${game.rapperList}`}>
           <Row>
             <Col xs="8">
-              1. {this.state.results[0].name} <Award style={{ color: "#d4af37" }} />
+              1. {this.state.results[0].name}{" "}
+              <Award style={{ color: "#d4af37" }} />
             </Col>
             <Col>{this.state.results[0].score} points</Col>
           </Row>
           <Row>
             <Col xs="8">
-              2. {this.state.results[1].name} <Award style={{ color: "#C0C0C0" }} />
+              2. {this.state.results[1].name}{" "}
+              <Award style={{ color: "#C0C0C0" }} />
             </Col>
             <Col>{this.state.results[1].score} points</Col>
           </Row>
           <Row>
             <Col xs="8">
-              3. {this.state.results[2].name} <Award style={{ color: "#cd7f32 " }} />
+              3. {this.state.results[2].name}{" "}
+              <Award style={{ color: "#cd7f32 " }} />
             </Col>
             <Col>{this.state.results[2].score} points</Col>
           </Row>

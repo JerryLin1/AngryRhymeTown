@@ -31,14 +31,29 @@ export default class Lobby extends React.Component {
       this.name = clients[this.client.socket.id].name;
 
       this.room = clients;
-
+      // if statements are to highlight the current player on the lobby list
       for (let client of Object.values(clients)) {
         if (client.isHost === true) {
-          $("#lobbyList").append(
-            `<div>${client.name} <span style="color: #b59700">HOST</span></div>`
-          );
+          if (
+            client.name ===
+            `Player #${this.client.socket.id.substring(0, 4).toUpperCase()}`
+          ) {
+            $("#lobbyList").append(
+              `<div><strong>${client.name}</strong> <span style="color: #b59700">HOST</span></div>`
+            );
+          } else {
+            $("#lobbyList").append(
+              `<div> ${client.name} <span style="color: #b59700">HOST</span></div>`
+            );
+          }
         } else {
-          $("#lobbyList").append(`<div> ${client.name}</div>`);
+          if (client.name === `Player #${this.client.socket.id.substring(0, 4).toUpperCase()}`) {
+            $("#lobbyList").append(
+              `<div> <strong>${client.name}</strong></div>`
+            );
+          } else {
+            $("#lobbyList").append(`<div> ${client.name}</div>`);
+          }
         }
       }
       if (clients[this.client.socket.id].isHost === true) {
@@ -57,6 +72,7 @@ export default class Lobby extends React.Component {
           onSubmit={(event) => {
             event.preventDefault();
             const nickname = $(`#${lobby.inputNickname}`).val();
+            // animation that flash red and black when the player tries to submit an invalid name
             if ($(`#${lobby.nameWarning}`).css("display") !== "none") {
               anime({
                 targets: `#${lobby.nameWarning}`,
@@ -97,7 +113,7 @@ export default class Lobby extends React.Component {
                 autoComplete="off"
                 onChange={() => {
                   let input = $(`#${lobby.inputNickname}`);
-                  // if statements to check if name is empty or too long
+                  // if statements to check if nickname is empty or too long
                   if (
                     (input.val().length === 13 || input.val().trim() === "") &&
                     $(`#${lobby.nameWarning}`).css("display") === "none"
@@ -109,7 +125,7 @@ export default class Lobby extends React.Component {
                       $(`#${lobby.nameWarning}`).show();
                     } else {
                       $(`#${lobby.nameWarning}`).text(
-                        "Nickname is too long. It must be no more than 12 characters"
+                        "Nickname is too long. Your nickname cannot have any more than 12 characters."
                       );
                       $(`#${lobby.nameWarning}`).show();
                     }
@@ -164,7 +180,9 @@ export default class Lobby extends React.Component {
             </Col>
             <Col>
               <Form.Group id={`${lobby.copyCode}`}>
-                <Form.Label column>Room Link: &ensp;</Form.Label>
+                <Form.Label column>
+                  <strong>Room Link: &ensp;</strong>
+                </Form.Label>
                 <Form.Control
                   id={`${lobby.roomCode}`}
                   value={window.location.href}
@@ -188,9 +206,7 @@ export default class Lobby extends React.Component {
             </Col>
           </Row>
         </Form>
-        <div id={`${lobby.nameWarning}`} style={{ display: "none" }}>
-          Nickname is too long. It must be no more than 12 characters
-        </div>
+        <div id={`${lobby.nameWarning}`} style={{ display: "none" }}></div>
 
         {/* Second row that displays the players on the left and the room chat on the right */}
         <Row>
@@ -240,6 +256,8 @@ export default class Lobby extends React.Component {
     );
   }
 }
+
+// Popup error message to notify if there are not enough players or an odd number of players in the lobby
 
 const ErrorMsg = () => {
   return (

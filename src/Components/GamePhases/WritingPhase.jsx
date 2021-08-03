@@ -86,7 +86,7 @@ export default class WritingPhase extends React.Component {
                 disabled={this.state.currentLine !== i}
               />
             </Col>
-            <Col xs="4">
+            <Col xs="auto">
               <Button
                 variant="outline-dark"
                 disabled={this.state.currentLine !== i}

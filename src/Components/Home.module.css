@@ -42,6 +42,7 @@
 
 #repoLink:hover {
     cursor: pointer;
+    color: #fff;
     fill: #fff;
     background: linear-gradient(#e66465, #9198e5);
     transition: 0.3s;
