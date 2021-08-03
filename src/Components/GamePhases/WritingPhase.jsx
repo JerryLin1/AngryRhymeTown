@@ -16,11 +16,13 @@ export default class WritingPhase extends React.Component {
       displayWords: [],
       nextWords: [true, false, false, false, false],
       currentLine: 0,
+      potentialPoints: ["","","",""],
+      opponent: ""
     };
 
-    this.socket.on("receiveWords", (newWords) => {
+    this.socket.on("receiveWritingInfo", (newWords, opponent) => {
       this.setState({ words: newWords });
-
+      this.setState({opponent: opponent});
       let toDisplayWords = []
       for (let i = 0; i < newWords.length; i++) {
         let display = "";
@@ -59,6 +61,21 @@ export default class WritingPhase extends React.Component {
     this.socket.emit("finishedSpittin");
   };
 
+  displayBonuses = (index) => {
+    let currentValue = $("#barInput_" + index).val().toLowerCase();
+    let potential = 0;
+    for (let word of this.state.words[index]) {
+      if (currentValue.includes(word)) {
+        potential += 50;
+      }
+    }
+    potential = (potential == 200) ? 300: potential;
+
+    let potentialPoints = [...this.state.potentialPoints];
+    potentialPoints[index] = potential + " points from your words!";
+    this.setState({potentialPoints: potentialPoints});
+  }
+
   generateInputFields = () => {
     let arr = [];
     for (let i = 0; i < 4; i++) {
@@ -84,6 +101,20 @@ export default class WritingPhase extends React.Component {
                 id={"barInput_" + i}
                 autoComplete="off"
                 disabled={this.state.currentLine !== i}
+
+                onChange = {
+                  () => {
+                    this.displayBonuses(i);
+                  }
+                }
+
+                onBlur = {
+                  () => {
+                    let potentialPoints = [...this.state.potentialPoints];
+                    potentialPoints[i] = "";
+                    this.setState({potentialPoints: potentialPoints});
+                  }
+                }
               />
             </Col>
             <Col xs="auto">
@@ -94,6 +125,9 @@ export default class WritingPhase extends React.Component {
               >
                 Submit tha bar
               </Button>
+            </Col>
+            <Col xs="4">
+              {this.state.potentialPoints[i]}
             </Col>
           </Form.Group>
         </Form>
@@ -108,6 +142,12 @@ export default class WritingPhase extends React.Component {
         <Row>
           <Col>
             <div className={`${game.header}`}>Write your rhyme!</div>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+            <div className = {`${game.header}`}>Your opponent is: {this.state.opponent}</div>
           </Col>
         </Row>
 

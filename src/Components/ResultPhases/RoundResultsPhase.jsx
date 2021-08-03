@@ -27,19 +27,31 @@ export default class RoundResultsPhase extends React.Component {
       this.setState({ round: round });
 
       let otherRappers = [];
-      for (let i = 3; i < results.length; i++) {
+      for (let i = 0; i < results.length; i++) {
         otherRappers.push(
           <Row>
             <Col xs="8">
               {i + 1}. {results[i].name}
+              {(i == 0) ? <Award style={{ color: "#d4af37" }}/> : ""}
+              {(i == 1) ? <Award style={{ color: "#C0C0C0" }}/> : ""}
+              {(i == 2) ? <Award style={{ color: "#cd7f32" }}/> : ""}
             </Col>
-            <Col>{results[i].score} points</Col>
+
+            {/* TODO: Roseak make font smaller here */}
+            <Col xs = "4">{results[i].score} points 
+              {
+                (results[i].wordBonuses == 0) ?
+                  " (no points from word bonuses)"
+                  :
+                  " (" + results[i].wordBonuses + " points from word bonuses)"
+              }
+            </Col>
           </Row>
         );
       }
 
       this.setState({ otherRappers: otherRappers });
-    });
+    })
   }
 
   render() {
@@ -52,27 +64,6 @@ export default class RoundResultsPhase extends React.Component {
         <br />
 
         <div id={`${game.rapperList}`}>
-          <Row>
-            <Col xs="8">
-              1. {this.state.results[0].name}{" "}
-              <Award style={{ color: "#d4af37" }} />
-            </Col>
-            <Col>{this.state.results[0].score} points</Col>
-          </Row>
-          <Row>
-            <Col xs="8">
-              2. {this.state.results[1].name}{" "}
-              <Award style={{ color: "#C0C0C0" }} />
-            </Col>
-            <Col>{this.state.results[1].score} points</Col>
-          </Row>
-          <Row>
-            <Col xs="8">
-              3. {this.state.results[2].name}{" "}
-              <Award style={{ color: "#cd7f32 " }} />
-            </Col>
-            <Col>{this.state.results[2].score} points</Col>
-          </Row>
           {this.state.otherRappers}
         </div>
       </div>
