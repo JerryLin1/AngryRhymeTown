@@ -282,11 +282,11 @@ io.on('connection', socket => {
         (rapper === 1) ?
             rooms[socket.room]
                 .clients[rooms[socket.room].rapper1]
-                .score += 1
+                .score += 250
             :
             rooms[socket.room]
                 .clients[rooms[socket.room].rapper2]
-                .score += 1;
+                .score += 250;
         io.to(socket.room).emit("numVotedSoFar", rooms[socket.room].votesCast);
         // Check if all votes have been submitted
         // TODO REPLACE numberOfClientsInRoom(socket.room) - 2 or 1 for debugging
@@ -365,7 +365,18 @@ io.on('connection', socket => {
     })
 
     socket.on("sendBars", (bars) => {
-        rooms[socket.room].rounds[rooms[socket.room].currentRound][socket.id].bars.push(bars);
+
+        rooms[socket.room]
+            .rounds[rooms[socket.room].currentRound][socket.id]
+            .bars.push(bars);
+
+        rooms[socket.room]
+            .clients[socket.id]
+            .score += wordFunctions.calculatePoints(bars, rooms[socket.room]
+                .clients[socket.id]
+                .words[rooms[socket.room]
+                    .rounds[rooms[socket.room].currentRound][socket.id]
+                    .bars.length - 1]);
     })
 });
 

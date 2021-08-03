@@ -14,19 +14,19 @@ module.exports = {
     calculatePoints(sentence, words) {
         sentence = sentence.toLowerCase();
         let points = 0;
-
         // Get points for every word used
         let countUsed = 0;
-        for (word of words) {
-            word = word.toLowerCase();
+        for (let word of words) {
+            console.log(word);
+            word.toLowerCase();
             if (sentence.includes(word)) {
-                points += 250;
+                points += 50;
             }
             countUsed++;
         }
         // Get bonus points if all words are used
         if (countUsed === words.length) {
-            points += 250;
+            points += 100;
         }
 
         return points;
