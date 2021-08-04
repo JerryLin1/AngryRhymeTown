@@ -19,7 +19,7 @@ export default class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
-    this.state = { numPlayers: 0, lobbyList: [] };
+    this.state = { numPlayers: 0, lobbyList: [], chat: [] };
 
     this.client.socket.on("joinedLobby", () => {
       this.setState({ numPlayers: this.state.numPlayers + 1 });
@@ -53,6 +53,39 @@ export default class Lobby extends React.Component {
       } else {
         $(`#${lobby.waitingMsg}`).css("display", "initial");
       }
+    });
+
+    // Update the chat
+    this.client.socket.on("receiveMessage", (chatInfo) => {
+      console.log(chatInfo);
+
+      // Autoscroll chat if scroll is already at bottom
+      // Otherwise we assume they are reading chat and so do not scroll
+      let autoScroll = false;
+      let jsele = $("#chat")[0];
+      if (jsele.scrollHeight - jsele.scrollTop === jsele.clientHeight) {
+        autoScroll = true;
+      }
+      let chatMsg;
+      let color;
+
+      if (chatInfo.type === "SERVER") {
+        chatMsg = chatInfo.msg;
+        color = "blue";
+      } else if (chatInfo.type === "SERVER_RED") {
+        chatMsg = chatInfo.msg;
+        color = "red";
+      } else {
+        chatMsg = chatInfo.nickname + ": " + chatInfo.msg;
+        color = "black";
+      }
+      this.setState({
+        chat: this.state.chat.concat(
+          <div style={{ color: color }}> {chatMsg} </div>
+        ),
+      });
+
+      if (autoScroll === true) jsele.scrollTo(0, jsele.scrollHeight);
     });
   }
 
@@ -216,7 +249,9 @@ export default class Lobby extends React.Component {
           <Col>
             <Card style={{ height: "28em", marginBottom: "0.25em" }}>
               <Card.Header style={{ fontSize: "2em" }}>Chat</Card.Header>
-              <Card.Body id="chat" style={{ overflowY: "scroll" }}></Card.Body>
+              <Card.Body id="chat" style={{ overflowY: "scroll" }}>
+                {this.state.chat}
+              </Card.Body>
             </Card>
             <Form
               autoComplete="off"

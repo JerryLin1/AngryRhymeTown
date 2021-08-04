@@ -58,39 +58,7 @@ export default class Client extends React.Component {
         this.socket.on("returnToLobby", () => {
             // TODO: Return to the lobby
         })
-        // Update the chat
-        this.socket.on("receiveMessage", (chatInfo) => {
-            console.log(chatInfo);
-
-            // Autoscroll chat if scroll is already at bottom
-            // Otherwise we assume they are reading chat and so do not scroll
-            let autoScroll = false;
-            if ($("#chat")[0] != undefined) {
-            let jsele = $("#chat")[0];
-            if (jsele.scrollHeight - jsele.scrollTop === jsele.clientHeight) {
-                autoScroll = true;
-            }
-            let chatMsg;
-            let color;
-            
-            if (chatInfo.type === "SERVER") {
-                chatMsg = chatInfo.msg;
-                color = "blue";
-            }
-            else if (chatInfo.type === "SERVER_RED"){
-                chatMsg = chatInfo.msg;
-                color = "red";
-            }
-            else {
-                chatMsg = chatInfo.nickname + ": " + chatInfo.msg;
-                color = "black";
-            }
-            $("#chat").append(
-                `<div style="color: ${color}"> ${chatMsg} </div>`
-            );
-
-            if (autoScroll === true) jsele.scrollTo(0, jsele.scrollHeight);
-        }});
+        
         this.socket.on("receiveRoomSettings", roomSettings => {
             this.roomSettings = roomSettings;
         })
