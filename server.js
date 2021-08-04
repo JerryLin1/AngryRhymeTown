@@ -30,23 +30,37 @@ io.on('connection', socket => {
         console.log(`${socket.id} has disconnected.`);
         if (socket.room in rooms) {
             sendToChat(`${socket.nickname} has left.`, "SERVER_RED");
+
             // If host disconnects, transfer host to the next client
             let transferHost = false;
             if (rooms[socket.room].clients[socket.id].isHost === true && numberOfClientsInRoom(socket.room) > 1) {
                 transferHost = true;
             }
 
+            // Increment disconnected so that skip options work correctly
+            // Go to next phase if everyone is ready
             rooms[socket.room].disconnected += 1;
             rooms[socket.room].clients[socket.id].disconnected = true;
-            rooms[socket.room].clients[socket.id].name = rooms[socket.room].clients[socket.id].name + " (disconnected)";
+            rooms[socket.room].clients[socket.id].name = rooms[socket.room].clients[socket.id].name + " (dc'd)";
+            if (rooms[socket.room].gameState === gameState.WRITING) {
+                if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room) - rooms[socket.room].disconnected) {
+                    startVotePhase();
+                }
+            } else if (rooms[socket.room].gameState === gameState.VOTING) {
+                if (rooms[socket.room].votesCast === numberOfClientsInRoom(socket.room) - rooms[socket.room].disconnected) {
+                    startNext();
+                }
+            }
 
+            // Transfer host
             if (numberOfClientsInRoom(socket.room) > 0) {
                 if (transferHost) {
                     Object.values(rooms[socket.room].clients)[0].isHost = true;
                 }
                 io.to(socket.room).emit("updateClientList", rooms[socket.room].clients);
             }
-            // TODO: Delete room when empty. Currently, just this will cause errors
+
+            // TODO: Delete room when empty
         }
     });
 
@@ -90,7 +104,7 @@ io.on('connection', socket => {
             else {
                 rooms[roomId].clients[socket.id].isHost = false;
             }
-            hf.logObj(rooms);
+            // hf.logObj(rooms);
             socket.room = roomId;
             io.to(socket.room).emit("joinedLobby");
             io.to(socket.room).emit("updateClientList", rooms[roomId].clients);
@@ -203,7 +217,7 @@ io.on('connection', socket => {
         // TODO: Verification: a hacker could finish spitting more than once
         rooms[socket.room].finishedSpittin += 1;
         if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room) - rooms[socket.room].disconnected) {
-            clearTimeout(rooms[socket.room].nextPhase);
+            
             rooms[socket.room].finishedSpittin = 0;
             startVotePhase();
         }
@@ -228,6 +242,7 @@ io.on('connection', socket => {
 
     function startVotePhase() {
         io.to(socket.room).emit("startVotePhase");
+        clearTimeout(rooms[socket.room].nextPhase);
         setGameState(socket.room, gameState.VOTING);
         startBattle();
     }
@@ -277,7 +292,7 @@ io.on('connection', socket => {
     }
 
     socket.on("receiveVote", (rapper) => {
-        // TOOD: vote verification. a hacker could vote more than once 
+        // TODO: vote verification. a hacker could vote more than once 
         rooms[socket.room].votesCast += 1;
         (rapper === 1) ?
             rooms[socket.room]
@@ -292,13 +307,15 @@ io.on('connection', socket => {
         // Check if all votes have been submitted
         let disconnectedVoters = 0;
         for (let client of Object.keys(rooms[socket.room].clients)) {
+            console.log(client, rooms[socket.room].rapper1, rooms[socket.room].rapper2);
             if (client !== rooms[socket.room].rapper1 && client !== rooms[socket.room].rapper2) {
                 if (rooms[socket.room].clients[client].disconnected) {
                     disconnectedVoters += 1;
                 }
             }
         }
-        if (rooms[socket.room].votesCast == numberOfClientsInRoom(socket.room) - 2 - disconnectedVoters) {
+        console.log(disconnectedVoters);
+        if (rooms[socket.room].votesCast === (numberOfClientsInRoom(socket.room) - 2 - disconnectedVoters)) {
 
             // Check if the next round or the next battle should start
             startNext();
@@ -415,10 +432,10 @@ io.on('connection', socket => {
 });
 
 // Server debug messages
-setInterval(() => {
-    console.log(`${io.engine.clientsCount} clients.`);
-    hf.logObj(rooms)
-}, 1000)
+// setInterval(() => {
+//     console.log(`${io.engine.clientsCount} clients.`);
+//     hf.logObj(rooms)
+// }, 1000)
 
 function numberOfClientsInRoom(roomId) {
     return Object.keys(rooms[roomId].clients).length;
