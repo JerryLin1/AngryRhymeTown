@@ -36,7 +36,9 @@ io.on('connection', socket => {
                 transferHost = true;
             }
 
-            delete rooms[socket.room].clients[socket.id];
+            rooms[socket.room].disconnected += 1;
+            rooms[socket.room].clients[socket.id].disconnected = true;
+            rooms[socket.room].clients[socket.id].name = rooms[socket.room].clients[socket.id].name + " (disconnected)";
 
             if (numberOfClientsInRoom(socket.room) > 0) {
                 if (transferHost) {
@@ -61,14 +63,14 @@ io.on('connection', socket => {
         rooms[roomId].battle = 0;
         rooms[roomId].currentRound = -1;
         rooms[roomId].votesCast = 0;
-        rooms[roomId].finishedSpittin = {};
-        rooms[roomId].finishedSpittinCount = 0;
+        rooms[roomId].finishedSpittin = 0;
         rooms[roomId].finishedListenin = 0;
         rooms[roomId].nextPhase = null;
         rooms[roomId].rapper1 = "";
         rooms[roomId].rapper2 = "";
         rooms[roomId].settings = DEFAULT_ROOM_SETTINGS;
         rooms[roomId].gameState = gameState.LOBBY;
+        rooms[roomId].disconnected = 0;
         console.log(`Room ${roomId} created.`);
     });
 
@@ -78,6 +80,7 @@ io.on('connection', socket => {
         if (roomId in rooms) {
             socket.join(roomId);
             rooms[roomId].clients[socket.id] = {};
+            rooms[roomId].clients[socket.id].disconnected = false;
             rooms[roomId].clients[socket.id].name = socket.nickname;
 
 
@@ -194,21 +197,15 @@ io.on('connection', socket => {
         setGameState(socket.room, gameState.WRITING);
         let t = rooms[socket.room].settings.writingTime;
         rooms[socket.room].nextPhase = setTimeout(() => { startVotePhase() }, t);
-
-        for (let id of Object.keys(rooms[socket.room].clients)) {
-            rooms[socket.room].finishedSpittin[id] = false;
-        }
-        rooms[socket.room].finishedSpittinCount = 0;
     };
 
     socket.on("finishedSpittin", () => {
-        if (rooms[socket.room].finishedSpittin[socket.id] === false) {
-            rooms[socket.room].finishedSpittin[socket.id] = true;
-            rooms[socket.room].finishedSpittinCount++;
-            if (rooms[socket.room].finishedSpittinCount === numberOfClientsInRoom(socket.room)) {
-                clearTimeout(rooms[socket.room].nextPhase);
-                startVotePhase();
-            }
+        // TODO: Verification: a hacker could finish spitting more than once
+        rooms[socket.room].finishedSpittin += 1;
+        if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room) - rooms[socket.room].disconnected) {
+            clearTimeout(rooms[socket.room].nextPhase);
+            rooms[socket.room].finishedSpittin = 0;
+            startVotePhase();
         }
     })
 
@@ -291,9 +288,17 @@ io.on('connection', socket => {
                 .clients[rooms[socket.room].rapper2]
                 .score += 250;
         io.to(socket.room).emit("numVotedSoFar", rooms[socket.room].votesCast);
+
         // Check if all votes have been submitted
-        // TODO REPLACE numberOfClientsInRoom(socket.room) - 2 or 1 for debugging
-        if (rooms[socket.room].votesCast == numberOfClientsInRoom(socket.room) - 2) {
+        let disconnectedVoters = 0;
+        for (let client of Object.keys(rooms[socket.room].clients)) {
+            if (client !== rooms[socket.room].rapper1 && client !== rooms[socket.room].rapper2) {
+                if (rooms[socket.room].clients[client].disconnected) {
+                    disconnectedVoters += 1;
+                }
+            }
+        }
+        if (rooms[socket.room].votesCast == numberOfClientsInRoom(socket.room) - 2 - disconnectedVoters) {
 
             // Check if the next round or the next battle should start
             startNext();
@@ -348,6 +353,12 @@ io.on('connection', socket => {
 
         io.to(socket.room).emit("sendGameResults", getResults());
 
+        // remove all disconnected clients
+        for (let client of Object.keys(rooms[socket.room].clients)) {
+            if (rooms[socket.room].clients[client].disconnected) {
+                delete rooms[socket.room].clients[client];
+            } 
+        }
         // TODO: In addition to or instead of these timeouts, 
         // have a button to go immediately to the next phase
         setTimeout(() => { returnToLobby() }, 5000);

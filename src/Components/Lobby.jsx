@@ -57,35 +57,37 @@ export default class Lobby extends React.Component {
 
     // Update the chat
     this.client.socket.on("receiveMessage", (chatInfo) => {
-      console.log(chatInfo);
+      if ($("#chat")[0] !== undefined) {
+        console.log(chatInfo);
 
-      // Autoscroll chat if scroll is already at bottom
-      // Otherwise we assume they are reading chat and so do not scroll
-      let autoScroll = false;
-      let jsele = $("#chat")[0];
-      if (jsele.scrollHeight - jsele.scrollTop === jsele.clientHeight) {
-        autoScroll = true;
+        // Autoscroll chat if scroll is already at bottom
+        // Otherwise we assume they are reading chat and so do not scroll
+        let autoScroll = false;
+        let jsele = $("#chat")[0];
+        if (jsele.scrollHeight - jsele.scrollTop === jsele.clientHeight) {
+          autoScroll = true;
+        }
+        let chatMsg;
+        let color;
+
+        if (chatInfo.type === "SERVER") {
+          chatMsg = chatInfo.msg;
+          color = "blue";
+        } else if (chatInfo.type === "SERVER_RED") {
+          chatMsg = chatInfo.msg;
+          color = "red";
+        } else {
+          chatMsg = chatInfo.nickname + ": " + chatInfo.msg;
+          color = "black";
+        }
+        this.setState({
+          chat: this.state.chat.concat(
+            <div style={{ color: color }}> {chatMsg} </div>
+          ),
+        });
+
+        if (autoScroll === true) jsele.scrollTo(0, jsele.scrollHeight);
       }
-      let chatMsg;
-      let color;
-
-      if (chatInfo.type === "SERVER") {
-        chatMsg = chatInfo.msg;
-        color = "blue";
-      } else if (chatInfo.type === "SERVER_RED") {
-        chatMsg = chatInfo.msg;
-        color = "red";
-      } else {
-        chatMsg = chatInfo.nickname + ": " + chatInfo.msg;
-        color = "black";
-      }
-      this.setState({
-        chat: this.state.chat.concat(
-          <div style={{ color: color }}> {chatMsg} </div>
-        ),
-      });
-
-      if (autoScroll === true) jsele.scrollTo(0, jsele.scrollHeight);
     });
   }
 
