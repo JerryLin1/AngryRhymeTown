@@ -58,6 +58,7 @@ export default class WritingPhase extends React.Component {
   };
 
   finishedSpittin = () => {
+    $(`#${game.finishWriting}`).attr("disabled", true);
     this.socket.emit("finishedSpittin");
   };
 
