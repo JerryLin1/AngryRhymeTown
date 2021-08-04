@@ -61,7 +61,8 @@ io.on('connection', socket => {
         rooms[roomId].battle = 0;
         rooms[roomId].currentRound = -1;
         rooms[roomId].votesCast = 0;
-        rooms[roomId].finishedSpittin = 0;
+        rooms[roomId].finishedSpittin = {};
+        rooms[roomId].finishedSpittinCount = 0;
         rooms[roomId].finishedListenin = 0;
         rooms[roomId].nextPhase = null;
         rooms[roomId].rapper1 = "";
@@ -193,15 +194,21 @@ io.on('connection', socket => {
         setGameState(socket.room, gameState.WRITING);
         let t = rooms[socket.room].settings.writingTime;
         rooms[socket.room].nextPhase = setTimeout(() => { startVotePhase() }, t);
+
+        for (let id of Object.keys(rooms[socket.room].clients)) {
+            rooms[socket.room].finishedSpittin[id] = false;
+        }
+        rooms[socket.room].finishedSpittinCount = 0;
     };
 
     socket.on("finishedSpittin", () => {
-        // TODO: Verification: a hacker could finish spitting more than once
-        rooms[socket.room].finishedSpittin += 1;
-        if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room)) {
-            clearTimeout(rooms[socket.room].nextPhase);
-            rooms[socket.room].finishedSpittin = 0;
-            startVotePhase();
+        if (rooms[socket.room].finishedSpittin[socket.id] === false) {
+            rooms[socket.room].finishedSpittin[socket.id] = true;
+            rooms[socket.room].finishedSpittinCount++;
+            if (rooms[socket.room].finishedSpittinCount === numberOfClientsInRoom(socket.room)) {
+                clearTimeout(rooms[socket.room].nextPhase);
+                startVotePhase();
+            }
         }
     })
 
