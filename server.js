@@ -77,7 +77,7 @@ io.on('connection', socket => {
     // Joins client to room
     socket.on("joinRoom", roomId => {
         // If room exists, join client to room
-        if (roomId in rooms) {
+        if (roomId in rooms && rooms[roomId].gameState === gameState.LOBBY) {
             socket.join(roomId);
             rooms[roomId].clients[socket.id] = {};
             rooms[roomId].clients[socket.id].disconnected = false;
@@ -415,10 +415,10 @@ io.on('connection', socket => {
 });
 
 // Server debug messages
-// setInterval(() => {
-//     console.log(`${io.engine.clientsCount} clients.`);
-//     hf.logObj(rooms)
-// }, 10000)
+setInterval(() => {
+    console.log(`${io.engine.clientsCount} clients.`);
+    hf.logObj(rooms)
+}, 1000)
 
 function numberOfClientsInRoom(roomId) {
     return Object.keys(rooms[roomId].clients).length;
