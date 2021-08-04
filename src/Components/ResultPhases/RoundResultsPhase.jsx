@@ -32,26 +32,28 @@ export default class RoundResultsPhase extends React.Component {
           <Row>
             <Col xs="8">
               {i + 1}. {results[i].name}
-              {(i == 0) ? <Award style={{ color: "#d4af37" }}/> : ""}
-              {(i == 1) ? <Award style={{ color: "#C0C0C0" }}/> : ""}
-              {(i == 2) ? <Award style={{ color: "#cd7f32" }}/> : ""}
+              {i == 0 ? <Award style={{ color: "#d4af37" }} /> : ""}
+              {i == 1 ? <Award style={{ color: "#C0C0C0" }} /> : ""}
+              {i == 2 ? <Award style={{ color: "#cd7f32" }} /> : ""}
             </Col>
 
-            {/* TODO: Roseak make font smaller here */}
-            <Col xs = "4">{results[i].score} points 
-              {
-                (results[i].wordBonuses == 0) ?
-                  " (no points from word bonuses)"
-                  :
-                  " (" + results[i].wordBonuses + " points from word bonuses)"
-              }
+            {/* TODO: Is 0.5em too small? */}
+            <Col xs="4">
+              <span>{results[i].score} points </span>
+              <span style={{ fontSize: "0.5em" }}>
+                {results[i].wordBonuses == 0
+                  ? " (No points from word bonuses)"
+                  : " (" +
+                    results[i].wordBonuses +
+                    " point(s) from word bonuses)"}
+              </span>
             </Col>
           </Row>
         );
       }
 
       this.setState({ otherRappers: otherRappers });
-    })
+    });
   }
 
   render() {
@@ -63,9 +65,7 @@ export default class RoundResultsPhase extends React.Component {
 
         <br />
 
-        <div id={`${game.rapperList}`}>
-          {this.state.otherRappers}
-        </div>
+        <div id={`${game.rapperList}`}>{this.state.otherRappers}</div>
       </div>
     );
   }
