@@ -36,11 +36,12 @@ export default class PairingPhase extends React.Component {
         }
       }
       this.setState({ matchups: matchups });
+      this.socket.emit("receiveOpponent", opponent => {
+        this.setState({opponent: opponent.name})
+      })
     });
 
-    this.socket.on("sendOpponent", opponent => {
-      this.setState({opponent: opponent});
-    }) 
+    
   }
 
   render() {

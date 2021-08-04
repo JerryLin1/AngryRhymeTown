@@ -186,11 +186,6 @@ io.on('connection', socket => {
                 .rounds[rooms[socket.room].currentRound][pairings[rapper]]
                 .opponent = rapper;
         }
-        socket.emit("sendOpponent",
-            rooms[socket.room].clients[rooms[socket.room]
-                .rounds[rooms[socket.room].currentRound][socket.id]
-                .opponent].name);
-
     }
 
     function startWritePhase() {
@@ -368,6 +363,8 @@ io.on('connection', socket => {
             .opponent].name);
     })
 
+
+    // Receive bars and calculate bonuses from using words
     socket.on("sendBars", (bars) => {
 
         rooms[socket.room]
@@ -388,7 +385,14 @@ io.on('connection', socket => {
         rooms[socket.room]
             .clients[socket.id]
             .wordBonuses += wordBonuses;
+    })
 
+    socket.on("receiveOpponent", callback => {
+        callback({
+            name: rooms[socket.room].clients[rooms[socket.room]
+                .rounds[rooms[socket.room].currentRound][socket.id]
+                .opponent].name
+        })
     })
 });
 
