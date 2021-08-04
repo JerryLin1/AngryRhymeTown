@@ -11,6 +11,7 @@ import Form from "react-bootstrap/Form";
 import { Clipboard } from "react-bootstrap-icons";
 import anime from "animejs";
 import Client from "../client.js";
+import ConditionalWrapper from "./ConditionalWrapper";
 
 const roomId = (window.location.pathname + window.location.search).substring(1);
 
@@ -18,7 +19,7 @@ export default class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
-    this.state = { numPlayers: 0 };
+    this.state = { numPlayers: 0, lobbyList: [] };
 
     this.client.socket.on("joinedLobby", () => {
       this.setState({ numPlayers: this.state.numPlayers + 1 });
@@ -27,35 +28,26 @@ export default class Lobby extends React.Component {
 
     // Update the player list in the client's room
     this.client.socket.on("updateClientList", (clients) => {
-      $("#lobbyList").html("");
       this.name = clients[this.client.socket.id].name;
 
       this.room = clients;
-      // if statements are to highlight the current player on the lobby list
-      for (let client of Object.values(clients)) {
-        if (client.isHost === true) {
-          if (
-            client.name ===
-            `Player #${this.client.socket.id.substring(0, 4).toUpperCase()}`
-          ) {
-            $("#lobbyList").append(
-              `<div><strong>${client.name}</strong> <span style="color: #b59700">HOST</span></div>`
-            );
-          } else {
-            $("#lobbyList").append(
-              `<div> ${client.name} <span style="color: #b59700">HOST</span></div>`
-            );
-          }
-        } else {
-          if (client.name === `Player #${this.client.socket.id.substring(0, 4).toUpperCase()}`) {
-            $("#lobbyList").append(
-              `<div> <strong>${client.name}</strong></div>`
-            );
-          } else {
-            $("#lobbyList").append(`<div> ${client.name}</div>`);
-          }
-        }
-      }
+      this.setState({
+        lobbyList: Object.values(clients).map((client) => {
+          return (
+            <div>
+              <ConditionalWrapper
+                condition={client.name === this.name}
+                wrapper={(children) => <strong>{children}</strong>}
+              >
+                {client.name}
+              </ConditionalWrapper>
+              {client.isHost === true && (
+                <span style={{ color: "#b59700" }}> HOST</span>
+              )}
+            </div>
+          );
+        }),
+      });
       if (clients[this.client.socket.id].isHost === true) {
         $(`#${lobby.startGame}`).css("display", "initial");
       } else {
@@ -216,7 +208,7 @@ export default class Lobby extends React.Component {
               <Card.Header style={{ fontSize: "2em " }}>
                 Player List
               </Card.Header>
-              <Card.Body id="lobbyList"></Card.Body>
+              <Card.Body id="lobbyList">{this.state.lobbyList}</Card.Body>
             </Card>
           </Col>
 

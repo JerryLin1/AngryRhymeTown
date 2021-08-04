@@ -65,6 +65,7 @@ export default class Client extends React.Component {
             // Autoscroll chat if scroll is already at bottom
             // Otherwise we assume they are reading chat and so do not scroll
             let autoScroll = false;
+            if ($("#chat")[0] != undefined) {
             let jsele = $("#chat")[0];
             if (jsele.scrollHeight - jsele.scrollTop === jsele.clientHeight) {
                 autoScroll = true;
@@ -89,10 +90,11 @@ export default class Client extends React.Component {
             );
 
             if (autoScroll === true) jsele.scrollTo(0, jsele.scrollHeight);
-        });
+        }});
         this.socket.on("receiveRoomSettings", roomSettings => {
             this.roomSettings = roomSettings;
         })
+        
     }
 
     setNick = (name) => {
