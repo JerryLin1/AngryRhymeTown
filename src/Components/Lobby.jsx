@@ -32,9 +32,9 @@ export default class Lobby extends React.Component {
 
       this.room = clients;
       this.setState({
-        lobbyList: Object.values(clients).map((client) => {
+        lobbyList: Object.values(clients).map((client, key) => {
           return (
-            <div>
+            <div key={key}>
               <ConditionalWrapper
                 condition={client.name === this.name}
                 wrapper={(children) => <strong>{children}</strong>}

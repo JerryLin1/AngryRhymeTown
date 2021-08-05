@@ -25,14 +25,23 @@ export default class WritingPhase extends React.Component {
       this.setState({ opponent: opponent });
       let toDisplayWords = [];
       for (let i = 0; i < newWords.length; i++) {
-        let display = "";
+        let display = [];
         for (let j = 0; j < newWords[i].length; j++) {
           let word = newWords[i][j];
           if (j === newWords[i].length - 1) {
-            display += word.substring(0, 1).toUpperCase() + word.substring(1);
+            display.push(
+              <span>
+                {word.substring(0, 1).toUpperCase()}
+                {word.substring(1)}
+              </span>
+            );
           } else {
-            display +=
-              word.substring(0, 1).toUpperCase() + word.substring(1) + " | ";
+            display.push(
+              <span>
+                {word.substring(0, 1).toUpperCase()}
+                {word.substring(1)} |{" "}
+              </span>
+            );
           }
         }
         toDisplayWords.push(display);
@@ -54,7 +63,7 @@ export default class WritingPhase extends React.Component {
   };
 
   sendBarsToServer = (index) => {
-    this.socket.emit("sendBars", $("#barInput_" + index).val());
+    this.socket.emit("sendBars", $(`#barInput_${index}`).val());
   };
 
   finishedSpittin = () => {
@@ -63,19 +72,44 @@ export default class WritingPhase extends React.Component {
   };
 
   displayBonuses = (index) => {
-    let currentValue = $("#barInput_" + index)
-      .val()
-      .toLowerCase();
+    let currentValue = $(`#barInput_${index}`).val().toLowerCase();
     let potential = 0;
-    for (let word of this.state.words[index]) {
+
+    for (let i = 0; i < this.state.words[index].length; i++) {
+      const word = this.state.words[index][i];
       if (currentValue.includes(word)) {
         potential += 50;
+
+        // highlight the word that they have used in their rap
+
+        if (i === this.state.words[index].length - 1) {
+          $(".form-label")
+            .eq(this.state.currentLine)
+            .find("span")
+            .eq(i)
+            .html(
+              `<strong>
+                  ${word.substring(0, 1).toUpperCase()}${word.substring(1)}
+              </strong>`
+            );
+        } else {
+          $(".form-label")
+            .eq(this.state.currentLine)
+            .find("span")
+            .eq(i)
+            .html(
+              `<strong>
+                  ${word.substring(0, 1).toUpperCase()}${word.substring(1)} 
+              </strong> | `
+            );
+        }
       }
     }
+
     potential = potential == 200 ? 300 : potential;
 
     let potentialPoints = [...this.state.potentialPoints];
-    potentialPoints[index] = potential + " points from your words!";
+    potentialPoints[index] = potential + " bonus points from your words!";
     this.setState({ potentialPoints: potentialPoints });
   };
 
@@ -103,7 +137,7 @@ export default class WritingPhase extends React.Component {
             </Form.Label>
             <Col xs="5">
               <Form.Control
-                id={"barInput_" + i}
+                id={`barInput_${i}`}
                 autoComplete="off"
                 disabled={this.state.currentLine !== i}
                 onChange={() => {
