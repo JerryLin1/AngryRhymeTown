@@ -25,8 +25,7 @@ class Director extends React.Component {
 
   displayState = () => {
     if (window.location.pathname + window.location.search === "/") {
-      sounds.stop("menu");
-
+      
       return <Home client={this.client} />;
 
     } else {

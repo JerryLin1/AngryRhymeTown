@@ -20,7 +20,7 @@ export default class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
-    this.state = { numPlayers: 0, lobbyList: [], chat: [] };
+    this.state = { numPlayers: 0, lobbyList: [], chat: [], muted: true };
 
     this.client.socket.on("joinedLobby", () => {
       this.setState({ numPlayers: this.state.numPlayers + 1 });
@@ -94,7 +94,6 @@ export default class Lobby extends React.Component {
       }
     });
   }
-
 
 
   render() {
@@ -212,6 +211,17 @@ export default class Lobby extends React.Component {
                 Start Game
               </Button>
               <div id={`${lobby.waitingMsg}`}>Waiting for host to start!</div>
+            </Col>
+            <Col xs = "auto">
+              <Button
+                onClick={() => {
+                  (this.state.muted) ? sounds.play("menu") : sounds.pause("menu");
+                  this.setState({muted: !this.state.muted})
+                }}
+                size="lg"
+              >
+                {(this.state.muted) ? "Unmute music" : "Mute music"}
+              </Button>
             </Col>
             <Col>
               <Form.Group id={`${lobby.copyCode}`}>
