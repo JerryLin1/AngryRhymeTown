@@ -4,12 +4,14 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import home from "./Home.module.css";
+import sounds from "../sounds.js";
 
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
   }
+
 
   render() {
     return (
@@ -21,7 +23,10 @@ export default class Home extends React.Component {
             <Button
               variant="outline-dark"
               id={`${home.createLobby}`}
-              onClick={this.client.createRoom}
+              onClick={() => { 
+                sounds.play("button");
+                this.client.createRoom(); 
+              }}
             >
               Create lobby
             </Button>
@@ -33,6 +38,7 @@ export default class Home extends React.Component {
             <Button
               variant="outline-dark"
               onClick={() => {
+                sounds.play("button");
                 this.client.redirect($(`#${home.inputRoomID}`).val());
               }}
               id={`${home.joinRoom}`}
@@ -51,6 +57,7 @@ export default class Home extends React.Component {
           <div
             id={`${home.repoLink}`}
             onClick={() => {
+              sounds.play("button");
               window.open("https://github.com/JerryLin1/AngryRhymeTown");
             }}
           >

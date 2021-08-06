@@ -39,18 +39,23 @@ io.on('connection', socket => {
 
             // Increment disconnected so that skip options work correctly
             // Go to next phase if everyone is ready
-            rooms[socket.room].disconnected += 1;
-            rooms[socket.room].clients[socket.id].disconnected = true;
-            rooms[socket.room].clients[socket.id].name = rooms[socket.room].clients[socket.id].name + " (dc'd)";
-            if (rooms[socket.room].gameState === gameState.WRITING) {
-                if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room) - rooms[socket.room].disconnected) {
-                    startVotePhase();
+            if (rooms[socket.room].gameState !== gameState.LOBBY) {
+                rooms[socket.room].disconnected += 1;
+                rooms[socket.room].clients[socket.id].disconnected = true;
+                rooms[socket.room].clients[socket.id].name = rooms[socket.room].clients[socket.id].name + " (dc'd)";
+                if (rooms[socket.room].gameState === gameState.WRITING) {
+                    if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room) - rooms[socket.room].disconnected) {
+                        startVotePhase();
+                    }
+                } else if (rooms[socket.room].gameState === gameState.VOTING) {
+                    if (rooms[socket.room].votesCast === numberOfClientsInRoom(socket.room) - rooms[socket.room].disconnected) {
+                        startNext();
+                    }
                 }
-            } else if (rooms[socket.room].gameState === gameState.VOTING) {
-                if (rooms[socket.room].votesCast === numberOfClientsInRoom(socket.room) - rooms[socket.room].disconnected) {
-                    startNext();
-                }
+            } else {
+                delete rooms[socket.room].clients[socket.id];
             }
+            
 
             // Transfer host
             if (numberOfClientsInRoom(socket.room) > 0) {

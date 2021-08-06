@@ -8,6 +8,7 @@ import reportWebVitals from "./reportWebVitals";
 import Client from './client.js';
 import tts from "./tts";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import sounds from "./sounds.js";
 
 
 class Director extends React.Component {
@@ -24,8 +25,12 @@ class Director extends React.Component {
 
   displayState = () => {
     if (window.location.pathname + window.location.search === "/") {
+      sounds.stop("menu");
+
       return <Home client={this.client} />;
+
     } else {
+
       if (this.state.inGame) {
         return <Game client={this.client} />;
       } else {

@@ -2,7 +2,9 @@ import React from "react";
 import Countdown from "../Countdown.jsx";
 import $ from "jquery";
 import { Button, Col, Form, Row } from "react-bootstrap";
+import sounds from "../../sounds.js";
 import game from "../Game.module.css";
+import sound from "../../assets/select.mp3";
 
 export default class WritingPhase extends React.Component {
   constructor(props) {
@@ -10,6 +12,7 @@ export default class WritingPhase extends React.Component {
     this.client = this.props.client;
     this.socket = this.props.client.socket;
     this.roomSettings = this.props.client.roomSettings;
+
 
     this.state = {
       words: [],
@@ -119,6 +122,7 @@ export default class WritingPhase extends React.Component {
       arr.push(
         <Form
           onSubmit={(event) => {
+            sounds.play("button");
             event.preventDefault();
             this.showNextWords(i);
             this.sendBarsToServer(i);
@@ -170,6 +174,7 @@ export default class WritingPhase extends React.Component {
   render() {
     return (
       <div className="writingPhase">
+        
         <Row>
           <Col>
             <div className={`${game.header}`}>Write your rhyme!</div>
@@ -207,8 +212,9 @@ export default class WritingPhase extends React.Component {
               variant="outline-success"
               // disabled={this.state.currentLine !== 4}
               onClick={() => {
-                $(`#${game.finishWriting}`).attr("class", "btn btn-success");
-                this.finishedSpittin();
+                sounds.play("button");
+                // $(`#${game.finishWriting}`).attr("class", "btn btn-success");
+                // this.finishedSpittin();
               }}
             >
               Finish Spitting

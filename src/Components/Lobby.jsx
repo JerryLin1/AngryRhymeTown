@@ -11,6 +11,7 @@ import Form from "react-bootstrap/Form";
 import { Clipboard } from "react-bootstrap-icons";
 import anime from "animejs";
 import Client from "../client.js";
+import sounds from "../sounds.js";
 import ConditionalWrapper from "./ConditionalWrapper";
 
 const roomId = (window.location.pathname + window.location.search).substring(1);
@@ -50,10 +51,13 @@ export default class Lobby extends React.Component {
       });
       if (clients[this.client.socket.id].isHost === true) {
         $(`#${lobby.startGame}`).css("display", "initial");
+        $(`#${lobby.waitingMsg}`).css("display", "none");
       } else {
+        $(`#${lobby.startGame}`).css("display", "none");
         $(`#${lobby.waitingMsg}`).css("display", "initial");
       }
     });
+
 
     // Update the chat
     this.client.socket.on("receiveMessage", (chatInfo) => {
@@ -91,12 +95,15 @@ export default class Lobby extends React.Component {
     });
   }
 
+
+
   render() {
     return (
       <div className={`${lobby.lobby}`}>
         {/* First row that displays the room code */}
         <Form
           onSubmit={(event) => {
+            sounds.play("button");
             event.preventDefault();
             const nickname = $(`#${lobby.inputNickname}`).val();
             // animation that flash red and black when the player tries to submit an invalid name
@@ -184,6 +191,7 @@ export default class Lobby extends React.Component {
                   //   this.state.numPlayers % 2 === 0 &&
                   //   this.state.numPlayers >= 4
                   // ) {
+                  sounds.play("button");
                   this.client.startGame();
                   // } else {
                   //   if (this.state.numPlayers < 4) {
@@ -223,6 +231,7 @@ export default class Lobby extends React.Component {
                   <Clipboard
                     id={`${lobby.cb}`}
                     onClick={() => {
+                      sounds.play("button");
                       $(`#${lobby.roomCode}`).select();
                       document.execCommand("copy");
                       $(".tooltip-inner").text("Copied!");
@@ -258,6 +267,7 @@ export default class Lobby extends React.Component {
             <Form
               autoComplete="off"
               onSubmit={(event) => {
+                sounds.play("button");
                 event.preventDefault();
                 this.client.sendMessage($(`#${lobby.chatInput}`).val());
                 $(`#${lobby.chatInput}`).val("");
@@ -296,6 +306,7 @@ const ErrorMsg = () => {
         <div
           id={`${lobby.closeErr}`}
           onClick={() => {
+            sounds.play("button");
             $(`.${lobby.ErrorMsgBg}`).fadeOut();
           }}
         >
