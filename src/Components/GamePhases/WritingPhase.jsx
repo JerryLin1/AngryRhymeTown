@@ -13,7 +13,6 @@ export default class WritingPhase extends React.Component {
     this.socket = this.props.client.socket;
     this.roomSettings = this.props.client.roomSettings;
 
-
     this.state = {
       words: [],
       displayWords: [],
@@ -106,6 +105,22 @@ export default class WritingPhase extends React.Component {
               </strong> | `
             );
         }
+      } else {
+        if (i === this.state.words[index].length - 1) {
+          $(".form-label")
+            .eq(this.state.currentLine)
+            .find("span")
+            .eq(i)
+            .html(`${word.substring(0, 1).toUpperCase()}${word.substring(1)}`);
+        } else {
+          $(".form-label")
+            .eq(this.state.currentLine)
+            .find("span")
+            .eq(i)
+            .html(
+              `${word.substring(0, 1).toUpperCase()}${word.substring(1)} | `
+            );
+        }
       }
     }
 
@@ -174,7 +189,6 @@ export default class WritingPhase extends React.Component {
   render() {
     return (
       <div className="writingPhase">
-        
         <Row>
           <Col>
             <div className={`${game.header}`}>Write your rhyme!</div>
