@@ -213,8 +213,8 @@ export default class WritingPhase extends React.Component {
               // disabled={this.state.currentLine !== 4}
               onClick={() => {
                 sounds.play("button");
-                // $(`#${game.finishWriting}`).attr("class", "btn btn-success");
-                // this.finishedSpittin();
+                $(`#${game.finishWriting}`).attr("class", "btn btn-success");
+                this.finishedSpittin();
               }}
             >
               Finish Spitting
