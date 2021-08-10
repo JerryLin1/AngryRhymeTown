@@ -127,11 +127,7 @@ export default class WritingPhase extends React.Component {
     potential = potential == 200 ? 300 : potential;
 
     let potentialPoints = [...this.state.potentialPoints];
-<<<<<<< HEAD
     potentialPoints[index] = potential + " bonus points from your word(s)!";
-=======
-    potentialPoints[index] = potential + " bonus points from your words!";
->>>>>>> 5e6b8f3ad032396847cf932880f81ebc8a6f57e8
     this.setState({ potentialPoints: potentialPoints });
   };
 
@@ -155,20 +151,12 @@ export default class WritingPhase extends React.Component {
           className={`${game.writingRow}`}
         >
           <Form.Group as={Row}>
-<<<<<<< HEAD
             <Form.Label column xs="4">
               {this.displayWords(i)}
             </Form.Label>
             <Col xs="4">
               <Form.Control
                 className={`${game.barInputs}`}
-=======
-            <Form.Label column xs="3">
-              {this.displayWords(i)}
-            </Form.Label>
-            <Col xs="5">
-              <Form.Control
->>>>>>> 5e6b8f3ad032396847cf932880f81ebc8a6f57e8
                 id={`barInput_${i}`}
                 autoComplete="off"
                 disabled={this.state.currentLine !== i}
