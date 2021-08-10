@@ -1,7 +1,3 @@
-html {
-    margin: 1em 0 0 1em;
-}
-
 .Countdown {
     font-size: 1.5em;
     text-align: center;
@@ -17,6 +13,7 @@ html {
 
 #matchups {
     height: 75vh;
+    margin-right: 0.5em;
 }
 
 #opponentCardRow {
@@ -30,6 +27,14 @@ html {
 }
 
 /* Writing Phase */
+
+.writingPhase {
+    margin-bottom: 2em !important;
+}
+
+#promptContainer {
+    margin-left: 1em;
+}
 
 #promptContainer>div {
     margin-bottom: 0.5em;

@@ -1,13 +1,15 @@
 import React from "react";
 import $ from "jquery";
-import Row from "react-bootstrap/esm/Row";
-import Col from "react-bootstrap/esm/Col";
+import {
+  Row,
+  Col,
+  Button,
+  Card,
+  OverlayTrigger,
+  Tooltip,
+  Form,
+} from "react-bootstrap";
 import lobby from "./Lobby.module.css";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/esm/Card";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
-import Form from "react-bootstrap/Form";
 import { Clipboard } from "react-bootstrap-icons";
 import anime from "animejs";
 import Client from "../client.js";
@@ -58,7 +60,6 @@ export default class Lobby extends React.Component {
       }
     });
 
-
     // Update the chat
     this.client.socket.on("receiveMessage", (chatInfo) => {
       if ($("#chat")[0] !== undefined) {
@@ -94,7 +95,6 @@ export default class Lobby extends React.Component {
       }
     });
   }
-
 
   render() {
     return (
@@ -206,22 +206,10 @@ export default class Lobby extends React.Component {
                   // }
                 }}
                 id={`${lobby.startGame}`}
-                size="lg"
               >
-                Start Game
+                <strong>Start Game</strong>
               </Button>
               <div id={`${lobby.waitingMsg}`}>Waiting for host to start!</div>
-            </Col>
-            <Col xs = "auto">
-              <Button
-                onClick={() => {
-                  (this.state.muted) ? sounds.play("menu") : sounds.pause("menu");
-                  this.setState({muted: !this.state.muted})
-                }}
-                size="lg"
-              >
-                {(this.state.muted) ? "Unmute music" : "Mute music"}
-              </Button>
             </Col>
             <Col>
               <Form.Group id={`${lobby.copyCode}`}>
@@ -300,6 +288,20 @@ export default class Lobby extends React.Component {
             </Form>
           </Col>
         </Row>
+        {/* Mute music button */}
+        <Button
+          onClick={() => {
+            this.state.muted ? sounds.play("menu") : sounds.pause("menu");
+            this.setState({ muted: !this.state.muted });
+          }}
+          size="xs"
+          variant="dark"
+          id={`${lobby.musicControl}`}
+        >
+          {this.state.muted ? "Unmute music" : "Mute music"}
+        </Button>
+
+        {/* Error message */}
         <ErrorMsg />
       </div>
     );

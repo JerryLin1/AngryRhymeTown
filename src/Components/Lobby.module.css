@@ -1,16 +1,13 @@
 /******* Global settings *******/
 
-html {
-    max-width: 98vw;
-}
-
 .lobby {
-    margin: 1em 0 0 1em;
+    padding: 1em;
 }
 
-input {
-    border-radius: 0.25em;
-    border: 1px solid #ccc;
+#musicControl {
+    position: absolute;
+    bottom: 0.5em;
+    left: 1em;
 }
 
 /******* Row 1 *******/
@@ -37,7 +34,7 @@ input {
 #startGame {
     position: absolute;
     left: 50%;
-    transform: translate(-50%, -25%);
+    transform: translateX(-50%);
     display: none;
 }
 

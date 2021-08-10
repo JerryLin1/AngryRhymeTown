@@ -188,7 +188,7 @@ export default class WritingPhase extends React.Component {
 
   render() {
     return (
-      <div className="writingPhase">
+      <div className={`${game.writingPhase}`}>
         <Row>
           <Col>
             <div className={`${game.header}`}>Write your rhyme!</div>

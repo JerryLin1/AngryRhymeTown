@@ -1,10 +1,8 @@
 import React from "react";
 import $ from "jquery";
-import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import home from "./Home.module.css";
 import sounds from "../sounds.js";
+import { Row, Col, Button, Form } from "react-bootstrap";
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -12,28 +10,28 @@ export default class Home extends React.Component {
     this.client = props.client;
   }
 
-
   render() {
     return (
       <div className={`${home.Home}`}>
         <h1 id="title">ANGRY RHYME TOWN</h1>
 
         <Row>
-          <Col>
+          <Form.Group as={Col}>
             <Button
               variant="outline-dark"
               id={`${home.createLobby}`}
-              onClick={() => { 
+              onClick={() => {
                 sounds.play("button");
-                this.client.createRoom(); 
+                this.client.createRoom();
               }}
             >
               Create lobby
             </Button>
-            <input
+            <Form.Control
+              inline
               placeholder="Lobby Code"
-              type="text"
               id={`${home.inputRoomID}`}
+              xs="3"
             />
             <Button
               variant="outline-dark"
@@ -45,7 +43,7 @@ export default class Home extends React.Component {
             >
               Join Lobby
             </Button>
-          </Col>
+          </Form.Group>
         </Row>
 
         <div id={home.credits}>
@@ -63,7 +61,7 @@ export default class Home extends React.Component {
           >
             Github Repository{" "}
             <svg
-              id={`${home.gitBtn}`}
+              id={`${home.gitIcon}`}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
               height="24"
