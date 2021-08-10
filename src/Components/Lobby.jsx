@@ -43,7 +43,14 @@ export default class Lobby extends React.Component {
       this.setState({
         lobbyList: Object.values(clients).map((client, key) => {
           return (
-            <div key={key}>
+            <div key={key}
+              className={`${lobby.playerListItem}`}
+              style={{
+                backgroundColor: "#d4e5ff",
+                boxShadow: client.name === this.name ? "0 0 10px #f2ff9e" : "none",
+                border: client.name === this.name ? "solid #e8ff52 3px" : "none",
+              }}
+            >
               <ConditionalWrapper
                 condition={client.name === this.name}
                 wrapper={(children) => <strong>{children}</strong>}
@@ -51,7 +58,7 @@ export default class Lobby extends React.Component {
                 {client.name}
               </ConditionalWrapper>
               {client.isHost === true && (
-                <span style={{ color: "#b59700" }}> HOST</span>
+                <span style={{ color: "#b59700", float: "right" }}> HOST</span>
               )}
             </div>
           );
@@ -117,12 +124,12 @@ export default class Lobby extends React.Component {
                 targets: `#${lobby.nameWarning}`,
                 keyframes: [
                   { color: "rgb(255,0,0)" },
-                  { color: "rgb(0,0,0)" },
+                  { color: "rgb(255,255,255)" },
                   { color: "rgb(255,0,0)" },
-                  { color: "rgb(0,0,0)" },
+                  { color: "rgb(255,255,255)" },
                   { color: "rgb(255,0,0)" },
                 ],
-                duration: 1000,
+                duration: 500,
               });
             } else if (nickname === "") {
               $(`#${lobby.nameWarning}`).text("Nickname cannot be empty");
@@ -131,12 +138,12 @@ export default class Lobby extends React.Component {
                 targets: `#${lobby.nameWarning}`,
                 keyframes: [
                   { color: "rgb(255,0,0)" },
-                  { color: "rgb(0,0,0)" },
+                  { color: "rgb(255,255,255)" },
                   { color: "rgb(255,0,0)" },
-                  { color: "rgb(0,0,0)" },
+                  { color: "rgb(255,255,255)" },
                   { color: "rgb(255,0,0)" },
                 ],
-                duration: 1000,
+                duration: 500,
               });
             } else {
               this.client.setNick(nickname);
@@ -248,22 +255,26 @@ export default class Lobby extends React.Component {
         </Form>
         <div id={`${lobby.nameWarning}`} style={{ display: "none" }}></div>
 
+        {/* ANCHOR: SECOND ROW */}
         {/* Second row that displays the players on the left and the room chat on the right */}
         <Row>
           {/* Player list */}
-          <Col xs="6">
-            <Card style={{ height: "28em" }}>
-              <Card.Header style={{ fontSize: "2em " }}>
-                Player List
+          <Col xs="3">
+            <Card
+              className={`${lobby.cards}`}
+              text="white"
+            >
+              <Card.Header className={`${lobby.cardHeaders}`}>
+                Player List ({this.state.lobbyList.length})
               </Card.Header>
-              <Card.Body id="lobbyList">{this.state.lobbyList}</Card.Body>
+              <Card.Body id="lobbyList" style={{ overflowY: "scroll" }}>{this.state.lobbyList}</Card.Body>
             </Card>
           </Col>
 
           {/* Lobby Chat */}
           <Col>
-            <Card style={{ height: "28em", marginBottom: "0.25em" }}>
-              <Card.Header style={{ fontSize: "2em" }}>Chat</Card.Header>
+            <Card className={`${lobby.cards}`} style = {{backgroundColor: "white"}}>
+              <Card.Header className={`${lobby.cardHeaders}`}>Chat</Card.Header>
               <Card.Body id="chat" style={{ overflowY: "scroll" }}>
                 {this.state.chat}
               </Card.Body>
@@ -293,7 +304,19 @@ export default class Lobby extends React.Component {
               </div>
             </Form>
           </Col>
+
+          <Col xs="4">
+            <Card
+              className = {`${lobby.cards}`}
+            >
+              <Card.Header className = {`${lobby.cardHeaders}`}>Room Settings
+              </Card.Header>
+              <Card.Body></Card.Body>
+
+            </Card>
+          </Col>
         </Row>
+
 
         {/* Music Control button */}
         <Button
@@ -339,10 +362,11 @@ const ErrorMsg = () => {
 
 const MusicHint = () => {
   return (
-    <div className={`${lobby.musicHint}`}>
+    <div className={`${lobby.musicHint}`} style = {{textShadow: "0 0 2px black"}}>
+      
       Click to hear
       <br />
-      some bussin beats <Arrow90degDown id={`${lobby.hintArrow}`} />{" "}
+      some bussin beats <Arrow90degDown id={`${lobby.hintArrow}`} style ={{fontSize: "0.75em"}}/>{" "}
     </div>
   );
 };

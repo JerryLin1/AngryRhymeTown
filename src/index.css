@@ -3,7 +3,7 @@
     font-family: 'Baloo Chettan 2', sans-serif;
 }
 
-html {
+html, body {
     padding: 1em;
     height: 100%;
     background: hsla(217, 100%, 50%, 1);
@@ -11,13 +11,6 @@ html {
     background: -moz-linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(190, 91%, 50%, 1) 100%);
     background: -webkit-linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(190, 91%, 50%, 1) 100%);
     filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#0061FF", endColorstr="#0BDCF3", GradientType=1);
-}
-
-body {
-    margin: auto !important;
-    border: 2px solid #ccc;
-    border-radius: 1em;
-    width: 75%;
 }
 
 input {

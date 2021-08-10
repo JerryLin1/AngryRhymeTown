@@ -3,7 +3,7 @@ import $ from "jquery";
 import home from "./Home.module.css";
 import sounds from "../sounds.js";
 import { Row, Col, Button, Form } from "react-bootstrap";
-import AvatarCustomizer from "./AvatarCustomizer";
+import AvatarCustomizer from "./Avatar/AvatarCustomizer";
 
 export default class Home extends React.Component {
   constructor(props) {
