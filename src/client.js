@@ -88,7 +88,8 @@ export default class Client extends React.Component {
 
     joinRoom = (roomId) => {
         let nickname = localStorage.getItem("nickname");
-        this.socket.emit("joinRoom", { roomId: roomId, nickname: nickname });
+        let avatar = JSON.parse(localStorage.getItem("avatar"));
+        this.socket.emit("joinRoom", { roomId: roomId, nickname: nickname, avatar: avatar });
     }
 
     redirect = (id) => {
