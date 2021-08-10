@@ -1,0 +1,201 @@
+.Countdown {
+    font-size: 1.5em;
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.header {
+    font-size: 3em;
+    text-align: center;
+}
+
+/* Pairing phase */
+
+#matchups {
+    height: 75vh;
+    margin-right: 0.5em;
+}
+
+#opponentCardRow {
+    width: 100%;
+    justify-content: center;
+}
+
+#opponentCard {
+    width: 50%;
+    align-items: center;
+}
+
+/* Writing Phase */
+
+.writingPhase {
+    margin-bottom: 2em !important;
+}
+
+#promptContainer {
+    margin-left: 1em;
+}
+
+#promptContainer>div {
+    margin-bottom: 0.5em;
+}
+
+.writingRow {
+    margin-bottom: 0.5em;
+    text-align: center;
+}
+
+.barInputs {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20% !important;
+}
+
+#finishWriting {
+    position: relative;
+    font-size: 1.5em;
+    padding: 0 1em 0 1em;
+    height: 150%;
+    overflow: hidden;
+}
+
+#finishWriting:after {
+    content: "";
+    background: #ffffff;
+    display: block;
+    position: absolute;
+    width: 150%;
+    padding-top: 200%;
+    margin-left: -50%;
+    margin-top: -50%;
+    opacity: 0;
+    transition: all 0.8s;
+    color: rgb(255, 255, 255);
+}
+
+#finishWriting:active::after {
+    width: 0%;
+    opacity: 1;
+    transition: 0s;
+}
+
+/* Rapping phase */
+
+.rapPhase {
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 1;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    justify-content: center;
+}
+
+#rapDisplay {
+    text-align: center;
+    border-radius: 0.5em;
+    color: #fff;
+    border: 1px solid rgb(145, 145, 145);
+    backdrop-filter: blur(0.5em) brightness(0.75);
+}
+
+#rapDisplay>div {
+    font-size: 2em;
+}
+
+/* Voting Phase */
+
+.rap {
+    font-size: 1.5em;
+}
+
+.rapperName {
+    font-size: 2.5em;
+}
+
+#votePrompt {
+    margin-top: 1.5em;
+    text-align: center;
+    font-size: 2em;
+}
+
+#voteConfirmation {
+    text-align: center;
+    font-size: 1.25em;
+}
+
+/* Round results */
+
+#rapperList {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5em;
+    width: 75%;
+}
+
+#rapperList>div {
+    margin: 0.5em 0 0.5em 0;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+}
+
+#rapperList>div:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+/* Game Results */
+
+#podium {
+    display: flex;
+    height: 25em;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+
+#podium>div {
+    display: inline-block;
+    text-align: center;
+    font-size: 1.5em;
+    width: 10em;
+    margin: 0 1em 0 1em;
+}
+
+#podium>div:hover {
+    transition: 0.3s;
+    transform: scale(1.05);
+}
+
+/* Podium spots */
+
+#firstP {
+    height: 16em;
+    background-color: #ffed48;
+    transition: 0.3s;
+}
+
+#firstP:hover {
+    filter: drop-shadow(0 0 1em #ffed48);
+}
+
+#secondP {
+    height: 13em;
+    background-color: #C0C0C0;
+    transition: 0.3s;
+}
+
+#secondP:hover {
+    filter: drop-shadow(0 0 1em #C0C0C0);
+}
+
+#thirdP {
+    height: 10em;
+    background-color: #cd7f32;
+    transition: 0.3s;
+}
+
+#thirdP:hover {
+    filter: drop-shadow(0 0 1em #cd7f32);
+}

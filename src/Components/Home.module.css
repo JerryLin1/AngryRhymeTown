@@ -1,0 +1,56 @@
+.Home {
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+
+#inputRoomID {
+    display: inline-block;
+    width: 10em;
+    border-radius: 0.25em;
+    border: 1px solid #000;
+    transition: 0.25s;
+}
+
+#inputRoomID:hover {
+    box-shadow: 2px 3px rgb(77, 77, 77);
+}
+
+#createLobby {
+    margin-right: 5em;
+}
+
+#joinRoom {
+    margin-left: 0.5em;
+}
+
+#credits {
+    position: fixed;
+    color: #fff;
+    width: 100%;
+    bottom: 3.5em;
+}
+
+#credits > * {
+    max-width: 75%;
+    text-align: center;
+}
+
+#repoLink {
+    position: absolute;
+    padding: 8px;
+    bottom: -2.5em;
+    left: 37.5%;
+    transform: translateX(-50%);
+    color: #000;
+    background: #ccc;
+    transition: 0.3s;
+    border-radius: 1em;
+}
+
+#repoLink:hover {
+    cursor: pointer;
+    color: #fff;
+    fill: #fff;
+    background: linear-gradient(#e66465, #9198e5);
+    transition: 0.3s;
+}
