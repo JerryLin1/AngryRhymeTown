@@ -17,7 +17,7 @@
 
 ::-webkit-scrollbar-thumb {
     background: #888;
-    border-radius: 20px;
+    border-radius: 1.5em;
 }
 
 /* Handle on hover */
@@ -28,6 +28,9 @@
 
 #musicControl {
     position: absolute;
+    padding: 0;
+    width: 1.75em;
+    height: 1.75em;
     top: 1em;
     right: 1em;
 }
@@ -179,7 +182,8 @@
 .musicHint {
     position: absolute;
     color: #fff;
-    right: 4.25em;
+    font-size: 0.8em;
+    right: 4em;
     top: 3.5em;
 }
 

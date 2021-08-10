@@ -83,6 +83,9 @@
 /* Rapping phase */
 
 .rapPhase {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100vw !important;
     height: 100vh !important;
     z-index: 1;
@@ -127,11 +130,10 @@
 /* Round results */
 
 #rapperList {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.5em;
+    margin: auto;
     width: 75%;
+    border-radius: 0.25em;
+    font-size: 1.5em;
 }
 
 #rapperList>div {
