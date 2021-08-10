@@ -71,17 +71,6 @@ export default class Home extends React.Component {
             </svg>
           </div>
         </div>
-<<<<<<< HEAD
-        {/* CHARACTER CHOOSER */}
-        {/* delete br after */}
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <div>character chooser :D</div>
-=======
->>>>>>> 5e6b8f3ad032396847cf932880f81ebc8a6f57e8
       </div>
     );
   }
