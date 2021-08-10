@@ -151,21 +151,17 @@ export default class WritingPhase extends React.Component {
           className={`${game.writingRow}`}
         >
           <Form.Group as={Row}>
-            <Form.Label column xs="3">
+            <Form.Label column xs="4">
               {this.displayWords(i)}
             </Form.Label>
-            <Col xs="5">
+            <Col xs="4">
               <Form.Control
+                className={`${game.barInputs}`}
                 id={`barInput_${i}`}
                 autoComplete="off"
                 disabled={this.state.currentLine !== i}
                 onChange={() => {
                   this.displayBonuses(i);
-                }}
-                onBlur={() => {
-                  let potentialPoints = [...this.state.potentialPoints];
-                  potentialPoints[i] = "";
-                  this.setState({ potentialPoints: potentialPoints });
                 }}
               />
             </Col>

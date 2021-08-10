@@ -43,12 +43,15 @@ export default class Lobby extends React.Component {
       this.setState({
         lobbyList: Object.values(clients).map((client, key) => {
           return (
-            <div key={key}
+            <div
+              key={key}
               className={`${lobby.playerListItem}`}
               style={{
                 backgroundColor: "#d4e5ff",
-                boxShadow: client.name === this.name ? "0 0 10px #f2ff9e" : "none",
-                border: client.name === this.name ? "solid #e8ff52 3px" : "none",
+                boxShadow:
+                  client.name === this.name ? "0 0 10px #f2ff9e" : "none",
+                border:
+                  client.name === this.name ? "solid #e8ff52 3px" : "none",
               }}
             >
               <ConditionalWrapper
@@ -260,20 +263,22 @@ export default class Lobby extends React.Component {
         <Row>
           {/* Player list */}
           <Col xs="3">
-            <Card
-              className={`${lobby.cards}`}
-              text="white"
-            >
+            <Card className={`${lobby.cards}`} text="white">
               <Card.Header className={`${lobby.cardHeaders}`}>
                 Player List ({this.state.lobbyList.length})
               </Card.Header>
-              <Card.Body id="lobbyList" style={{ overflowY: "scroll" }}>{this.state.lobbyList}</Card.Body>
+              <Card.Body id="lobbyList" style={{ overflowY: "scroll" }}>
+                {this.state.lobbyList}
+              </Card.Body>
             </Card>
           </Col>
 
           {/* Lobby Chat */}
           <Col>
-            <Card className={`${lobby.cards}`} style = {{backgroundColor: "white"}}>
+            <Card
+              className={`${lobby.cards}`}
+              style={{ backgroundColor: "white" }}
+            >
               <Card.Header className={`${lobby.cardHeaders}`}>Chat</Card.Header>
               <Card.Body id="chat" style={{ overflowY: "scroll" }}>
                 {this.state.chat}
@@ -306,17 +311,14 @@ export default class Lobby extends React.Component {
           </Col>
 
           <Col xs="4">
-            <Card
-              className = {`${lobby.cards}`}
-            >
-              <Card.Header className = {`${lobby.cardHeaders}`}>Room Settings
+            <Card className={`${lobby.cards}`}>
+              <Card.Header className={`${lobby.cardHeaders}`}>
+                Room Settings
               </Card.Header>
               <Card.Body></Card.Body>
-
             </Card>
           </Col>
         </Row>
-
 
         {/* Music Control button */}
         <Button
@@ -362,11 +364,17 @@ const ErrorMsg = () => {
 
 const MusicHint = () => {
   return (
-    <div className={`${lobby.musicHint}`} style = {{textShadow: "0 0 2px black"}}>
-      
+    <div
+      className={`${lobby.musicHint}`}
+      style={{ textShadow: "0 0 2px #000" }}
+    >
       Click to hear
       <br />
-      some bussin beats <Arrow90degDown id={`${lobby.hintArrow}`} style ={{fontSize: "0.75em"}}/>{" "}
+      some bussin beats!{" "}
+      <Arrow90degDown
+        id={`${lobby.hintArrow}`}
+        style={{ fontSize: "0.75em" }}
+      />{" "}
     </div>
   );
 };
