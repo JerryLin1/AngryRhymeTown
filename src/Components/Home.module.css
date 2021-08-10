@@ -30,11 +30,16 @@
     bottom: 3.5em;
 }
 
+#credits > * {
+    max-width: 75%;
+    text-align: center;
+}
+
 #repoLink {
     position: absolute;
     padding: 8px;
     bottom: -2.5em;
-    left: 50%;
+    left: 37.5%;
     transform: translateX(-50%);
     color: #000;
     background: #ccc;

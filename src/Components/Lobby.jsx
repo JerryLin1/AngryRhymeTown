@@ -8,9 +8,15 @@ import {
   OverlayTrigger,
   Tooltip,
   Form,
+  Overlay,
 } from "react-bootstrap";
 import lobby from "./Lobby.module.css";
-import { Clipboard } from "react-bootstrap-icons";
+import {
+  Clipboard,
+  VolumeUpFill,
+  VolumeMuteFill,
+  Arrow90degDown,
+} from "react-bootstrap-icons";
 import anime from "animejs";
 import Client from "../client.js";
 import sounds from "../sounds.js";
@@ -311,18 +317,20 @@ export default class Lobby extends React.Component {
           </Col>
         </Row>
 
-        {/* Mute music button */}
+
+        {/* Music Control button */}
         <Button
           onClick={() => {
             this.state.muted ? sounds.play("menu") : sounds.pause("menu");
             this.setState({ muted: !this.state.muted });
+            $(`.${lobby.musicHint}`).fadeOut();
           }}
-          size="xs"
-          variant="dark"
+          variant="light"
           id={`${lobby.musicControl}`}
         >
-          {this.state.muted ? "Unmute music" : "Mute music"}
+          {this.state.muted ? <VolumeMuteFill /> : <VolumeUpFill />}
         </Button>
+        <MusicHint />
 
         {/* Error message */}
         <ErrorMsg />
@@ -348,6 +356,17 @@ const ErrorMsg = () => {
           &times;
         </div>
       </div>
+    </div>
+  );
+};
+
+const MusicHint = () => {
+  return (
+    <div className={`${lobby.musicHint}`} style = {{textShadow: "0 0 2px black"}}>
+      
+      Click to hear
+      <br />
+      some bussin beats <Arrow90degDown id={`${lobby.hintArrow}`} style ={{fontSize: "0.75em"}}/>{" "}
     </div>
   );
 };

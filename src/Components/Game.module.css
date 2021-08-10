@@ -42,6 +42,14 @@
 
 .writingRow {
     margin-bottom: 0.5em;
+    text-align: center;
+}
+
+.barInputs {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20% !important;
 }
 
 #finishWriting {
@@ -75,9 +83,9 @@
 /* Rapping phase */
 
 .rapPhase {
-    margin: -1em 0 0 -1em;
-    width: 100vw;
-    height: 100vh;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 1;
     background-repeat: no-repeat;
     overflow: hidden;
     justify-content: center;
