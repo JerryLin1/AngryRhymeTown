@@ -151,12 +151,11 @@ export default class WritingPhase extends React.Component {
           className={`${game.writingRow}`}
         >
           <Form.Group as={Row}>
-            <Form.Label column xs="4">
+            <Form.Label column xs="3">
               {this.displayWords(i)}
             </Form.Label>
-            <Col xs="4">
+            <Col xs="5">
               <Form.Control
-                className={`${game.barInputs}`}
                 id={`barInput_${i}`}
                 autoComplete="off"
                 disabled={this.state.currentLine !== i}

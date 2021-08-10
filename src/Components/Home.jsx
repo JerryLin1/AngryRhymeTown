@@ -3,6 +3,7 @@ import $ from "jquery";
 import home from "./Home.module.css";
 import sounds from "../sounds.js";
 import { Row, Col, Button, Form } from "react-bootstrap";
+import AvatarCustomizer from "./AvatarCustomizer";
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -45,10 +46,10 @@ export default class Home extends React.Component {
             </Button>
           </Form.Group>
         </Row>
-
         <div id={home.credits}>
           <Row>
             <Col>
+            <AvatarCustomizer/>
               <h4>Game created by: Tom Han, Jerry Lin, and Roseak Lin</h4>
             </Col>
           </Row>
@@ -71,17 +72,6 @@ export default class Home extends React.Component {
             </svg>
           </div>
         </div>
-<<<<<<< HEAD
-        {/* CHARACTER CHOOSER */}
-        {/* delete br after */}
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <div>character chooser :D</div>
-=======
->>>>>>> 5e6b8f3ad032396847cf932880f81ebc8a6f57e8
       </div>
     );
   }
