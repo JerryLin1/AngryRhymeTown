@@ -20,6 +20,18 @@ export default class AvatarDisplay extends React.Component {
   }
   componentDidUpdate(prevProps) {
     if (prevProps != this.props) this.verifyComponentsInfo();
+    // Update localstorage whenever avatar is updated
+    localStorage.setItem(
+      "avatar",
+      JSON.stringify({
+        bodyNum: this.state.bodyNum,
+        eyesNum: this.state.eyesNum,
+        hairNum: this.state.hairNum,
+        mouthNum: this.state.mouthNum,
+        shirtNum: this.state.shirtNum,
+      })
+    );
+    console.log(localStorage);
   }
   componentDidMount() {
     this.verifyComponentsInfo();
@@ -54,7 +66,6 @@ export default class AvatarDisplay extends React.Component {
         this.state.shirtNum = this.props.avatar.shirtNum;
       else this.state.shirtNum = getRandomInt(0, sheetInfo.NUM_OF_SHIRT);
     }
-    console.log("");
     this.setState({
       bodyPos: this.getCoords(this.state.bodyNum, sheetInfo.NUM_OF_BODY),
       eyesPos: this.getCoords(this.state.eyesNum, sheetInfo.NUM_OF_EYES),

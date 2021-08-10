@@ -1,7 +1,7 @@
 import React from "react";
 import AvatarDisplay from "./AvatarDisplay";
 import avatarCustomizer from "./AvatarCustomizer.module.css";
-import { getRandomInt, sheetInfo } from "./SheetInfo";
+import { getRandomInt, isValidComponent, sheetInfo } from "./SheetInfo";
 
 export default class AvatarCustomizer extends React.Component {
   constructor(props) {
@@ -13,6 +13,30 @@ export default class AvatarCustomizer extends React.Component {
       mouthNum: 0,
       shirtNum: 0,
     };
+
+    // Check and verify local storage for previously created avatar
+    let a = JSON.parse(localStorage.getItem("avatar"));
+    if (a != null) {
+      if (isValidComponent(a.bodyNum, sheetInfo.NUM_OF_BODY))
+        this.state.bodyNum = a.bodyNum;
+      else this.state.bodyNum = getRandomInt(0, sheetInfo.NUM_OF_BODY);
+
+      if (isValidComponent(a.eyesNum, sheetInfo.NUM_OF_EYES))
+        this.state.eyesNum = a.eyesNum;
+      else this.state.eyesNum = getRandomInt(0, sheetInfo.NUM_OF_EYES);
+
+      if (isValidComponent(a.hairNum, sheetInfo.NUM_OF_HAIR))
+        this.state.hairNum = a.hairNum;
+      else this.state.hairNum = getRandomInt(0, sheetInfo.NUM_OF_HAIR);
+
+      if (isValidComponent(a.mouthNum, sheetInfo.NUM_OF_MOUTH))
+        this.state.mouthNum = a.mouthNum;
+      else this.state.mouthNum = getRandomInt(0, sheetInfo.NUM_OF_MOUTH);
+
+      if (isValidComponent(a.shirtNum, sheetInfo.NUM_OF_SHIRT))
+        this.state.shirtNum = a.shirtNum;
+      else this.state.shirtNum = getRandomInt(0, sheetInfo.NUM_OF_SHIRT);
+    }
   }
   randomize() {
     this.setState({
@@ -26,13 +50,10 @@ export default class AvatarCustomizer extends React.Component {
   nextComponent(add, num, comNum) {
     let t = num + add;
     if (t >= 0 && t < comNum) {
-      console.log(t);
       return t;
     } else if (t < 0) {
-      console.log(comNum - 1);
       return comNum - 1;
     } else if (t >= comNum) {
-      console.log(0);
       return 0;
     }
   }

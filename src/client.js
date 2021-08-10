@@ -58,11 +58,11 @@ export default class Client extends React.Component {
         this.socket.on("returnToLobby", () => {
             // TODO: Return to the lobby
         })
-        
+
         this.socket.on("receiveRoomSettings", roomSettings => {
             this.roomSettings = roomSettings;
         })
-        
+
     }
 
     setNick = (name) => {
@@ -87,7 +87,8 @@ export default class Client extends React.Component {
     }
 
     joinRoom = (roomId) => {
-        this.socket.emit("joinRoom", roomId);
+        let nickname = localStorage.getItem("nickname");
+        this.socket.emit("joinRoom", { roomId: roomId, nickname: nickname });
     }
 
     redirect = (id) => {

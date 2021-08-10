@@ -147,6 +147,7 @@ export default class Lobby extends React.Component {
               });
             } else {
               this.client.setNick(nickname);
+              localStorage.setItem("nickname", nickname);
               $(`#${lobby.inputNickname}`).val("");
             }
           }}

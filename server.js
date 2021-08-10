@@ -24,7 +24,7 @@ const rooms = {};
 io.on('connection', socket => {
     console.log(`${socket.id} has connected.`);
     socket.room = undefined;
-    socket.nickname = "Player #" + socket.id.substring(0, 4).toUpperCase();
+    socket.nickname = `Player # ${socket.id.substring(0, 4).toUpperCase()}`;
 
     socket.on('disconnect', () => {
         console.log(`${socket.id} has disconnected.`);
@@ -94,14 +94,21 @@ io.on('connection', socket => {
     });
 
     // Joins client to room
-    socket.on("joinRoom", roomId => {
+    socket.on("joinRoom", info => {
+        let roomId = info.roomId;
         // If room exists, join client to room
         if (roomId in rooms && rooms[roomId].gameState === gameState.LOBBY) {
             socket.join(roomId);
+            //TODO: Check if this is valid name
+            if (info.nickname != undefined) {
+                socket.nickname = info.nickname;
+            }
             rooms[roomId].clients[socket.id] = {};
             rooms[roomId].clients[socket.id].disconnected = false;
             rooms[roomId].clients[socket.id].name = socket.nickname;
-
+            
+            //TODO: Authenticate this is a real avatar. If not, set a random one
+            rooms[roomId].clients[socket.id].avatar = info.avatar;
 
             if (numberOfClientsInRoom(roomId) === 1) {
                 rooms[roomId].clients[socket.id].isHost = true;
