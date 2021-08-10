@@ -3,7 +3,7 @@
     font-family: 'Baloo Chettan 2', sans-serif;
 }
 
-html {
+html, body {
     padding: 1em;
     width: 100%;
     height: 100%;
@@ -14,9 +14,10 @@ html {
     filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#0061FF", endColorstr="#0BDCF3", GradientType=1);
 }
 
-body {
-    border: 2px solid #ccc;
-    border-radius: 1em;
+
+
+.game_wrapper { 
+    background-color: transparent;
 }
 
 input {
