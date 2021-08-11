@@ -39,6 +39,20 @@ export default class AvatarCustomizer extends React.Component {
       else this.state.shirtNum = getRandomInt(0, sheetInfo.NUM_OF_SHIRT);
     }
   }
+  componentDidUpdate() {
+    // Update localstorage whenever avatar is updated
+    localStorage.setItem(
+      "avatar",
+      JSON.stringify({
+        bodyNum: this.state.bodyNum,
+        eyesNum: this.state.eyesNum,
+        hairNum: this.state.hairNum,
+        mouthNum: this.state.mouthNum,
+        shirtNum: this.state.shirtNum,
+      })
+    );
+    console.log(localStorage);
+  }
   randomize() {
     this.setState({
       bodyNum: getRandomInt(0, sheetInfo.NUM_OF_BODY),
@@ -220,7 +234,7 @@ export default class AvatarCustomizer extends React.Component {
               mouthNum: this.state.mouthNum,
               shirtNum: this.state.shirtNum,
             }}
-            size = {1}
+            size={1}
           />
           <div
             className={avatarCustomizer.random}

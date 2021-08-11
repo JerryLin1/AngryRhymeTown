@@ -21,18 +21,6 @@ export default class AvatarDisplay extends React.Component {
   }
   componentDidUpdate(prevProps) {
     if (prevProps != this.props) this.verifyComponentsInfo();
-    // Update localstorage whenever avatar is updated
-    localStorage.setItem(
-      "avatar",
-      JSON.stringify({
-        bodyNum: this.state.bodyNum,
-        eyesNum: this.state.eyesNum,
-        hairNum: this.state.hairNum,
-        mouthNum: this.state.mouthNum,
-        shirtNum: this.state.shirtNum,
-      })
-    );
-    console.log(localStorage);
   }
   componentDidMount() {
     this.verifyComponentsInfo();
@@ -81,8 +69,8 @@ export default class AvatarDisplay extends React.Component {
         className={avatarDisplay.avatarContainer}
         style={{
           zoom: this.props.size,
-          "-moz-transform": `scale(${this.props.size})`,
-          "-moz-transform-origin": "0 0"
+          MozTransform: `scale(${this.props.size})`,
+          MozTransformOrigin: "0 0"
         }}
       >
         <div
