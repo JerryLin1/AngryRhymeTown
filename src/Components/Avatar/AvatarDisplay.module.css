@@ -1,6 +1,8 @@
 .avatarContainer {
     width: 128px;
     height: 128px;
+    position: relative;
+    box-sizing: border-box;
 }
 .avatarComponent {
     width: 128px;

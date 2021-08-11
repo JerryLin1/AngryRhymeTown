@@ -1,18 +1,46 @@
 import React from "react";
 import AvatarDisplay from "./AvatarDisplay";
 import avatarCustomizer from "./AvatarCustomizer.module.css";
-import { getRandomInt, sheetInfo } from "./SheetInfo";
+import { getRandomInt, isValidComponent } from "./avatarFunctions";
+import sheetInfo from "./SheetInfo.json";
 
 export default class AvatarCustomizer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      bodyNum: 0,
-      eyesNum: 0,
-      hairNum: 0,
-      mouthNum: 0,
-      shirtNum: 0,
-    };
+    this.state = {};
+  }
+  componentDidMount() {
+    // Check and verify local storage for previously created avatar
+    let a = JSON.parse(localStorage.getItem("avatar"));
+    if (
+      a != null &&
+      isValidComponent(a.bodyNum, sheetInfo.NUM_OF_BODY) &&
+      isValidComponent(a.eyesNum, sheetInfo.NUM_OF_EYES) &&
+      isValidComponent(a.hairNum, sheetInfo.NUM_OF_HAIR) &&
+      isValidComponent(a.mouthNum, sheetInfo.NUM_OF_MOUTH) &&
+      isValidComponent(a.shirtNum, sheetInfo.NUM_OF_SHIRT)
+    ) {
+      this.setState({
+        bodyNum: a.bodyNum,
+        eyesNum: a.eyesNum,
+        hairNum: a.hairNum,
+        mouthNum: a.mouthNum,
+        shirtNum: a.shirtNum,
+      });
+    } else this.randomize();
+  }
+  componentDidUpdate() {
+    // Update localstorage whenever avatar is updated
+    localStorage.setItem(
+      "avatar",
+      JSON.stringify({
+        bodyNum: this.state.bodyNum,
+        eyesNum: this.state.eyesNum,
+        hairNum: this.state.hairNum,
+        mouthNum: this.state.mouthNum,
+        shirtNum: this.state.shirtNum,
+      })
+    );
   }
   randomize() {
     this.setState({
@@ -26,13 +54,10 @@ export default class AvatarCustomizer extends React.Component {
   nextComponent(add, num, comNum) {
     let t = num + add;
     if (t >= 0 && t < comNum) {
-      console.log(t);
       return t;
     } else if (t < 0) {
-      console.log(comNum - 1);
       return comNum - 1;
     } else if (t >= comNum) {
-      console.log(0);
       return 0;
     }
   }
@@ -198,6 +223,7 @@ export default class AvatarCustomizer extends React.Component {
               mouthNum: this.state.mouthNum,
               shirtNum: this.state.shirtNum,
             }}
+            size={1}
           />
           <div
             className={avatarCustomizer.random}

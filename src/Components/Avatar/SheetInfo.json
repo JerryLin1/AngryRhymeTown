@@ -1,0 +1,9 @@
+{
+    "NUM_OF_BODY": 5,
+    "NUM_OF_EYES": 5,
+    "NUM_OF_HAIR": 5,
+    "NUM_OF_MOUTH": 5,
+    "NUM_OF_SHIRT": 2,
+    "COMPONENT_DIMENSIONS": { "x": 128, "y": 128 },
+    "SHEET_DIMENSIONS": { "x": 1024, "y": 1024 }
+}

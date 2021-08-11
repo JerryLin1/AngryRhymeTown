@@ -12,6 +12,8 @@ const gameState = require("./server/gameState.js");
 const hf = require("./server/helperFunctions.js");
 const DEFAULT_ROOM_SETTINGS = require("./server/defaultRoomSettings.js");
 const { Callbacks } = require('jquery');
+const { getRandomInt } = require('./server/helperFunctions.js');
+const sheetInfo = require('./src/Components/Avatar/SheetInfo.json');
 
 const port = process.env.PORT || 6567;
 server.listen(port, () => {
@@ -24,7 +26,7 @@ const rooms = {};
 io.on('connection', socket => {
     console.log(`${socket.id} has connected.`);
     socket.room = undefined;
-    socket.nickname = "Player #" + socket.id.substring(0, 4).toUpperCase();
+    socket.nickname = `Player # ${socket.id.substring(0, 4).toUpperCase()}`;
 
     socket.on('disconnect', () => {
         console.log(`${socket.id} has disconnected.`);
@@ -55,7 +57,6 @@ io.on('connection', socket => {
             } else {
                 delete rooms[socket.room].clients[socket.id];
             }
-            
 
             // Transfer host
             if (numberOfClientsInRoom(socket.room) > 0) {
@@ -94,14 +95,45 @@ io.on('connection', socket => {
     });
 
     // Joins client to room
-    socket.on("joinRoom", roomId => {
+    socket.on("joinRoom", info => {
+        let roomId = info.roomId;
         // If room exists, join client to room
         if (roomId in rooms && rooms[roomId].gameState === gameState.LOBBY) {
             socket.join(roomId);
+            //TODO: Check if this is valid name
+            if (info.nickname != undefined) {
+                socket.nickname = info.nickname;
+            }
             rooms[roomId].clients[socket.id] = {};
             rooms[roomId].clients[socket.id].disconnected = false;
             rooms[roomId].clients[socket.id].name = socket.nickname;
 
+            //TODO: Authenticate this is a real avatar. If not, set a random one
+            if (info.avatar === null) {
+                info.avatar = {
+                    bodyNum: -1,
+                    eyesNum: -1,
+                    hairNum: -1,
+                    mouthNum: -1,
+                    shirtNum: -1
+                }
+            }
+            rooms[roomId].clients[socket.id].avatar = info.avatar;
+
+            if (!isValidComponent(info.avatar.bodyNum, sheetInfo.NUM_OF_BODY))
+                rooms[roomId].clients[socket.id].avatar.bodyNum = getRandomInt(0, sheetInfo.NUM_OF_BODY);
+
+            if (!isValidComponent(info.avatar.eyesNum, sheetInfo.NUM_OF_EYES))
+                rooms[roomId].clients[socket.id].avatar.eyesNum = getRandomInt(0, sheetInfo.NUM_OF_EYES);
+
+            if (!isValidComponent(info.avatar.hairNum, sheetInfo.NUM_OF_HAIR))
+                rooms[roomId].clients[socket.id].avatar.hairNum = getRandomInt(0, sheetInfo.NUM_OF_HAIR);
+
+            if (!isValidComponent(info.avatar.mouthNum, sheetInfo.NUM_OF_MOUTH))
+                rooms[roomId].clients[socket.id].avatar.mouthNum = getRandomInt(0, sheetInfo.NUM_OF_MOUTH);
+
+            if (!isValidComponent(info.avatar.shirtNum, sheetInfo.NUM_OF_SHIRT))
+                rooms[roomId].clients[socket.id].avatar.shirtNum = getRandomInt(0, sheetInfo.NUM_OF_SHIRT);
 
             if (numberOfClientsInRoom(roomId) === 1) {
                 rooms[roomId].clients[socket.id].isHost = true;
@@ -222,7 +254,7 @@ io.on('connection', socket => {
         // TODO: Verification: a hacker could finish spitting more than once
         rooms[socket.room].finishedSpittin += 1;
         if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room) - rooms[socket.room].disconnected) {
-            
+
             rooms[socket.room].finishedSpittin = 0;
             startVotePhase();
         }
@@ -379,7 +411,7 @@ io.on('connection', socket => {
         for (let client of Object.keys(rooms[socket.room].clients)) {
             if (rooms[socket.room].clients[client].disconnected) {
                 delete rooms[socket.room].clients[client];
-            } 
+            }
         }
         // TODO: In addition to or instead of these timeouts, 
         // have a button to go immediately to the next phase
@@ -449,4 +481,9 @@ function setGameState(roomId, gameState) {
     if (rooms[roomId] != undefined) {
         rooms[roomId].gameState = gameState;
     }
+}
+function isValidComponent(num, numCom) {
+    if (num === undefined || num === null) return false;
+    if (num >= 0 && num < numCom) return true;
+    else return false;
 }
