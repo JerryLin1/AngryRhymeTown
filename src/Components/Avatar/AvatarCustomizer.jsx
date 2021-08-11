@@ -220,6 +220,7 @@ export default class AvatarCustomizer extends React.Component {
               mouthNum: this.state.mouthNum,
               shirtNum: this.state.shirtNum,
             }}
+            size = {1}
           />
           <div
             className={avatarCustomizer.random}

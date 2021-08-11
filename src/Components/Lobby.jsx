@@ -70,7 +70,8 @@ export default class Lobby extends React.Component {
                 hairNum: client.avatar.hairNum,
                 mouthNum: client.avatar.mouthNum,
                 shirtNum: client.avatar.shirtNum,
-              }}/>
+              }}
+              size={0.5}/>
             </div>
           );
         }),

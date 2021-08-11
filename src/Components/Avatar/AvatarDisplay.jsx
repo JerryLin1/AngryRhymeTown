@@ -77,7 +77,14 @@ export default class AvatarDisplay extends React.Component {
   }
   render() {
     return (
-      <div className={avatarDisplay.avatarContainer}>
+      <div
+        className={avatarDisplay.avatarContainer}
+        style={{
+          zoom: this.props.size,
+          "-moz-transform": `scale(${this.props.size})`,
+          "-moz-transform-origin": "0 0"
+        }}
+      >
         <div
           className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarBody}`}
           style={{ backgroundPosition: this.state.bodyPos }}

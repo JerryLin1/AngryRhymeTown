@@ -1,25 +1,26 @@
 .avatarContainer {
-  width: 128px;
-  height: 128px;
-  position: relative;
+    width: 128px;
+    height: 128px;
+    position: relative;
+    box-sizing: border-box;
 }
 .avatarComponent {
-  width: 128px;
-  height: 128px;
-  position: absolute;
+    width: 128px;
+    height: 128px;
+    position: absolute;
 }
 .avatarHair {
-  background-image: url("../../assets/avatar/hair.gif");
+    background-image: url("../../assets/avatar/hair.gif");
 }
 .avatarEyes {
-  background-image: url("../../assets/avatar/eye.gif");
+    background-image: url("../../assets/avatar/eye.gif");
 }
 .avatarBody {
-  background-image: url("../../assets/avatar/body.gif");
+    background-image: url("../../assets/avatar/body.gif");
 }
 .avatarMouth {
-  background-image: url("../../assets/avatar/mouth.gif");
+    background-image: url("../../assets/avatar/mouth.gif");
 }
 .avatarShirt {
-  background-image: url("../../assets/avatar/shirt.gif");
+    background-image: url("../../assets/avatar/shirt.gif");
 }
