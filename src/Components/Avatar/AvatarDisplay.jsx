@@ -1,6 +1,7 @@
 import React from "react";
 import avatarDisplay from "./AvatarDisplay.module.css";
-import { sheetInfo, isValidComponent, getRandomInt } from "./SheetInfo";
+import { isValidComponent, getRandomInt } from "./avatarFunctions";
+import sheetInfo from "./SheetInfo.json";
 
 export default class AvatarDisplay extends React.Component {
   constructor(props) {

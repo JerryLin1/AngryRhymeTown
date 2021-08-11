@@ -21,6 +21,7 @@ import anime from "animejs";
 import Client from "../client.js";
 import sounds from "../sounds.js";
 import ConditionalWrapper from "./ConditionalWrapper";
+import AvatarDisplay from "./Avatar/AvatarDisplay";
 
 const roomId = (window.location.pathname + window.location.search).substring(1);
 
@@ -63,6 +64,13 @@ export default class Lobby extends React.Component {
               {client.isHost === true && (
                 <span style={{ color: "#b59700", float: "right" }}> HOST</span>
               )}
+              <AvatarDisplay avatar={{
+                bodyNum: client.avatar.bodyNum,
+                eyesNum: client.avatar.eyesNum,
+                hairNum: client.avatar.hairNum,
+                mouthNum: client.avatar.mouthNum,
+                shirtNum: client.avatar.shirtNum,
+              }}/>
             </div>
           );
         }),
