@@ -23,23 +23,24 @@
     margin-left: 0.5em;
 }
 
+#avatarCustomizer {
+    text-align: center;
+    margin: auto;
+}
+
 #credits {
     position: fixed;
     color: #fff;
+    text-align: center;
     width: 100%;
     bottom: 3.5em;
-}
-
-#credits > * {
-    max-width: 75%;
-    text-align: center;
 }
 
 #repoLink {
     position: absolute;
     padding: 8px;
     bottom: -2.5em;
-    left: 37.5%;
+    left: 50%;
     transform: translateX(-50%);
     color: #000;
     background: #ccc;

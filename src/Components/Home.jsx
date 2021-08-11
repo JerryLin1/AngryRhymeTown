@@ -46,10 +46,12 @@ export default class Home extends React.Component {
             </Button>
           </Form.Group>
         </Row>
+        <div id={`${home.avatarCustomizer}`}>
+          <AvatarCustomizer />
+        </div>
         <div id={home.credits}>
           <Row>
             <Col>
-            <AvatarCustomizer/>
               <h4>Game created by: Tom Han, Jerry Lin, and Roseak Lin</h4>
             </Col>
           </Row>

@@ -260,6 +260,7 @@ export default class Lobby extends React.Component {
 
         {/* ANCHOR: SECOND ROW */}
         {/* Second row that displays the players on the left and the room chat on the right */}
+        
         <Row>
           {/* Player list */}
           <Col xs="3">
