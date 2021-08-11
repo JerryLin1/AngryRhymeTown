@@ -7,37 +7,27 @@ import sheetInfo from "./SheetInfo.json";
 export default class AvatarCustomizer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      bodyNum: 0,
-      eyesNum: 0,
-      hairNum: 0,
-      mouthNum: 0,
-      shirtNum: 0,
-    };
-
+    this.state = {};
+  }
+  componentDidMount() {
     // Check and verify local storage for previously created avatar
     let a = JSON.parse(localStorage.getItem("avatar"));
-    if (a != null) {
-      if (isValidComponent(a.bodyNum, sheetInfo.NUM_OF_BODY))
-        this.state.bodyNum = a.bodyNum;
-      else this.state.bodyNum = getRandomInt(0, sheetInfo.NUM_OF_BODY);
-
-      if (isValidComponent(a.eyesNum, sheetInfo.NUM_OF_EYES))
-        this.state.eyesNum = a.eyesNum;
-      else this.state.eyesNum = getRandomInt(0, sheetInfo.NUM_OF_EYES);
-
-      if (isValidComponent(a.hairNum, sheetInfo.NUM_OF_HAIR))
-        this.state.hairNum = a.hairNum;
-      else this.state.hairNum = getRandomInt(0, sheetInfo.NUM_OF_HAIR);
-
-      if (isValidComponent(a.mouthNum, sheetInfo.NUM_OF_MOUTH))
-        this.state.mouthNum = a.mouthNum;
-      else this.state.mouthNum = getRandomInt(0, sheetInfo.NUM_OF_MOUTH);
-
-      if (isValidComponent(a.shirtNum, sheetInfo.NUM_OF_SHIRT))
-        this.state.shirtNum = a.shirtNum;
-      else this.state.shirtNum = getRandomInt(0, sheetInfo.NUM_OF_SHIRT);
-    }
+    if (
+      a != null &&
+      isValidComponent(a.bodyNum, sheetInfo.NUM_OF_BODY) &&
+      isValidComponent(a.eyesNum, sheetInfo.NUM_OF_EYES) &&
+      isValidComponent(a.hairNum, sheetInfo.NUM_OF_HAIR) &&
+      isValidComponent(a.mouthNum, sheetInfo.NUM_OF_MOUTH) &&
+      isValidComponent(a.shirtNum, sheetInfo.NUM_OF_SHIRT)
+    ) {
+      this.setState({
+        bodyNum: a.bodyNum,
+        eyesNum: a.eyesNum,
+        hairNum: a.hairNum,
+        mouthNum: a.mouthNum,
+        shirtNum: a.shirtNum,
+      });
+    } else this.randomize();
   }
   componentDidUpdate() {
     // Update localstorage whenever avatar is updated
@@ -51,7 +41,6 @@ export default class AvatarCustomizer extends React.Component {
         shirtNum: this.state.shirtNum,
       })
     );
-    console.log(localStorage);
   }
   randomize() {
     this.setState({

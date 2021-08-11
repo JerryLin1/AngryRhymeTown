@@ -35,25 +35,25 @@ export default class AvatarDisplay extends React.Component {
         shirtNum: getRandomInt(0, sheetInfo.NUM_OF_SHIRT),
       });
     } else {
-      if (isValidComponent(this.state.bodyNum, sheetInfo.NUM_OF_BODY))
+      if (isValidComponent(this.props.avatar.bodyNum, sheetInfo.NUM_OF_BODY))
         this.state.bodyNum = this.props.avatar.bodyNum;
-      else this.state.bodyNum = getRandomInt(0, sheetInfo.NUM_OF_BODY);
+      else this.state.bodyNum = 0;
 
-      if (isValidComponent(this.state.eyesNum, sheetInfo.NUM_OF_EYES))
+      if (isValidComponent(this.props.avatar.eyesNum, sheetInfo.NUM_OF_EYES))
         this.state.eyesNum = this.props.avatar.eyesNum;
-      else this.state.eyesNum = getRandomInt(0, sheetInfo.NUM_OF_EYES);
+      else this.state.eyesNum = 0;
 
-      if (isValidComponent(this.state.hairNum, sheetInfo.NUM_OF_HAIR))
+      if (isValidComponent(this.props.avatar.hairNum, sheetInfo.NUM_OF_HAIR))
         this.state.hairNum = this.props.avatar.hairNum;
-      else this.state.hairNum = getRandomInt(0, sheetInfo.NUM_OF_HAIR);
+      else this.state.hairNum = 0;
 
-      if (isValidComponent(this.state.mouthNum, sheetInfo.NUM_OF_MOUTH))
+      if (isValidComponent(this.props.avatar.mouthNum, sheetInfo.NUM_OF_MOUTH))
         this.state.mouthNum = this.props.avatar.mouthNum;
-      else this.state.mouthNum = getRandomInt(0, sheetInfo.NUM_OF_MOUTH);
+      else this.state.mouthNum = 0;
 
-      if (isValidComponent(this.state.shirtNum, sheetInfo.NUM_OF_SHIRT))
+      if (isValidComponent(this.props.avatar.shirtNum, sheetInfo.NUM_OF_SHIRT))
         this.state.shirtNum = this.props.avatar.shirtNum;
-      else this.state.shirtNum = getRandomInt(0, sheetInfo.NUM_OF_SHIRT);
+      else this.state.shirtNum = 0;
     }
     this.setState({
       bodyPos: this.getCoords(this.state.bodyNum, sheetInfo.NUM_OF_BODY),
