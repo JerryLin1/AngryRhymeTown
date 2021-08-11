@@ -13,7 +13,7 @@ export default class AvatarCustomizer extends React.Component {
     // Check and verify local storage for previously created avatar
     let a = JSON.parse(localStorage.getItem("avatar"));
     if (
-      a != null &&
+      a !== null &&
       isValidComponent(a.bodyNum, sheetInfo.NUM_OF_BODY) &&
       isValidComponent(a.eyesNum, sheetInfo.NUM_OF_EYES) &&
       isValidComponent(a.hairNum, sheetInfo.NUM_OF_HAIR) &&
