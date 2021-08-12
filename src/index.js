@@ -24,8 +24,8 @@ class Director extends React.Component {
   constructor(props) {
     super(props);
     this.client = new Client({ switchState: this.switchState, match: props.match });
-    let roomId = props.match.match.params.roomId || "";
-    this.client.joinRoom(roomId);
+    // let roomId = props.match.match.params.roomId || "";
+    // this.client.joinRoom(roomId);
   }
 
   render() {
