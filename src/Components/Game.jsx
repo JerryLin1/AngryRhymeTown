@@ -8,7 +8,7 @@ import VotingPhase from "./GamePhases/VotingPhase.jsx";
 import RoundResultsPhase from "./ResultPhases/RoundResultsPhase.jsx";
 import GameResultsPhase from "./ResultPhases/GameResultsPhase.jsx";
 
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Switch, Route,BrowserRouter } from "react-router-dom";
 
 export default class Game extends React.Component {
   constructor(props) {
