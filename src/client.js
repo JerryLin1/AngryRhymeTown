@@ -59,7 +59,7 @@ export default class Client extends React.Component {
 
     }
     redirect = (id) => {
-        this.props.match.history.push(`/${id}`)
+        this.props.match.history.replace(`/${id}`)
     }
 
     sendMessage = (msg) => {
