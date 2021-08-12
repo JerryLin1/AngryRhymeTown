@@ -114,18 +114,19 @@ export default class WritingPhase extends React.Component {
         <Form
           onSubmit={(e) => {
             e.preventDefault();
-            this.setState({ currentLine: this.state.currentLine + 1 }, () => {
-              $(`.${game.writingRow} input`)
-                .eq(i + 1)
-                .focus();
-            });
-            this.setState({ wordsForCurrentBar: this.state.displayWords[i + 1] });
-            this.displayBonuses(i + 1);
 
             sounds.play("button");
             this.sendBarsToServer(i);
             $(".btn-outline-dark:first").attr("class", "btn btn-success");
 
+              this.setState({ currentLine: this.state.currentLine + 1 }, () => {
+                $(`.${game.writingRow} input`)
+                  .eq(i + 1)
+                  .focus();
+              });
+              this.setState({ wordsForCurrentBar: this.state.displayWords[i + 1] });
+              if (i<3) this.displayBonuses(i + 1);
+            
           }}
           className={`${game.writingRow}`}
         >
@@ -205,7 +206,7 @@ export default class WritingPhase extends React.Component {
                   color: "white",
                   backgroundColor: "#52aeff"
                 }}
-              >Your power words for bar #{this.state.currentLine + 1}
+              >{(this.state.currentLine < 4) ? "Your power words for bar #"+(this.state.currentLine + 1) : "Press finished spittin!"}
               </Card.Header>
               <Card.Body style={{ color: "#245497" }}>
                 <h5>{this.state.potentialPoints[this.state.currentLine]}</h5>
