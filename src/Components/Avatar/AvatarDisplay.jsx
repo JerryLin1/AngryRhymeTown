@@ -6,8 +6,7 @@ import sheetInfo from "./SheetInfo.json";
 export default class AvatarDisplay extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-    };
+    this.state = {};
   }
   componentDidUpdate(prevProps) {
     if (prevProps != this.props) this.verifyComponentsInfo();
@@ -15,7 +14,10 @@ export default class AvatarDisplay extends React.Component {
   componentDidMount() {
     this.verifyComponentsInfo();
   }
+
   verifyComponentsInfo() {
+    // console.log("===========props=========")
+    // console.log(this.props)
     if (
       this.props.avatar !== undefined &&
       isValidComponent(this.props.avatar.bodyNum, sheetInfo.NUM_OF_BODY) &&
@@ -24,6 +26,8 @@ export default class AvatarDisplay extends React.Component {
       isValidComponent(this.props.avatar.mouthNum, sheetInfo.NUM_OF_MOUTH) &&
       isValidComponent(this.props.avatar.shirtNum, sheetInfo.NUM_OF_SHIRT)
     ) {
+      // console.log("bodyNum: "+this.props.avatar.bodyNum)
+
       this.state.bodyNum = this.props.avatar.bodyNum;
       this.state.eyesNum = this.props.avatar.eyesNum;
       this.state.hairNum = this.props.avatar.hairNum;
@@ -45,6 +49,8 @@ export default class AvatarDisplay extends React.Component {
       mouthPos: this.getCoords(this.state.mouthNum, sheetInfo.NUM_OF_MOUTH),
       shirtPos: this.getCoords(this.state.shirtNum, sheetInfo.NUM_OF_SHIRT),
     });
+    // console.log("===============state==============")
+    // console.log(this.state)
   }
   render() {
     return (
