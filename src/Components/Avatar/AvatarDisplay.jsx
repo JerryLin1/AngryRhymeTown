@@ -6,18 +6,7 @@ import sheetInfo from "./SheetInfo.json";
 export default class AvatarDisplay extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      bodyNum: 0,
-      eyesNum: 0,
-      hairNum: 0,
-      mouthNum: 0,
-      shirtNum: 0,
-      bodyPos: "0px 0px",
-      eyesPos: "0px 0px",
-      hairPos: "0px 0px",
-      mouthPos: "0px 0px",
-      shirtPos: "0px 0px",
-    };
+    this.state = {};
   }
   componentDidUpdate(prevProps) {
     if (prevProps != this.props) this.verifyComponentsInfo();
@@ -25,35 +14,41 @@ export default class AvatarDisplay extends React.Component {
   componentDidMount() {
     this.verifyComponentsInfo();
   }
+
   verifyComponentsInfo() {
-    if (this.props.avatar === undefined) {
-      this.setState({
-        bodyNum: getRandomInt(0, sheetInfo.NUM_OF_BODY),
-        eyesNum: getRandomInt(0, sheetInfo.NUM_OF_EYES),
-        hairNum: getRandomInt(0, sheetInfo.NUM_OF_HAIR),
-        mouthNum: getRandomInt(0, sheetInfo.NUM_OF_MOUTH),
-        shirtNum: getRandomInt(0, sheetInfo.NUM_OF_SHIRT),
-      });
+    // console.log("===========props=========")
+    // console.log(this.props)
+    if (
+      this.props.avatar !== undefined &&
+      isValidComponent(this.props.avatar.bodyNum, sheetInfo.NUM_OF_BODY) &&
+      isValidComponent(this.props.avatar.eyesNum, sheetInfo.NUM_OF_EYES) &&
+      isValidComponent(this.props.avatar.hairNum, sheetInfo.NUM_OF_HAIR) &&
+      isValidComponent(this.props.avatar.mouthNum, sheetInfo.NUM_OF_MOUTH) &&
+      isValidComponent(this.props.avatar.shirtNum, sheetInfo.NUM_OF_SHIRT)
+    ) {
+      // console.log("bodyNum: "+this.props.avatar.bodyNum)
+
+      this.state.bodyNum = this.props.avatar.bodyNum;
+      this.state.eyesNum = this.props.avatar.eyesNum;
+      this.state.hairNum = this.props.avatar.hairNum;
+      this.state.mouthNum = this.props.avatar.mouthNum;
+      this.state.shirtNum = this.props.avatar.shirtNum;
+
+      // this.setState({
+      //   bodyNum: this.props.avatar.bodyNum,
+      //   eyesNum: this.props.avatar.eyesNum,
+      //   hairNum: this.props.avatar.hairNum,
+      //   mouthNum: this.props.avatar.mouthNum,
+      //   shirtNum: this.props.avatar.shirtNum,
+      // });
     } else {
-      if (isValidComponent(this.props.avatar.bodyNum, sheetInfo.NUM_OF_BODY))
-        this.state.bodyNum = this.props.avatar.bodyNum;
-      else this.state.bodyNum = 0;
-
-      if (isValidComponent(this.props.avatar.eyesNum, sheetInfo.NUM_OF_EYES))
-        this.state.eyesNum = this.props.avatar.eyesNum;
-      else this.state.eyesNum = 0;
-
-      if (isValidComponent(this.props.avatar.hairNum, sheetInfo.NUM_OF_HAIR))
-        this.state.hairNum = this.props.avatar.hairNum;
-      else this.state.hairNum = 0;
-
-      if (isValidComponent(this.props.avatar.mouthNum, sheetInfo.NUM_OF_MOUTH))
-        this.state.mouthNum = this.props.avatar.mouthNum;
-      else this.state.mouthNum = 0;
-
-      if (isValidComponent(this.props.avatar.shirtNum, sheetInfo.NUM_OF_SHIRT))
-        this.state.shirtNum = this.props.avatar.shirtNum;
-      else this.state.shirtNum = 0;
+      this.setState({
+        bodyNum: 0,
+        eyesNum: 0,
+        hairNum: 0,
+        mouthNum: 0,
+        shirtNum: 0,
+      });
     }
     this.setState({
       bodyPos: this.getCoords(this.state.bodyNum, sheetInfo.NUM_OF_BODY),
@@ -62,6 +57,8 @@ export default class AvatarDisplay extends React.Component {
       mouthPos: this.getCoords(this.state.mouthNum, sheetInfo.NUM_OF_MOUTH),
       shirtPos: this.getCoords(this.state.shirtNum, sheetInfo.NUM_OF_SHIRT),
     });
+    // console.log("===============state==============")
+    // console.log(this.state)
   }
   render() {
     return (
@@ -70,7 +67,7 @@ export default class AvatarDisplay extends React.Component {
         style={{
           zoom: this.props.size,
           MozTransform: `scale(${this.props.size})`,
-          MozTransformOrigin: "0 0"
+          MozTransformOrigin: "0 0",
         }}
       >
         <div
