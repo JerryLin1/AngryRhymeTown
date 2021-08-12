@@ -10,6 +10,9 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
+    this.state = {
+      nickNamealert: ""
+    }
   }
 
   render() {
@@ -51,7 +54,7 @@ export default class Home extends React.Component {
           Hi there {"(name)"}!
         </div>
 
-        <Form
+        {/* <Form
           onSubmit={(event) => {
             sounds.play("button");
             event.preventDefault();
@@ -85,47 +88,48 @@ export default class Home extends React.Component {
               });
             } else {
               this.client.setNick(nickname);
-              localStorage.setItem("nickname", nickname);
-              $(`#${home.inputNickname}`).val("");
             }
           }}
-        >
+        > */}
           <Row id={`${home.nicknameRow}`}>
             <Col xs="auto">
               <Form.Control
                 placeholder="Nickname"
                 id={`${home.inputNickname}`}
                 autoComplete="off"
+                maxLength = "12"
+                defaultValue={localStorage.getItem("nickname")||""}
                 onChange={() => {
                   let input = $(`#${home.inputNickname}`);
+                  this.client.setNick(input.val());
                   // if statements to check if nickname is empty or too long
-                  if (
-                    (input.val().length === 13 || input.val().trim() === "") &&
-                    $(`#${home.nameWarning}`).css("display") === "none"
-                  ) {
-                    if (input.val().trim() === "") {
-                      $(`#${home.nameWarning}`).text(
-                        "Nickname cannot be empty"
-                      );
-                      $(`#${home.nameWarning}`).show();
-                    } else {
-                      $(`#${home.nameWarning}`).text(
-                        "Nickname is too long. Your nickname cannot have any more than 12 characters."
-                      );
-                      $(`#${home.nameWarning}`).show();
-                    }
-                  } else if (input.val().length > 12) {
-                    return;
-                  } else if (input.val().trim() === "") {
-                    $(`#${home.nameWarning}`).text("Nickname cannot be empty");
-                    return;
-                  } else {
-                    $(`#${home.nameWarning}`).hide();
-                  }
+                  // if (
+                  //   (input.val().length === 13 || input.val().trim() === "") &&
+                  //   $(`#${home.nameWarning}`).css("display") === "none"
+                  // ) {
+                  //   if (input.val().trim() === "") {
+                  //     $(`#${home.nameWarning}`).text(
+                  //       "Nickname cannot be empty"
+                  //     );
+                  //     $(`#${home.nameWarning}`).show();
+                  //   } else {
+                  //     $(`#${home.nameWarning}`).text(
+                  //       "Nickname is too long. Your nickname cannot have any more than 12 characters."
+                  //     );
+                  //     $(`#${home.nameWarning}`).show();
+                  //   }
+                  // } else if (input.val().length > 12) {
+                  //   return;
+                  // } else if (input.val().trim() === "") {
+                  //   $(`#${home.nameWarning}`).text("Nickname cannot be empty");
+                  //   return;
+                  // } else {
+                  //   $(`#${home.nameWarning}`).hide();
+                  // }
                 }}
               />
             </Col>
-            <Col xs="auto">
+            {/* <Col xs="auto">
               <Button
                 variant="outline-dark"
                 type="submit"
@@ -133,9 +137,9 @@ export default class Home extends React.Component {
               >
                 Set Nickname
               </Button>
-            </Col>
+            </Col> */}
           </Row>
-        </Form>
+        {/* </Form> */}
 
         {/* Flashing name warning */}
         <div id={`${home.nameWarning}`}></div>

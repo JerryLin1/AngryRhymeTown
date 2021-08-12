@@ -65,15 +65,19 @@ export default class Client extends React.Component {
 
     }
 
-    setNick = (name) => {
-        if (name.trim() === "" || name.trim().length <= 12) {
-            if (Object.values(this.room).map(client => client.name).includes(name)) {
-                // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE. Already functional but an alert would be good
-            } else {
-                this.name = name;
-                this.socket.emit("updateNickname", name);
-            }
-        }
+    setNick = (nickname) => {
+        // if (nickname.trim() === "" || nickname.trim().length <= 12) {
+        //     if (Object.values(this.room).map(client => client.name).includes(name)) {
+        //         // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE. Already functional but an alert would be good
+        //     } else {
+        //         this.name = name;
+        //         this.socket.emit("updateNickname", name);
+        //     }
+        //     this.name = nickname;
+        //     localStorage.setItem("nickname", nickname)
+        // }
+        this.name = nickname;
+        localStorage.setItem("nickname", nickname)
     }
 
     sendMessage = (msg) => {
