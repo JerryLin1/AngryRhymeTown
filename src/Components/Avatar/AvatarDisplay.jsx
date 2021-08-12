@@ -33,6 +33,14 @@ export default class AvatarDisplay extends React.Component {
       this.state.hairNum = this.props.avatar.hairNum;
       this.state.mouthNum = this.props.avatar.mouthNum;
       this.state.shirtNum = this.props.avatar.shirtNum;
+
+      // this.setState({
+      //   bodyNum: this.props.avatar.bodyNum,
+      //   eyesNum: this.props.avatar.eyesNum,
+      //   hairNum: this.props.avatar.hairNum,
+      //   mouthNum: this.props.avatar.mouthNum,
+      //   shirtNum: this.props.avatar.shirtNum,
+      // });
     } else {
       this.setState({
         bodyNum: 0,
