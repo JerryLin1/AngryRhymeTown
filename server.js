@@ -103,6 +103,9 @@ io.on('connection', socket => {
             if (info.nickname !== undefined && info.nickname && info.nickname.trim() !== "" && info.nickname.length <= 12) {
                 socket.nickname = info.nickname;
             }
+            else {
+                socket.nickname = info.defaultNickname;
+            }
             rooms[roomId].clients[socket.id] = {};
             rooms[roomId].clients[socket.id].disconnected = false;
             rooms[roomId].clients[socket.id].name = socket.nickname;

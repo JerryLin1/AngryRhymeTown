@@ -65,21 +65,6 @@ export default class Client extends React.Component {
 
     }
 
-    setNick = (nickname) => {
-        // if (nickname.trim() === "" || nickname.trim().length <= 12) {
-        //     if (Object.values(this.room).map(client => client.name).includes(name)) {
-        //         // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE. Already functional but an alert would be good
-        //     } else {
-        //         this.name = name;
-        //         this.socket.emit("updateNickname", name);
-        //     }
-        //     this.name = nickname;
-        //     localStorage.setItem("nickname", nickname)
-        // }
-        this.name = nickname;
-        localStorage.setItem("nickname", nickname)
-    }
-
     sendMessage = (msg) => {
         if (msg != "") {
             this.socket.emit("sendMessage", msg);
@@ -93,8 +78,14 @@ export default class Client extends React.Component {
     joinRoom = (roomId) => {
         let nickname = localStorage.getItem("nickname");
         let avatar = JSON.parse(localStorage.getItem("avatar"));
-        this.socket.emit("joinRoom", { roomId: roomId, nickname: nickname, avatar: avatar });
-    }
+        let defaultNickname = localStorage.getItem("defaultNickname")
+        this.socket.emit("joinRoom", {
+            roomId: roomId,
+            nickname: nickname,
+            avatar: avatar,
+            defaultNickname: defaultNickname,
+        });
+    };
 
     redirect = (id) => {
         window.location.href = id;
