@@ -65,9 +65,8 @@ export default class AvatarDisplay extends React.Component {
       <div
         className={avatarDisplay.avatarContainer}
         style={{
-          zoom: this.props.size,
-          MozTransform: `scale(${this.props.size})`,
-          MozTransformOrigin: "0 0",
+          width: `${sheetInfo.COMPONENT_DIMENSIONS.x * this.props.size}px`,
+          height: `${sheetInfo.COMPONENT_DIMENSIONS.y * this.props.size}px`,
         }}
       >
         <div
@@ -94,14 +93,27 @@ export default class AvatarDisplay extends React.Component {
     );
   }
   getCoords(num, numCom) {
-    let x = -sheetInfo.COMPONENT_DIMENSIONS.x * num;
+    let x = -100 * num;
     let row = 0;
     let y = 0;
-    while (x < -sheetInfo.SHEET_DIMENSIONS.x) {
+    while (
+      x <
+      (-100 * sheetInfo.SHEET_DIMENSIONS.x) / sheetInfo.COMPONENT_DIMENSIONS.x
+    ) {
       row++;
-      y = -sheetInfo.COMPONENT_DIMENSIONS.y * row;
-      x += sheetInfo.COMPONENT_DIMENSIONS.x;
+      y = -100 * row;
+      x += 100;
     }
-    return `${x}px ${y}px`;
+    return `${x}% ${y}%`;
   }
+  //   let x = -sheetInfo.COMPONENT_DIMENSIONS.x * num;
+  //   let row = 0;
+  //   let y = 0;
+  //   while (x < -sheetInfo.SHEET_DIMENSIONS.x) {
+  //     row++;
+  //     y = -sheetInfo.COMPONENT_DIMENSIONS.y * row;
+  //     x += sheetInfo.COMPONENT_DIMENSIONS.x;
+  //   }
+  //   return `${x}px ${y}px`;
+  // }
 }

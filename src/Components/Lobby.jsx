@@ -63,16 +63,24 @@ export default class Lobby extends React.Component {
               {client.isHost === true && (
                 <span style={{ color: "#b59700", float: "right" }}> HOST</span>
               )}
-              <AvatarDisplay
-                avatar={{
-                  bodyNum: client.avatar.bodyNum,
-                  eyesNum: client.avatar.eyesNum,
-                  hairNum: client.avatar.hairNum,
-                  mouthNum: client.avatar.mouthNum,
-                  shirtNum: client.avatar.shirtNum,
+              <div
+                style={{
+                  borderRadius: "0 0 10px 10px",
+                  boxSizing: "border-box",
+                  backgroundColor: "#52aeff",
                 }}
-                size={0.5}
-              />
+              >
+                <AvatarDisplay
+                  avatar={{
+                    bodyNum: client.avatar.bodyNum,
+                    eyesNum: client.avatar.eyesNum,
+                    hairNum: client.avatar.hairNum,
+                    mouthNum: client.avatar.mouthNum,
+                    shirtNum: client.avatar.shirtNum,
+                  }}
+                  size={0.5}
+                />
+              </div>
             </div>
           );
         }),
