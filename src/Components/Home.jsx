@@ -1,16 +1,38 @@
 import React from "react";
 import $ from "jquery";
+import anime from "animejs";
 import home from "./Home.module.css";
 import sounds from "../sounds.js";
 import { Row, Col, Button, Form } from "react-bootstrap";
 import AvatarCustomizer from "./Avatar/AvatarCustomizer";
+import { GenerateName } from "../assets/nameGenerator";
 
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
+
+    let randomName = GenerateName();
+    localStorage.setItem("defaultNickname", randomName);
+    this.state = {
+      defaultNickname: randomName,
+    };
   }
 
+  setNick = (nickname, save = false) => {
+    // if (nickname.trim() === "" || nickname.trim().length <= 12) {
+    //     if (Object.values(this.room).map(client => client.name).includes(name)) {
+    //         // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE. Already functional but an alert would be good
+    //     } else {
+    //         this.name = name;
+    //         this.socket.emit("updateNickname", name);
+    //     }
+    //     this.name = nickname;
+    //     localStorage.setItem("nickname", nickname)
+    // }
+    this.name = nickname;
+    localStorage.setItem("nickname", nickname);
+  };
   render() {
     return (
       <div className={`${home.Home}`}>
@@ -46,10 +68,107 @@ export default class Home extends React.Component {
             </Button>
           </Form.Group>
         </Row>
+        <div style={{ marginTop: "5%", fontSize: "1.5em" }}>
+          Hi there {"(name)"}!
+        </div>
+
+        {/* <Form
+          onSubmit={(event) => {
+            sounds.play("button");
+            event.preventDefault();
+            const nickname = $(`#${home.inputNickname}`).val();
+            // animation that flash red and black when the player tries to submit an invalid name
+            if ($(`#${home.nameWarning}`).css("display") !== "none") {
+              anime({
+                targets: `#${home.nameWarning}`,
+                keyframes: [
+                  { color: "rgb(255,255,255)" },
+                  { color: "rgb(255,0,0)" },
+                  { color: "rgb(255,255,255)" },
+                  { color: "rgb(255,0,0)" },
+                  { color: "rgb(255,255,255)" },
+                ],
+                duration: 750,
+              });
+            } else if (nickname === "") {
+              $(`#${home.nameWarning}`).text("Nickname cannot be empty");
+              $(`#${home.nameWarning}`).show();
+              anime({
+                targets: `#${home.nameWarning}`,
+                keyframes: [
+                  { color: "rgb(255,0,0)" },
+                  { color: "rgb(255,255,255)" },
+                  { color: "rgb(255,0,0)" },
+                  { color: "rgb(255,255,255)" },
+                  { color: "rgb(255,0,0)" },
+                ],
+                duration: 750,
+              });
+            } else {
+              this.client.setNick(nickname);
+            }
+          }}
+        > */}
+        <Row id={`${home.nicknameRow}`}>
+          <Col xs="auto">
+            <Form.Control
+              placeholder={this.state.defaultNickname}
+              id={`${home.inputNickname}`}
+              autoComplete="off"
+              maxLength="12"
+              defaultValue={localStorage.getItem("nickname") || ""}
+              onChange={() => {
+                let input = $(`#${home.inputNickname}`);
+                this.setNick(input.val());
+                // if statements to check if nickname is empty or too long
+                // if (
+                //   (input.val().length === 13 || input.val().trim() === "") &&
+                //   $(`#${home.nameWarning}`).css("display") === "none"
+                // ) {
+                //   if (input.val().trim() === "") {
+                //     $(`#${home.nameWarning}`).text(
+                //       "Nickname cannot be empty"
+                //     );
+                //     $(`#${home.nameWarning}`).show();
+                //   } else {
+                //     $(`#${home.nameWarning}`).text(
+                //       "Nickname is too long. Your nickname cannot have any more than 12 characters."
+                //     );
+                //     $(`#${home.nameWarning}`).show();
+                //   }
+                // } else if (input.val().length > 12) {
+                //   return;
+                // } else if (input.val().trim() === "") {
+                //   $(`#${home.nameWarning}`).text("Nickname cannot be empty");
+                //   return;
+                // } else {
+                //   $(`#${home.nameWarning}`).hide();
+                // }
+              }}
+            />
+          </Col>
+          {/* <Col xs="auto">
+              <Button
+                variant="outline-dark"
+                type="submit"
+                id={`${home.setName}`}
+              >
+                Set Nickname
+              </Button>
+            </Col> */}
+        </Row>
+        {/* </Form> */}
+
+        {/* Flashing name warning */}
+        <div id={`${home.nameWarning}`}></div>
+
+        <div>
+          <AvatarCustomizer />
+        </div>
+
         <div id={home.credits}>
           <Row>
             <Col>
-            <AvatarCustomizer/>
               <h4>Game created by: Tom Han, Jerry Lin, and Roseak Lin</h4>
             </Col>
           </Row>

@@ -100,9 +100,11 @@ io.on('connection', socket => {
         // If room exists, join client to room
         if (roomId in rooms && rooms[roomId].gameState === gameState.LOBBY) {
             socket.join(roomId);
-            //TODO: Check if this is valid name
-            if (info.nickname != undefined) {
+            if (info.nickname !== undefined && info.nickname && info.nickname.trim() !== "" && info.nickname.length <= 12) {
                 socket.nickname = info.nickname;
+            }
+            else {
+                socket.nickname = info.defaultNickname;
             }
             rooms[roomId].clients[socket.id] = {};
             rooms[roomId].clients[socket.id].disconnected = false;
@@ -158,15 +160,16 @@ io.on('connection', socket => {
         }
     })
 
+    // LEGACY CODE: Nickname is now in home screen and cannot be changed in lobby
     // Update's client's nickname and updates client list on client side for all clients
-    socket.on("updateNickname", name => {
-        if (rooms[socket.room].gameState === gameState.LOBBY) {
-            sendToChat(`${socket.nickname} has been renamed to ${name}.`, "SERVER");
-            socket.nickname = name;
-            rooms[socket.room].clients[socket.id].name = socket.nickname;
-            io.to(socket.room).emit("updateClientList", rooms[socket.room].clients);
-        }
-    })
+    // socket.on("updateNickname", name => {
+    //     if (rooms[socket.room].gameState === gameState.LOBBY) {
+    //         sendToChat(`${socket.nickname} has been renamed to ${name}.`, "SERVER");
+    //         socket.nickname = name;
+    //         rooms[socket.room].clients[socket.id].name = socket.nickname;
+    //         io.to(socket.room).emit("updateClientList", rooms[socket.room].clients);
+    //     }
+    // })
 
     // Receives and sends message to all clients in a room
     socket.on("sendMessage", (msg) => {
