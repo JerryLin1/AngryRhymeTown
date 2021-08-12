@@ -61,7 +61,7 @@ export default class Home extends React.Component {
               variant="outline-dark"
               onClick={() => {
                 sounds.play("button");
-                this.client.redirect($(`#${home.inputRoomID}`).val());
+                this.client.redirectURL($(`#${home.inputRoomID}`).val());
               }}
               id={`${home.joinRoom}`}
             >

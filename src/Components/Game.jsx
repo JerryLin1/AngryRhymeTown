@@ -48,7 +48,9 @@ export default class Game extends React.Component {
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////
   render() {
     return (
-    <MemoryRouter></MemoryRouter>
+    <MemoryRouter>
+      
+    </MemoryRouter>
       );
   }
 }

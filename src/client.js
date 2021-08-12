@@ -20,7 +20,7 @@ export default class Client extends React.Component {
         console.log(props)
         // Redirect URL (e.g. when client creates room)
         this.socket.on("redirect", (id) => {
-            this.redirect(id);
+            this.redirectURL(id);
         }); 
 
         // ANCHOR: Game state handlers
@@ -58,10 +58,12 @@ export default class Client extends React.Component {
         })
 
     }
-    redirect = (id) => {
-        this.props.match.history.replace(`/${id}`)
+    redirectURL = (id) => {
+        this.props.match.history.replace(`/${id}`);
     }
-
+    pushURL = (id) => {
+        this.props.match.history.push(`/${id}`);
+    }
     sendMessage = (msg) => {
         if (msg != "") {
             this.socket.emit("sendMessage", msg);
