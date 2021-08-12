@@ -61,12 +61,13 @@ export default class AvatarDisplay extends React.Component {
     // console.log(this.state)
   }
   render() {
+    let size = this.props.size || 1;
     return (
       <div
         className={avatarDisplay.avatarContainer}
         style={{
-          width: `${sheetInfo.COMPONENT_DIMENSIONS.x * this.props.size}px`,
-          height: `${sheetInfo.COMPONENT_DIMENSIONS.y * this.props.size}px`,
+          width: `${sheetInfo.COMPONENT_DIMENSIONS.x * size}px`,
+          height: `${sheetInfo.COMPONENT_DIMENSIONS.y * size}px`,
         }}
       >
         <div
