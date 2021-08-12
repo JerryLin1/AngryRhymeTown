@@ -23,9 +23,27 @@
     margin-left: 0.5em;
 }
 
-#avatarCustomizer {
-    text-align: center;
-    margin: auto;
+/* Nickname and Character Select */
+
+#nicknameRow {
+    justify-content: center;
+    margin-top: 1em;
+}
+
+#inputNickname {
+    display: inline-block;
+    width: 12em;
+}
+
+#setName {
+    display: inline-block;
+    width: 8em;
+}
+
+#nameWarning {
+    display: none;
+    margin-top: 1em;
+    color: rgb(255, 255, 255);
 }
 
 #credits {

@@ -17,7 +17,6 @@ import {
   VolumeMuteFill,
   Arrow90degDown,
 } from "react-bootstrap-icons";
-import anime from "animejs";
 import Client from "../client.js";
 import sounds from "../sounds.js";
 import ConditionalWrapper from "./ConditionalWrapper";
@@ -64,14 +63,16 @@ export default class Lobby extends React.Component {
               {client.isHost === true && (
                 <span style={{ color: "#b59700", float: "right" }}> HOST</span>
               )}
-              <AvatarDisplay avatar={{
-                bodyNum: client.avatar.bodyNum,
-                eyesNum: client.avatar.eyesNum,
-                hairNum: client.avatar.hairNum,
-                mouthNum: client.avatar.mouthNum,
-                shirtNum: client.avatar.shirtNum,
-              }}
-              size={0.5}/>
+              <AvatarDisplay
+                avatar={{
+                  bodyNum: client.avatar.bodyNum,
+                  eyesNum: client.avatar.eyesNum,
+                  hairNum: client.avatar.hairNum,
+                  mouthNum: client.avatar.mouthNum,
+                  shirtNum: client.avatar.shirtNum,
+                }}
+                size={0.5}
+              />
             </div>
           );
         }),
@@ -125,89 +126,8 @@ export default class Lobby extends React.Component {
     return (
       <div className={`${lobby.lobby}`}>
         {/* First row that displays the room code */}
-        <Form
-          onSubmit={(event) => {
-            sounds.play("button");
-            event.preventDefault();
-            const nickname = $(`#${lobby.inputNickname}`).val();
-            // animation that flash red and black when the player tries to submit an invalid name
-            if ($(`#${lobby.nameWarning}`).css("display") !== "none") {
-              anime({
-                targets: `#${lobby.nameWarning}`,
-                keyframes: [
-                  { color: "rgb(255,0,0)" },
-                  { color: "rgb(255,255,255)" },
-                  { color: "rgb(255,0,0)" },
-                  { color: "rgb(255,255,255)" },
-                  { color: "rgb(255,0,0)" },
-                ],
-                duration: 500,
-              });
-            } else if (nickname === "") {
-              $(`#${lobby.nameWarning}`).text("Nickname cannot be empty");
-              $(`#${lobby.nameWarning}`).show();
-              anime({
-                targets: `#${lobby.nameWarning}`,
-                keyframes: [
-                  { color: "rgb(255,0,0)" },
-                  { color: "rgb(255,255,255)" },
-                  { color: "rgb(255,0,0)" },
-                  { color: "rgb(255,255,255)" },
-                  { color: "rgb(255,0,0)" },
-                ],
-                duration: 500,
-              });
-            } else {
-              this.client.setNick(nickname);
-              localStorage.setItem("nickname", nickname);
-              $(`#${lobby.inputNickname}`).val("");
-            }
-          }}
-        >
+        <Form>
           <Row>
-            <Col xs="auto">
-              <Form.Control
-                placeholder="Nickname"
-                id={`${lobby.inputNickname}`}
-                autoComplete="off"
-                onChange={() => {
-                  let input = $(`#${lobby.inputNickname}`);
-                  // if statements to check if nickname is empty or too long
-                  if (
-                    (input.val().length === 13 || input.val().trim() === "") &&
-                    $(`#${lobby.nameWarning}`).css("display") === "none"
-                  ) {
-                    if (input.val().trim() === "") {
-                      $(`#${lobby.nameWarning}`).text(
-                        "Nickname cannot be empty"
-                      );
-                      $(`#${lobby.nameWarning}`).show();
-                    } else {
-                      $(`#${lobby.nameWarning}`).text(
-                        "Nickname is too long. Your nickname cannot have any more than 12 characters."
-                      );
-                      $(`#${lobby.nameWarning}`).show();
-                    }
-                  } else if (input.val().length > 12) {
-                    return;
-                  } else if (input.val().trim() === "") {
-                    $(`#${lobby.nameWarning}`).text("Nickname cannot be empty");
-                    return;
-                  } else {
-                    $(`#${lobby.nameWarning}`).hide();
-                  }
-                }}
-              />
-            </Col>
-            <Col xs="auto">
-              <Button
-                variant="outline-dark"
-                type="submit"
-                id={`${lobby.setName}`}
-              >
-                Set Nickname
-              </Button>
-            </Col>
             <Col>
               <Button
                 variant="success"
@@ -266,11 +186,10 @@ export default class Lobby extends React.Component {
             </Col>
           </Row>
         </Form>
-        <div id={`${lobby.nameWarning}`} style={{ display: "none" }}></div>
 
         {/* ANCHOR: SECOND ROW */}
         {/* Second row that displays the players on the left and the room chat on the right */}
-        
+
         <Row>
           {/* Player list */}
           <Col xs="3">
