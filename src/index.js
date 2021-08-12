@@ -9,43 +9,37 @@ import Client from './client.js';
 import tts from "./tts";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import sounds from "./sounds.js";
-
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 class Director extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { inGame: false };
-    this.switchState = this.switchState.bind(this);
-    this.client = new Client({ switchState: this.switchState }, { test: "test" });
-  }
-
-  switchState = (inGame) => {
-    this.setState({ inGame: inGame });
-  }
-
-  displayState = () => {
-    if (window.location.pathname + window.location.search === "/") {
-      return <Home client={this.client} />;
-    } else {
-      if (this.state.inGame) {
-        return <Game client={this.client} />;
-      } else {
-        return <Lobby client={this.client} switchState={this.switchState} />;
-      }
-    }
+    this.client = new Client({ switchState: this.switchState, match: props.match });
   }
 
   render() {
     return (
       <div className="game_wrapper">
-        {this.displayState()}
+        <Switch>
+          <Route path="/" exact>
+            <Home client={this.client} />
+          </Route>
+          <Route path="/game">
+              <Game client={this.client} />
+            </Route>
+          <Route path="/:roomId" render={(props) => (<Lobby client={this.client} match={props.match} />)}>
+
+          </Route>
+        </Switch>
       </div>
     );
   }
 }
 
 ReactDOM.render(
-  <Director />,
+  <BrowserRouter>
+    <Route render={(props) => (<Director match={props} />)} />
+  </BrowserRouter>,
   document.getElementById("root")
 );
 

@@ -33,7 +33,16 @@ export default class Lobby extends React.Component {
     this.client.socket.on("joinedLobby", () => {
       this.setState({ numPlayers: this.state.numPlayers + 1 });
       console.log(this.state.numPlayers);
-    });
+    })
+
+    let roomId = props.match.params.roomId;
+
+    // At start, attempt to join the room ID from the URL
+    this.roomId = (window.location.pathname + window.location.search).substring(1);
+
+    if (this.roomId.length > 1) {
+        this.client.joinRoom(this.roomId);
+    };
 
     // Update the player list in the client's room
     this.client.socket.on("updateClientList", (clients) => {

@@ -12,6 +12,7 @@ export default class Home extends React.Component {
     super(props);
     this.client = props.client;
 
+    console.log(props)
     let randomName = GenerateName();
     localStorage.setItem("defaultNickname", randomName);
     this.state = {

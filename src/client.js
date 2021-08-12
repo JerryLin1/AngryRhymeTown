@@ -13,21 +13,15 @@ export default class Client extends React.Component {
         this.room = [];
         this.roomSettings = {};
 
-        // At start, attempt to join the room ID from the URL
-        this.roomId = (window.location.pathname + window.location.search).substring(1);
-
-        if (this.roomId.length > 1) {
-            this.joinRoom(this.roomId);
-        }
         // For debug
         this.socket.on("log", (msg) => {
             console.log(msg);
         });
-
+        console.log(props)
         // Redirect URL (e.g. when client creates room)
         this.socket.on("redirect", (id) => {
             this.redirect(id);
-        });
+        }); 
 
         // ANCHOR: Game state handlers
         this.socket.on("startGame", () => {
@@ -64,6 +58,9 @@ export default class Client extends React.Component {
         })
 
     }
+    redirect = (id) => {
+        this.props.match.history.push(`/${id}`)
+    }
 
     sendMessage = (msg) => {
         if (msg != "") {
@@ -87,14 +84,13 @@ export default class Client extends React.Component {
         });
     };
 
-    redirect = (id) => {
-        window.location.href = id;
-    }
-
     // This should be an onClick button only available to the host
     startGame = () => {
         this.socket.emit("startGame");
         // TODO: instead of an empty emit, emit an object that contains all the game options
         // E.g. Writing time, voting time, number of rounds, etc.
+    }
+    render() {
+        return null;
     }
 }
