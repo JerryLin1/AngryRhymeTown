@@ -26,41 +26,50 @@
     align-items: center;
 }
 
-/* Writing Phase */
+/* ANCHOR: Writing Phase */
 
 .writingPhase {
-    margin-bottom: 2em !important;
+    margin: auto;
+    padding: 2em;
+    background-color: #cde8ffd5;
+    border: solid rgba(255, 255, 255, 0.521) 1px;
+    border-radius: 20px;
 }
 
-#promptContainer {
-    margin-left: 1em;
-}
 
 #promptContainer>div {
     margin-bottom: 0.5em;
 }
 
 .writingRow {
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
+    margin-top: 1em;
     text-align: center;
 }
 
+
 .barInputs {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20% !important;
+    margin: auto;
+    font-size: 1.25em !important;
+}
+
+.displayWords {
+    margin: 0 auto 0.5em auto;
+    padding: 0.5em;
+    background-color: #d4e5ff;
+    color: #245497;
+    border-radius: 15px;
+    font-size: 1.25em;
 }
 
 #finishWriting {
-    position: relative;
     font-size: 1.5em;
-    padding: 0 1em 0 1em;
-    height: 150%;
-    overflow: hidden;
+    padding: 0.25em 1em 0.25em 1em;
+    display: block;
+    margin: 2em auto 0.5em auto;
 }
 
-#finishWriting:after {
+/* #finishWriting:after {
     content: "";
     background: #ffffff;
     display: block;
@@ -78,7 +87,7 @@
     width: 0%;
     opacity: 1;
     transition: 0s;
-}
+} */
 
 /* Rapping phase */
 

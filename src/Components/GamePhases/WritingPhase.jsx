@@ -1,7 +1,7 @@
 import React from "react";
 import Countdown from "../Countdown.jsx";
 import $ from "jquery";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import sounds from "../../sounds.js";
 import game from "../Game.module.css";
 import sound from "../../assets/select.mp3";
@@ -16,9 +16,12 @@ export default class WritingPhase extends React.Component {
     this.state = {
       words: [],
       displayWords: [],
-      nextWords: [true, false, false, false, false],
       currentLine: 0,
-      potentialPoints: ["", "", "", ""],
+      wordsForCurrentBar: "",
+      potentialPoints: ["0 bonus points from your word(s)!",
+        "0 bonus points from your word(s)!",
+        "0 bonus points from your word(s)!",
+        "0 bonus points from your word(s)!"],
       opponent: "",
     };
 
@@ -30,39 +33,22 @@ export default class WritingPhase extends React.Component {
         let display = [];
         for (let j = 0; j < newWords[i].length; j++) {
           let word = newWords[i][j];
-          if (j === newWords[i].length - 1) {
-            display.push(
-              <span>
-                {word.substring(0, 1).toUpperCase()}
-                {word.substring(1)}
-              </span>
-            );
-          } else {
-            display.push(
-              <span>
-                {word.substring(0, 1).toUpperCase()}
-                {word.substring(1)} |{" "}
-              </span>
-            );
-          }
+          display.push(
+            <div
+              className={`${game.displayWords}`}>
+              {j + 1}. {word.substring(0, 1).toUpperCase()}
+              {word.substring(1)}
+            </div>
+          );
+
         }
         toDisplayWords.push(display);
       }
       this.setState({ displayWords: toDisplayWords });
+      this.setState({ wordsForCurrentBar: toDisplayWords[0] });
     });
+
   }
-
-  showNextWords = (barIndex) => {
-    let updateNextWords = this.state.nextWords;
-    updateNextWords[barIndex + 1] = true;
-    this.setState({ nextWords: updateNextWords });
-  };
-
-  displayWords = (index) => {
-    if (this.state.nextWords[index]) {
-      return this.state.displayWords[index];
-    }
-  };
 
   sendBarsToServer = (index) => {
     this.socket.emit("sendBars", $(`#barInput_${index}`).val());
@@ -83,44 +69,34 @@ export default class WritingPhase extends React.Component {
         potential += 50;
 
         // highlight the word that they have used in their rap
+        $(`#${game.displayWordsWrapper}`)
+          .find(".card")
+          .find(".card-body")
+          .find("div")
+          .eq(i)
+          .css("border", "solid #e8ff52 3px")
 
-        if (i === this.state.words[index].length - 1) {
-          $(".form-label")
-            .eq(this.state.currentLine)
-            .find("span")
-            .eq(i)
-            .html(
-              `<strong>
-                  ${word.substring(0, 1).toUpperCase()}${word.substring(1)}
-              </strong>`
-            );
-        } else {
-          $(".form-label")
-            .eq(this.state.currentLine)
-            .find("span")
-            .eq(i)
-            .html(
-              `<strong>
-                  ${word.substring(0, 1).toUpperCase()}${word.substring(1)} 
-              </strong> | `
-            );
-        }
+        $(`#${game.displayWordsWrapper}`)
+          .find(".card")
+          .find(".card-body")
+          .find("div")
+          .eq(i)
+          .css("boxShadow", "0 0 10px #f2ff9e")
+
       } else {
-        if (i === this.state.words[index].length - 1) {
-          $(".form-label")
-            .eq(this.state.currentLine)
-            .find("span")
-            .eq(i)
-            .html(`${word.substring(0, 1).toUpperCase()}${word.substring(1)}`);
-        } else {
-          $(".form-label")
-            .eq(this.state.currentLine)
-            .find("span")
-            .eq(i)
-            .html(
-              `${word.substring(0, 1).toUpperCase()}${word.substring(1)} | `
-            );
-        }
+        $(`#${game.displayWordsWrapper}`)
+          .find(".card")
+          .find(".card-body")
+          .find("div")
+          .eq(i)
+          .css("border", "none")
+
+        $(`#${game.displayWordsWrapper}`)
+          .find(".card")
+          .find(".card-body")
+          .find("div")
+          .eq(i)
+          .css("boxShadow", "none")
       }
     }
 
@@ -136,27 +112,28 @@ export default class WritingPhase extends React.Component {
     for (let i = 0; i < 4; i++) {
       arr.push(
         <Form
-          onSubmit={(event) => {
-            sounds.play("button");
-            event.preventDefault();
-            this.showNextWords(i);
-            this.sendBarsToServer(i);
-            $(".btn-outline-dark:first").attr("class", "btn btn-success");
+          onSubmit={(e) => {
+            e.preventDefault();
             this.setState({ currentLine: this.state.currentLine + 1 }, () => {
               $(`.${game.writingRow} input`)
                 .eq(i + 1)
                 .focus();
             });
+            this.setState({ wordsForCurrentBar: this.state.displayWords[i + 1] });
+            this.displayBonuses(i + 1);
+
+            sounds.play("button");
+            this.sendBarsToServer(i);
+            $(".btn-outline-dark:first").attr("class", "btn btn-success");
+
           }}
           className={`${game.writingRow}`}
         >
           <Form.Group as={Row}>
-            <Form.Label column xs="4">
-              {this.displayWords(i)}
-            </Form.Label>
-            <Col xs="4">
+            <Col xs="9">
               <Form.Control
                 className={`${game.barInputs}`}
+                placeholder={"Write bar #" + (i + 1) + " here..."}
                 id={`barInput_${i}`}
                 autoComplete="off"
                 disabled={this.state.currentLine !== i}
@@ -165,16 +142,15 @@ export default class WritingPhase extends React.Component {
                 }}
               />
             </Col>
-            <Col xs="auto">
+            <Col xs="3">
               <Button
                 variant="outline-dark"
                 disabled={this.state.currentLine !== i}
                 type="submit"
               >
-                Submit tha bar
+                Submit the bar
               </Button>
             </Col>
-            <Col xs="4">{this.state.potentialPoints[i]}</Col>
           </Form.Group>
         </Form>
       );
@@ -200,7 +176,7 @@ export default class WritingPhase extends React.Component {
                 marginBottom: "1em",
               }}
             >
-              Your opponent is: {this.state.opponent}
+              Your opponent is: <strong>{this.state.opponent}</strong>
             </div>
           </Col>
         </Row>
@@ -213,24 +189,70 @@ export default class WritingPhase extends React.Component {
           />
         </Row>
 
-        <div id={`${game.promptContainer}`}>{this.generateInputFields()}</div>
+        <Row id={`${game.promptContainer}`}>
+          <Col
+            xs="4"
+            id={`${game.displayWordsWrapper}`}>
 
-        <Row>
-          <Col style={{ textAlign: "center" }}>
-            <Button
-              id={`${game.finishWriting}`}
-              variant="outline-success"
-              // disabled={this.state.currentLine !== 4}
-              onClick={() => {
-                sounds.play("button");
-                $(`#${game.finishWriting}`).attr("class", "btn btn-success");
-                this.finishedSpittin();
-              }}
-            >
-              Finish Spitting
-            </Button>
+            <Card style={{
+              border: "solid rgba(255, 255, 255, 0.521) 1px",
+              backgroundColor: "#96ceff",
+              borderRadius: "20px"
+            }}>
+              <Card.Header
+                style={{
+                  fontSize: "1.5em",
+                  color: "white",
+                  backgroundColor: "#52aeff"
+                }}
+              >Your power words for bar #{this.state.currentLine + 1}
+              </Card.Header>
+              <Card.Body style={{ color: "#245497" }}>
+                <h5>{this.state.potentialPoints[this.state.currentLine]}</h5>
+                {this.state.wordsForCurrentBar}
+              </Card.Body>
+            </Card>
+
           </Col>
+          <Col id={`${game.barInputWrapper}`}>
+            <Card style={{
+              border: "solid rgba(255, 255, 255, 0.521) 1px",
+              backgroundColor: "#96ceff",
+              borderRadius: "20px"
+            }}>
+              <Card.Header
+                style={{
+                  fontSize: "1.5em",
+                  color: "white",
+                  backgroundColor: "#52aeff"
+                }}
+              >Write your bars here
+              </Card.Header>
+              <Card.Body style={{ color: "#245497" }}>
+                {this.generateInputFields()}
+                <Button
+                  id={`${game.finishWriting}`}
+                  variant="outline-success"
+                  // disabled={this.state.currentLine !== 4}
+                  onClick={() => {
+                    sounds.play("button");
+                    $(`#${game.finishWriting}`).attr("class", "btn btn-success");
+                    this.finishedSpittin();
+                  }}
+                >
+                  Finish Spitting
+                </Button>
+              </Card.Body>
+            </Card>
+
+
+          </Col>
+
         </Row>
+
+
+
+
       </div>
     );
   }
