@@ -17,25 +17,35 @@ export default class AvatarDisplay extends React.Component {
 
     // Make sure that gifs start at same time
     let himg = new Image();
-    himg.onload = ()=>{this.onSheetLoaded()};
+    himg.onload = () => {
+      this.onSheetLoaded();
+    };
     himg.src = hairSheet;
     let eimg = new Image();
-    eimg.onload = ()=>{this.onSheetLoaded()};
+    eimg.onload = () => {
+      this.onSheetLoaded();
+    };
     eimg.src = eyesSheet;
     let bimg = new Image();
-    bimg.onload = ()=>{this.onSheetLoaded()};
+    bimg.onload = () => {
+      this.onSheetLoaded();
+    };
     bimg.src = bodySheet;
     let mimg = new Image();
-    mimg.onload = ()=>{this.onSheetLoaded()};
+    mimg.onload = () => {
+      this.onSheetLoaded();
+    };
     mimg.src = mouthSheet;
     let simg = new Image();
-    simg.onload = ()=>{this.onSheetLoaded()};
+    simg.onload = () => {
+      this.onSheetLoaded();
+    };
     simg.src = shirtSheet;
   }
   onSheetLoaded() {
-    this.setState({sheetsLoaded: this.state.sheetsLoaded+1})
+    this.setState({ sheetsLoaded: this.state.sheetsLoaded + 1 });
     // this.state.sheetsLoaded++;
-    console.log(this.state.sheetsLoaded)
+    console.log(this.state.sheetsLoaded);
   }
   componentDidUpdate(prevProps) {
     if (prevProps != this.props) this.verifyComponentsInfo();
@@ -98,44 +108,49 @@ export default class AvatarDisplay extends React.Component {
           width: `${sheetInfo.COMPONENT_DIMENSIONS.x * size}px`,
           height: `${sheetInfo.COMPONENT_DIMENSIONS.y * size}px`,
           transform: this.props.flipped ? "scaleX(-1)" : "scaleX(1)",
-          visibility: this.state.sheetsLoaded >= 5 ? "visible" : "hidden",
         }}
       >
-        <div
-          className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarBody}`}
-          style={{
-            backgroundPosition: this.state.bodyPos,
-            backgroundImage: `url(${bodySheet})`,
-          }}
-        />
-        <div
-          className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarShirt}`}
-          style={{
-            backgroundPosition: this.state.shirtPos,
-            backgroundImage: `url(${shirtSheet})`,
-          }}
-        />
-        <div
-          className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarMouth}`}
-          style={{
-            backgroundPosition: this.state.mouthPos,
-            backgroundImage: `url(${mouthSheet})`,
-          }}
-        />
-        <div
-          className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarEyes}`}
-          style={{
-            backgroundPosition: this.state.eyesPos,
-            backgroundImage: `url(${eyesSheet})`,
-          }}
-        />
-        <div
-          className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarHair}`}
-          style={{
-            backgroundPosition: this.state.hairPos,
-            backgroundImage: `url(${hairSheet})`,
-          }}
-        />
+        {this.state.sheetsLoaded >= 5 ? (
+          <div>
+            <div
+              className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarBody}`}
+              style={{
+                backgroundPosition: this.state.bodyPos,
+                backgroundImage: `url(${bodySheet})`,
+              }}
+            />
+            <div
+              className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarShirt}`}
+              style={{
+                backgroundPosition: this.state.shirtPos,
+                backgroundImage: `url(${shirtSheet})`,
+              }}
+            />
+            <div
+              className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarMouth}`}
+              style={{
+                backgroundPosition: this.state.mouthPos,
+                backgroundImage: `url(${mouthSheet})`,
+              }}
+            />
+            <div
+              className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarEyes}`}
+              style={{
+                backgroundPosition: this.state.eyesPos,
+                backgroundImage: `url(${eyesSheet})`,
+              }}
+            />
+            <div
+              className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarHair}`}
+              style={{
+                backgroundPosition: this.state.hairPos,
+                backgroundImage: `url(${hairSheet})`,
+              }}
+            />
+          </div>
+        ) : (
+          <div>{/* Loading icon here? */}</div>
+        )}
       </div>
     );
   }
