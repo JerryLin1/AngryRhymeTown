@@ -75,6 +75,7 @@ export default class AvatarDisplay extends React.Component {
         style={{
           width: `${sheetInfo.COMPONENT_DIMENSIONS.x * size}px`,
           height: `${sheetInfo.COMPONENT_DIMENSIONS.y * size}px`,
+          transform: this.props.flipped ? "scaleX(-1)" : "scaleX(1)"
         }}
       >
         <div

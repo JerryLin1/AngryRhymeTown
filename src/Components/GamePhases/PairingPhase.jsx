@@ -2,6 +2,8 @@ import React from "react";
 import Countdown from "../Countdown.jsx";
 import { Card, Col, Row } from "react-bootstrap";
 import game from "../Game.module.css";
+import AvatarDisplay from "../Avatar/AvatarDisplay.jsx"
+
 
 export default class PairingPhase extends React.Component {
   constructor(props) {
@@ -10,83 +12,100 @@ export default class PairingPhase extends React.Component {
     this.socket = this.props.client.socket;
     this.roomSettings = this.props.client.roomSettings;
 
-    this.state = {opponent: ""}
+    this.state = { opponent: "", avatarData: undefined, opponentAvatarData: undefined, currentMatchup: [] }
 
     this.state = { matchups: [] };
     this.socket.on("sendPairings", (pairDisplay) => {
       let matchups = [];
       for (let pair of pairDisplay) {
-        // bold the current player's matchup
-        if (
-          (this.client.name === "" &&
-            (pair[0] ===
-              `Player #${this.socket.id.substring(0, 4).toUpperCase()}` ||
-              pair[1] ===
-                `Player #${this.socket.id.substring(0, 4).toUpperCase()}`)) ||
-          this.client.name === pair[0] ||
-          this.client.name === pair[1]
-        ) {
-          matchups.push(
-            <Card.Body>
-              <strong>{`${pair[0]} vs. ${pair[1]}`}</strong>
-            </Card.Body>
-          );
-        } else {
-          matchups.push(<Card.Body>{`${pair[0]} vs. ${pair[1]}`}</Card.Body>);
-        }
+        matchups.push(
+          <div className={`${game.pairWrapper}`}>
+            <div className={`${game.pairName}`}>
+              {pair[0]}
+            </div>
+            <strong>V. S.</strong>
+            <div className={`${game.pairName}`}>
+              {pair[1]}
+            </div>
+          </div>);
       }
       this.setState({ matchups: matchups });
-      this.socket.emit("receiveOpponent", opponent => {
-        this.setState({opponent: opponent.name})
+
+      this.socket.emit("getMatchupInfo", matchup => {
+        this.setState({
+          currentMatchup: [
+            <div className={`${game.pairName} ${game.currentPairName}`}>
+              {matchup.name}
+            </div>,
+            <div className={`${game.pairName} ${game.currentPairName}`}>
+              {matchup.opponent}
+            </div>
+          ]
+        })
+        this.setState({ opponent: matchup.opponent });
+        this.setState({ avatarData: matchup.avatarData });
+        this.setState({ opponentAvatarData: matchup.opponentAvatarData });
       })
     });
 
-    
+
   }
 
   render() {
-    console.log(this.socket.id);
     return (
       <div>
-        <Row>
-          <Col>
-            <Row>
-              <Col id={`${game.countdown}`}>
-                <div className={`${game.header}`}>
-                  <Countdown
-                    time={this.roomSettings.pairingTime / 1000}
-                    before="The game starts in"
-                  />
-                </div>
-              </Col>
-            </Row>
-            <Row id={`${game.opponentCardRow}`}>
-              <Card id={`${game.opponentCard}`} className="text-center">
-                <Card.Title>Your opponent is: {this.state.opponent}!</Card.Title>
-                <Card.Text>Think you can beat them? (in game ofc.)</Card.Text>
-                <Card.Img
-                  id={`${game.opponentCard}`}
-                  src="https://i.redd.it/5andi3picpy61.jpg"
-                  alt="opponent icon"
-                />
-              </Card>
-            </Row>
-          </Col>
+        <div className={`${game.header}`}>
+          <Countdown
+            time={this.roomSettings.pairingTime / 1000}
+            before="The game starts in"
+          />
+        </div>
 
-          {/* Matchup List */}
-          <Col xs="3">
-            <Card
-              id={`${game.matchups}`}
-              variant="dark"
-              style={{ textAlign: "center" }}
-            >
-              <Card.Title>
-                <strong>GET READY FOR YOUR MATCHUP!</strong>
-              </Card.Title>
-              <div>{this.state.matchups}</div>
-            </Card>
-          </Col>
-        </Row>
+        <Card id={`${game.opponentCard}`}>
+          <Card.Header id={`${game.opponentCardHeader}`}>
+            Your opponent is: <strong>{this.state.opponent}</strong>
+          </Card.Header>
+          <Card.Body>
+            {(this.state.avatarData !== undefined && this.state.opponentAvatarData !== undefined) &&
+              <Row className={`${game.avatarMatchupWrapper}`}>
+                <Col className={`${game.matchupAvatar}`}>
+                  <AvatarDisplay
+
+                    avatar={{
+                      bodyNum: this.state.avatarData.bodyNum,
+                      eyesNum: this.state.avatarData.eyesNum,
+                      hairNum: this.state.avatarData.hairNum,
+                      mouthNum: this.state.avatarData.mouthNum,
+                      shirtNum: this.state.avatarData.shirtNum,
+                    }}
+                    size={2}
+                  />
+                  {this.state.currentMatchup[0]}
+                </Col>
+                <Col className={`${game.matchupVersus}`} style={{ fontSize: "4em", alignSelf: "center" }}>
+                  V. S.
+                </Col>
+                <Col className={`${game.matchupAvatar}`}>
+                  <AvatarDisplay
+
+                    avatar={{
+                      bodyNum: this.state.opponentAvatarData.bodyNum,
+                      eyesNum: this.state.opponentAvatarData.eyesNum,
+                      hairNum: this.state.opponentAvatarData.hairNum,
+                      mouthNum: this.state.opponentAvatarData.mouthNum,
+                      shirtNum: this.state.opponentAvatarData.shirtNum,
+                    }}
+                    flipped={true}
+                    size={2}
+                  />
+                  {this.state.currentMatchup[1]}
+                </Col>
+
+              </Row>}
+            {this.state.matchups}
+            {/* <div style={{ fontSize: "1.25em" }}><div className={`${game.pairName}`}>WWWWWWWWWWWW</div><strong>V. S.</strong><div className={`${game.pairName}`}>test</div></div> */}
+          </Card.Body>
+        </Card>
       </div>
     );
   }

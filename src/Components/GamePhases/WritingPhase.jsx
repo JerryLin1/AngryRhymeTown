@@ -195,17 +195,9 @@ export default class WritingPhase extends React.Component {
             xs="4"
             id={`${game.displayWordsWrapper}`}>
 
-            <Card style={{
-              border: "solid rgba(255, 255, 255, 0.521) 1px",
-              backgroundColor: "#96ceff",
-              borderRadius: "20px"
-            }}>
+            <Card className = {`${game.writingPhaseCards}`}>
               <Card.Header
-                style={{
-                  fontSize: "1.5em",
-                  color: "white",
-                  backgroundColor: "#52aeff"
-                }}
+                className = {`${game.writingPhaseHeaders}`}
               >{(this.state.currentLine < 4) ? "Your power words for bar #"+(this.state.currentLine + 1) : "Press finished spittin!"}
               </Card.Header>
               <Card.Body style={{ color: "#245497" }}>
@@ -216,17 +208,9 @@ export default class WritingPhase extends React.Component {
 
           </Col>
           <Col id={`${game.barInputWrapper}`}>
-            <Card style={{
-              border: "solid rgba(255, 255, 255, 0.521) 1px",
-              backgroundColor: "#96ceff",
-              borderRadius: "20px"
-            }}>
+            <Card className = {`${game.writingPhaseCards}`}>
               <Card.Header
-                style={{
-                  fontSize: "1.5em",
-                  color: "white",
-                  backgroundColor: "#52aeff"
-                }}
+                className = {`${game.writingPhaseHeaders}`}
               >Write your bars here
               </Card.Header>
               <Card.Body style={{ color: "#245497" }}>

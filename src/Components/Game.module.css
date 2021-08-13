@@ -5,7 +5,6 @@ html {
 .Countdown {
     font-size: 1.5em;
     text-align: center;
-    margin-bottom: 1em;
 }
 
 .header {
@@ -15,19 +14,65 @@ html {
 
 /* Pairing phase */
 
-#matchups {
-    height: 75vh;
-    margin-right: 0.5em;
+.pairName {
+    background-color: #2498ff;
+    color: white;
+    border-radius: 100px;
+    width: 12.5em;
+    padding: 1em 0 1em 0;
+    display: inline-block;
+    margin: 0 2em 0 2em;
 }
 
-#opponentCardRow {
-    width: 100%;
-    justify-content: center;
+.currentPairName {
+    border: solid white 3px;
+    box-shadow: 0 0 10px #f2ff9e;
+    margin: 0 auto 0 auto;
+    left: 0;
+    right: 0;
+    position: absolute;
+    top: 90%;
+}
+
+.pairWrapper {
+    margin-bottom: 1em;
+    font-size: 1.25em;
+}
+
+#matchups {
+    margin: auto;
+    width: 60%;
+    border: none;
+}
+
+.avatarMatchupWrapper {
+    padding: 2em;
+    margin-bottom: 2em;
+}
+
+.matchupAvatar {
+    border: solid rgba(255, 255, 255, 0.651) 2px;
+    border-radius: 50px;
+    background-color: #2498ff;
+    position: relative !important;
 }
 
 #opponentCard {
-    width: 50%;
-    align-items: center;
+    width: 65%;
+    margin: auto;
+    text-align: center;
+    border: none;
+    border-radius: 20px 20px 5px 5px;
+    padding: 0 !important;
+    background-color: #96ceff;
+}
+
+#opponentCardHeader {
+    font-size: 2em;
+    background-color: #2498ff;
+    color: white;
+    border: solid rgba(255, 255, 255, 0.521) 1px;
+    border-radius: 20px 20px 0px 0px;
 }
 
 /* ANCHOR: Writing Phase */
@@ -40,7 +85,6 @@ html {
     border-radius: 20px;
 }
 
-
 #promptContainer>div {
     margin-bottom: 0.5em;
 }
@@ -50,7 +94,6 @@ html {
     margin-top: 1em;
     text-align: center;
 }
-
 
 .barInputs {
     margin: auto;
@@ -64,6 +107,18 @@ html {
     color: #245497;
     border-radius: 15px;
     font-size: 1.25em;
+}
+
+.writingPhaseCards {
+    border: solid rgba(255, 255, 255, 0.521) 1px;
+    border-radius: 20px;
+    background-color: #96ceff;
+}
+
+.writingPhaseHeaders {
+    font-size: 1.5em;
+    color: white;
+    background-color: #52aeff;
 }
 
 #finishWriting {
