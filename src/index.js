@@ -10,42 +10,53 @@ import tts from "./tts";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import sounds from "./sounds.js";
 
+import PairingPhase from "./Components/GamePhases/PairingPhase.jsx";
+import WritingPhase from "./Components/GamePhases/WritingPhase.jsx";
+import RappingPhase from "./Components/GamePhases/RappingPhase.jsx";
+import VotingPhase from "./Components/GamePhases/VotingPhase.jsx";
+
+import RoundResultsPhase from "./Components/ResultPhases/RoundResultsPhase.jsx";
+import GameResultsPhase from "./Components/ResultPhases/GameResultsPhase.jsx";
+
+import { BrowserRouter, Route, Switch, MemoryRouter } from "react-router-dom";
+import { GenerateName } from "./assets/nameGenerator";
 
 class Director extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { inGame: false };
-    this.switchState = this.switchState.bind(this);
-    this.client = new Client({ switchState: this.switchState }, { test: "test" });
-  }
-
-  switchState = (inGame) => {
-    this.setState({ inGame: inGame });
-  }
-
-  displayState = () => {
-    if (window.location.pathname + window.location.search === "/") {
-      return <Home client={this.client} />;
-    } else {
-      if (this.state.inGame) {
-        return <Game client={this.client} />;
-      } else {
-        return <Lobby client={this.client} switchState={this.switchState} />;
-      }
-    }
+    this.client = new Client({ switchState: this.switchState, match: props.match });
+    localStorage.setItem("defaultNickname", GenerateName());
+    // let roomId = props.match.match.params.roomId || "";
+    // this.client.joinRoom(roomId);
   }
 
   render() {
     return (
       <div className="game_wrapper">
-        {this.displayState()}
+        <Switch>
+          <Route path="/" exact>
+            <Home client={this.client} />
+          </Route>
+          <Route path="/:roomId" exact render={(props) => (<Lobby client={this.client} match={props.match} />)} />
+          {/* <Route path="/:roomId">
+            <Game client={this.client} />
+          </Route> */}
+          <Route path="/:roomId/pairing" render={() => (<PairingPhase client={this.client} />)} />
+          <Route path="/:roomId/writing" render={() => (<WritingPhase client={this.client} />)} />
+          <Route path="/:roomId/rapping" render={() => (<RappingPhase client={this.client} />)} />
+          <Route path="/:roomId/voting" render={() => (<VotingPhase client={this.client} />)} />
+          <Route path="/:roomId/roundresults" render={() => (<RoundResultsPhase client={this.client} />)} />
+          <Route path="/:roomId/gameresults" render={() => (<GameResultsPhase client={this.client} />)} />
+        </Switch>
       </div>
     );
   }
 }
 
 ReactDOM.render(
-  <Director />,
+  <BrowserRouter>
+    <Route render={(props) => (<Director match={props} />)} />
+  </BrowserRouter>,
   document.getElementById("root")
 );
 
