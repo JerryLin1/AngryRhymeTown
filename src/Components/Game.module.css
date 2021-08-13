@@ -112,13 +112,13 @@ html {
 .writingPhaseCards {
     border: solid rgba(255, 255, 255, 0.521) 1px;
     border-radius: 20px;
-    background-color: #96ceff;
+    background-color: #96ceff !important;
 }
 
 .writingPhaseHeaders {
     font-size: 1.5em;
     color: white;
-    background-color: #52aeff;
+    background-color: #52aeff !important;
 }
 
 #finishWriting {

@@ -43,6 +43,10 @@ export default class RappingPhase extends React.Component {
     });
   }
 
+  componentDidMount() {
+    window.speechSynthesis.cancel();
+  }
+
   async readBars() {
     for (let bar of this.state.matchup[0].bars) {
       this.state.barDivs.push(<div>{bar}</div>);
