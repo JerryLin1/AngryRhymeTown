@@ -11,13 +11,6 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
-
-    console.log(props)
-    let randomName = GenerateName();
-    localStorage.setItem("defaultNickname", randomName);
-    this.state = {
-      defaultNickname: randomName,
-    };
   }
 
   setNick = (nickname, save = false) => {
@@ -113,7 +106,7 @@ export default class Home extends React.Component {
         <Row id={`${home.nicknameRow}`}>
           <Col xs="auto">
             <Form.Control
-              placeholder={this.state.defaultNickname}
+              placeholder={localStorage.getItem("defaultNickname")}
               id={`${home.inputNickname}`}
               autoComplete="off"
               maxLength="12"

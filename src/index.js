@@ -19,11 +19,13 @@ import RoundResultsPhase from "./Components/ResultPhases/RoundResultsPhase.jsx";
 import GameResultsPhase from "./Components/ResultPhases/GameResultsPhase.jsx";
 
 import { BrowserRouter, Route, Switch, MemoryRouter } from "react-router-dom";
+import { GenerateName } from "./assets/nameGenerator";
 
 class Director extends React.Component {
   constructor(props) {
     super(props);
     this.client = new Client({ switchState: this.switchState, match: props.match });
+    localStorage.setItem("defaultNickname", GenerateName());
     // let roomId = props.match.match.params.roomId || "";
     // this.client.joinRoom(roomId);
   }
