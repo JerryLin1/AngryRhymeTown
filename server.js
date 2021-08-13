@@ -145,7 +145,7 @@ io.on('connection', socket => {
             }
             // hf.logObj(rooms);
             socket.room = roomId;
-            io.to(socket.room).emit("joinedLobby");
+            io.to(socket.room).emit("joinedLobby", socket.nickname);
             io.to(socket.room).emit("updateClientList", rooms[roomId].clients);
 
             // Update chat history. 
@@ -462,11 +462,15 @@ io.on('connection', socket => {
             .wordBonuses += wordBonuses;
     })
 
-    socket.on("receiveOpponent", callback => {
+    socket.on("getMatchupInfo", callback => {
+        let opponentId = rooms[socket.room]
+        .rounds[rooms[socket.room].currentRound][socket.id]
+        .opponent
         callback({
-            name: rooms[socket.room].clients[rooms[socket.room]
-                .rounds[rooms[socket.room].currentRound][socket.id]
-                .opponent].name
+            name: rooms[socket.room].clients[socket.id].name,
+            opponent: rooms[socket.room].clients[opponentId].name,
+            avatarData: rooms[socket.room].clients[socket.id].avatar,
+            opponentAvatarData: rooms[socket.room].clients[opponentId].avatar
         })
     })
 });

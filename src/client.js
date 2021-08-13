@@ -7,7 +7,7 @@ export default class Client extends React.Component {
     constructor(props) {
         super(props);
         this.socket = io();
-        this.name = "";
+        this.nickname = "";
 
         // this.room is actually clients (rooms[roomId].clients)
         this.room = [];
@@ -28,6 +28,10 @@ export default class Client extends React.Component {
         this.socket.on("redirect", (id) => {
             this.redirect(id);
         });
+
+        this.socket.on("joinedLobby", name => {
+            this.nickname = name;
+        })
 
         // ANCHOR: Game state handlers
         this.socket.on("startGame", () => {
