@@ -1,7 +1,8 @@
 .avatarContainer {
-    margin: auto;
+  margin: auto;
   position: relative;
   box-sizing: border-box;
+  image-rendering: crisp-edges;
 }
 .avatarComponent {
   width: 100%;
