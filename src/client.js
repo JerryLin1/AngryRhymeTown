@@ -9,25 +9,17 @@ export default class Client extends React.Component {
         this.socket = io();
         this.nickname = "";
 
-        // this.room is actually clients (rooms[roomId].clients)
-        this.room = [];
         this.roomSettings = {};
 
-        // At start, attempt to join the room ID from the URL
-        this.roomId = (window.location.pathname + window.location.search).substring(1);
-
-        if (this.roomId.length > 1) {
-            this.joinRoom(this.roomId);
-        }
         // For debug
         this.socket.on("log", (msg) => {
             console.log(msg);
         });
-
+        console.log(props)
         // Redirect URL (e.g. when client creates room)
         this.socket.on("redirect", (id) => {
-            this.redirect(id);
-        });
+            this.pushURL(id);
+        }); 
 
         this.socket.on("joinedLobby", name => {
             this.nickname = name;
@@ -35,32 +27,31 @@ export default class Client extends React.Component {
 
         // ANCHOR: Game state handlers
         this.socket.on("startGame", () => {
-            this.props.switchState(true);
             // TODO: Do some animations
         })
         this.socket.on("startPairPhase", () => {
-            this.switchPhase("Pairing");
+            this.redirectURL(`${this.roomId}/pairing`);
         })
         this.socket.on("startWritePhase", () => {
-            this.switchPhase("Writing");
+            this.redirectURL(`${this.roomId}/writing`)
 
             this.socket.emit("requestWords");
         })
         this.socket.on("startRapPhase", () => {
-            this.switchPhase("Rapping");
+            this.redirectURL(`${this.roomId}/rapping`)
         })
         // Clientside timer should end about the same time as they receive startVotePhase from server
         this.socket.on("startVotePhase", () => {
-            this.switchPhase("Voting");
+            this.redirectURL(`${this.roomId}/voting`)
         })
         this.socket.on("startRoundResultsPhase", () => {
-            this.switchPhase("RoundResults");
+            this.redirectURL(`${this.roomId}/roundresults`)
         })
         this.socket.on("startGameResultsPhase", () => {
-            this.switchPhase("GameResults");
+            this.redirectURL(`${this.roomId}/gameresults`)
         })
         this.socket.on("returnToLobby", () => {
-            // TODO: Return to the lobby
+            this.redirectURL(`${this.roomId}`)
         })
 
         this.socket.on("receiveRoomSettings", roomSettings => {
@@ -68,7 +59,12 @@ export default class Client extends React.Component {
         })
 
     }
-
+    redirectURL = (id) => {
+        this.props.match.history.replace(`/${id}`);
+    }
+    pushURL = (id) => {
+        this.props.match.history.push(`/${id}`);
+    }
     sendMessage = (msg) => {
         if (msg != "") {
             this.socket.emit("sendMessage", msg);
@@ -83,6 +79,7 @@ export default class Client extends React.Component {
         let nickname = localStorage.getItem("nickname");
         let avatar = JSON.parse(localStorage.getItem("avatar"));
         let defaultNickname = localStorage.getItem("defaultNickname")
+        this.roomId = roomId;
         this.socket.emit("joinRoom", {
             roomId: roomId,
             nickname: nickname,
@@ -91,14 +88,13 @@ export default class Client extends React.Component {
         });
     };
 
-    redirect = (id) => {
-        window.location.href = id;
-    }
-
     // This should be an onClick button only available to the host
     startGame = () => {
         this.socket.emit("startGame");
         // TODO: instead of an empty emit, emit an object that contains all the game options
         // E.g. Writing time, voting time, number of rounds, etc.
+    }
+    render() {
+        return null;
     }
 }

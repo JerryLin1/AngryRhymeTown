@@ -8,6 +8,8 @@ import VotingPhase from "./GamePhases/VotingPhase.jsx";
 import RoundResultsPhase from "./ResultPhases/RoundResultsPhase.jsx";
 import GameResultsPhase from "./ResultPhases/GameResultsPhase.jsx";
 
+import { MemoryRouter, Switch, Route,BrowserRouter } from "react-router-dom";
+
 export default class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -45,6 +47,10 @@ export default class Game extends React.Component {
 
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////
   render() {
-    return <div className="game">{this.setPhase()}</div>;
+    return (
+    <MemoryRouter>
+      
+    </MemoryRouter>
+      );
   }
 }

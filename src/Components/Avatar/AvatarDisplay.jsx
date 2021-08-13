@@ -2,12 +2,19 @@ import React from "react";
 import avatarDisplay from "./AvatarDisplay.module.css";
 import { isValidComponent, getRandomInt } from "./avatarFunctions";
 import sheetInfo from "./SheetInfo.json";
+import hairSheet from "../../assets/avatar/hair.gif";
+import eyesSheet from "../../assets/avatar/eye.gif";
+import bodySheet from "../../assets/avatar/body.gif";
+import mouthSheet from "../../assets/avatar/mouth.gif";
+import shirtSheet from "../../assets/avatar/shirt.gif";
 
 export default class AvatarDisplay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    console.log(bodySheet);
   }
+
   componentDidUpdate(prevProps) {
     if (prevProps != this.props) this.verifyComponentsInfo();
   }
@@ -73,23 +80,38 @@ export default class AvatarDisplay extends React.Component {
       >
         <div
           className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarBody}`}
-          style={{ backgroundPosition: this.state.bodyPos }}
+          style={{
+            backgroundPosition: this.state.bodyPos,
+            backgroundImage: `url(${bodySheet})`,
+          }}
         />
         <div
           className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarShirt}`}
-          style={{ backgroundPosition: this.state.shirtPos }}
+          style={{
+            backgroundPosition: this.state.shirtPos,
+            backgroundImage: `url(${shirtSheet})`,
+          }}
         />
         <div
           className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarMouth}`}
-          style={{ backgroundPosition: this.state.mouthPos }}
+          style={{
+            backgroundPosition: this.state.mouthPos,
+            backgroundImage: `url(${mouthSheet})`,
+          }}
         />
         <div
           className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarEyes}`}
-          style={{ backgroundPosition: this.state.eyesPos }}
+          style={{
+            backgroundPosition: this.state.eyesPos,
+            backgroundImage: `url(${eyesSheet})`,
+          }}
         />
         <div
           className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarHair}`}
-          style={{ backgroundPosition: this.state.hairPos }}
+          style={{
+            backgroundPosition: this.state.hairPos,
+            backgroundImage: `url(${hairSheet})`,
+          }}
         />
       </div>
     );

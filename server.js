@@ -156,7 +156,7 @@ io.on('connection', socket => {
         }
         // Else redirect them back to home
         else {
-            socket.emit("redirect", "/");
+            socket.emit("redirect", "");
         }
     })
 
