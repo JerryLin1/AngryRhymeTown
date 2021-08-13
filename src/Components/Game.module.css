@@ -37,9 +37,8 @@ html {
     padding: 2em;
     background-color: #cde8ffd5;
     border: solid rgba(255, 255, 255, 0.521) 1px;
-    border-radius: 20px;
+    border-radius: 1.5em;
 }
-
 
 #promptContainer>div {
     margin-bottom: 0.5em;
@@ -50,7 +49,6 @@ html {
     margin-top: 1em;
     text-align: center;
 }
-
 
 .barInputs {
     margin: auto;
@@ -72,26 +70,6 @@ html {
     display: block;
     margin: 2em auto 0.5em auto;
 }
-
-/* #finishWriting:after {
-    content: "";
-    background: #ffffff;
-    display: block;
-    position: absolute;
-    width: 150%;
-    padding-top: 200%;
-    margin-left: -50%;
-    margin-top: -50%;
-    opacity: 0;
-    transition: all 0.8s;
-    color: rgb(255, 255, 255);
-}
-
-#finishWriting:active::after {
-    width: 0%;
-    opacity: 1;
-    transition: 0s;
-} */
 
 /* Rapping phase */
 
@@ -121,6 +99,13 @@ html {
 
 /* Voting Phase */
 
+.votePhase {
+    padding: 2em;
+    background-color: #cde8ffd5;
+    border: solid rgba(255, 255, 255, 0.521) 1px;
+    border-radius: 1.5em;
+}
+
 .rap {
     font-size: 1.5em;
 }
@@ -138,6 +123,14 @@ html {
 #voteConfirmation {
     text-align: center;
     font-size: 1.25em;
+}
+
+#rapDisplayRow>div>div {
+    padding: 0.5em;
+}
+
+#voteBtnRow button {
+    background-color: #fff;
 }
 
 /* Round results */

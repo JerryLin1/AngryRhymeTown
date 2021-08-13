@@ -2,7 +2,7 @@ import React from "react";
 import $ from "jquery";
 import anime from "animejs";
 import Countdown from "../Countdown.jsx";
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import game from "../Game.module.css";
 
 export default class VotingPhase extends React.Component {
@@ -109,23 +109,27 @@ export default class VotingPhase extends React.Component {
           />
         </Row>
 
-        <Row>
-          <Col xs="5" sm={{ offset: 2 }} style={{ color: color1 }}>
-            <div className={`${game.rapperName}`}>
-              {this.state.matchup[0].nickname}'s bars
-            </div>
-            <div className={`${game.rap}`}>{this.renderBars(0)}</div>
+        <Row id={`${game.rapDisplayRow}`}>
+          <Col xs={{ offset: 2, span: 3 }} style={{ color: color1 }}>
+            <Card>
+              <div className={`${game.rapperName}`}>
+                {this.state.matchup[0].nickname}'s bars
+              </div>
+              <div className={`${game.rap}`}>{this.renderBars(0)}</div>
+            </Card>
           </Col>
 
-          <Col xs="5" style={{ color: color2 }}>
-            <div className={`${game.rapperName}`}>
-              {this.state.matchup[1].nickname}'s bars
-            </div>
-            <div className={`${game.rap}`}>{this.renderBars(1)}</div>
+          <Col xs={{ offset: 2, span: 3 }} style={{ color: color2 }}>
+            <Card>
+              <div className={`${game.rapperName}`}>
+                {this.state.matchup[1].nickname}'s bars
+              </div>
+              <div className={`${game.rap}`}>{this.renderBars(1)}</div>
+            </Card>
           </Col>
         </Row>
         <br />
-        <Row>
+        <Row id={`${game.voteBtnRow}`}>
           <Col xs="3" sm={{ offset: 2 }} id="rap_1">
             <Button
               variant="outline-light"
@@ -140,7 +144,7 @@ export default class VotingPhase extends React.Component {
                   backgroundColor: color1,
                   color: "#fff",
                   scale: 1.1,
-                  duration: 150,
+                  duration: 100,
                 });
               }}
               onMouseOut={() => {
@@ -149,7 +153,7 @@ export default class VotingPhase extends React.Component {
                   backgroundColor: "#fff",
                   color: color1,
                   scale: 1.0,
-                  duration: 150,
+                  duration: 100,
                 });
               }}
               onClick={() => {
@@ -170,7 +174,7 @@ export default class VotingPhase extends React.Component {
                   backgroundColor: color2,
                   color: "#fff",
                   scale: 1.1,
-                  duration: 150,
+                  duration: 100,
                 });
               }}
               onMouseOut={() => {
@@ -179,7 +183,7 @@ export default class VotingPhase extends React.Component {
                   backgroundColor: "#fff",
                   color: color2,
                   scale: 1.0,
-                  duration: 150,
+                  duration: 100,
                 });
               }}
               style={{
