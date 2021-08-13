@@ -11,10 +11,32 @@ import shirtSheet from "../../assets/avatar/shirt.gif";
 export default class AvatarDisplay extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    console.log(bodySheet);
-  }
+    this.state = {
+      sheetsLoaded: 0,
+    };
 
+    // Make sure that gifs start at same time
+    let himg = new Image();
+    himg.onload = ()=>{this.onSheetLoaded()};
+    himg.src = hairSheet;
+    let eimg = new Image();
+    eimg.onload = ()=>{this.onSheetLoaded()};
+    eimg.src = eyesSheet;
+    let bimg = new Image();
+    bimg.onload = ()=>{this.onSheetLoaded()};
+    bimg.src = bodySheet;
+    let mimg = new Image();
+    mimg.onload = ()=>{this.onSheetLoaded()};
+    mimg.src = mouthSheet;
+    let simg = new Image();
+    simg.onload = ()=>{this.onSheetLoaded()};
+    simg.src = shirtSheet;
+  }
+  onSheetLoaded() {
+    this.setState({sheetsLoaded: this.state.sheetsLoaded+1})
+    // this.state.sheetsLoaded++;
+    console.log(this.state.sheetsLoaded)
+  }
   componentDidUpdate(prevProps) {
     if (prevProps != this.props) this.verifyComponentsInfo();
   }
@@ -75,7 +97,8 @@ export default class AvatarDisplay extends React.Component {
         style={{
           width: `${sheetInfo.COMPONENT_DIMENSIONS.x * size}px`,
           height: `${sheetInfo.COMPONENT_DIMENSIONS.y * size}px`,
-          transform: this.props.flipped ? "scaleX(-1)" : "scaleX(1)"
+          transform: this.props.flipped ? "scaleX(-1)" : "scaleX(1)",
+          visibility: this.state.sheetsLoaded >= 5 ? "visible" : "hidden",
         }}
       >
         <div
