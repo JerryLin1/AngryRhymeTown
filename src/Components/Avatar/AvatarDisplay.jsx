@@ -116,27 +116,15 @@ export default class AvatarDisplay extends React.Component {
     );
   }
   getCoords(num, numCom) {
+    let cols = sheetInfo.SHEET_DIMENSIONS.x / sheetInfo.COMPONENT_DIMENSIONS.x;
     let x = -100 * num;
     let row = 0;
     let y = 0;
-    while (
-      x <
-      (-100 * sheetInfo.SHEET_DIMENSIONS.x) / sheetInfo.COMPONENT_DIMENSIONS.x
-    ) {
+    while (x <= -100 * cols) {
       row++;
       y = -100 * row;
-      x += 100;
+      x += 100 * cols;
     }
     return `${x}% ${y}%`;
   }
-  //   let x = -sheetInfo.COMPONENT_DIMENSIONS.x * num;
-  //   let row = 0;
-  //   let y = 0;
-  //   while (x < -sheetInfo.SHEET_DIMENSIONS.x) {
-  //     row++;
-  //     y = -sheetInfo.COMPONENT_DIMENSIONS.y * row;
-  //     x += sheetInfo.COMPONENT_DIMENSIONS.x;
-  //   }
-  //   return `${x}px ${y}px`;
-  // }
 }
