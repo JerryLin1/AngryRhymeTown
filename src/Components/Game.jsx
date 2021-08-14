@@ -8,7 +8,7 @@ import VotingPhase from "./GamePhases/VotingPhase.jsx";
 import RoundResultsPhase from "./ResultPhases/RoundResultsPhase.jsx";
 import GameResultsPhase from "./ResultPhases/GameResultsPhase.jsx";
 
-import { MemoryRouter, Switch, Route,BrowserRouter } from "react-router-dom";
+import { MemoryRouter, Switch, Route, BrowserRouter } from "react-router-dom";
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -27,29 +27,20 @@ export default class Game extends React.Component {
     // if (this.state.phase === "Pairing") {
     //   return <PairingPhase client={this.client} />;
     // } else if (this.state.phase === "Writing") {
-      // return <WritingPhase client={this.client} />;
-    // } else if (this.state.phase === "Rapping") {
-    //   return <RappingPhase client={this.client} />;
-    // } else if (this.state.phase === "Voting") {
-    //   return <VotingPhase client={this.client} />;
-      // return <WritingPhase client={this.client} />;
+    //   return <WritingPhase client={this.client} />;
     // } else if (this.state.phase === "Rapping") {
     //   return <RappingPhase client={this.client} />;
     // } else if (this.state.phase === "Voting") {
       return <VotingPhase client={this.client} />;
-  //   } else if (this.state.phase == "RoundResults") {
-  //     return <RoundResultsPhase client={this.client} />;
-  //   } else if (this.state.phase == "GameResults") {
-  //     return <GameResultsPhase client={this.client} />;
-  //   }
+    // } else if (this.state.phase == "RoundResults") {
+    //   return <RoundResultsPhase client={this.client} />;
+    // } else if (this.state.phase == "GameResults") {
+    //   return <GameResultsPhase client={this.client} />;
+    // }
   };
 
   ////////////////// REMEMBER TO CHANGE INDEX.JS BACK //////////////////
   render() {
-    return (
-    <MemoryRouter>
-      
-    </MemoryRouter>
-      );
+    return <MemoryRouter></MemoryRouter>;
   }
 }

@@ -15,7 +15,7 @@ export default class VotingPhase extends React.Component {
 
     const fontColors = [
       "rgb(0, 119, 255)",
-      "rgb(0, 192, 26)",
+      "rgb(1, 158, 22)",
       "rgb(255, 129, 11)",
       "rgb(228, 0, 209)",
       "rgb(0, 228, 179)",
@@ -40,7 +40,7 @@ export default class VotingPhase extends React.Component {
         },
       ],
       voted: false,
-      color1: fontColors[color1],
+      color1: fontColors[],
       color2: fontColors[color2],
       selected: undefined,
       numVoted: 0,

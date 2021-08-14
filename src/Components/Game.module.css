@@ -108,6 +108,7 @@ html {
 
 .rap {
     font-size: 1.5em;
+    color: rgb(255, 238, 0);
 }
 
 .rapperName {
@@ -126,7 +127,8 @@ html {
 }
 
 #rapDisplayRow>div>div {
-    padding: 0.5em;
+    padding: 1em;
+    background-color: rgb(150, 206, 255);
 }
 
 #voteBtnRow button {
