@@ -50,19 +50,25 @@ export default class AvatarDisplay extends React.Component {
   onSheetLoaded() {
     this.setState({ sheetsLoaded: this.state.sheetsLoaded + 1 });
     // this.state.sheetsLoaded++;
+    if (this.sheetsLoaded>=5) {
+      this.bodyRef.style.backgroundImage = ``;
+      this.shirtRef.style.backgroundImage = ``;
+      this.mouthRef.style.backgroundImage = ``;
+      this.eyesRef.style.backgroundImage = ``;
+      this.hairRef.style.backgroundImage = ``;
+      this.bodyRef.style.backgroundImage = `url(${bodySheet})`;
+      this.shirtRef.style.backgroundImage = `url(${shirtSheet})`;
+      this.mouthRef.style.backgroundImage = `url(${mouthSheet})`;
+      this.eyesRef.style.backgroundImage = `url(${eyesSheet})`;
+      this.hairRef.style.backgroundImage = `url(${hairSheet})`;
+    }
   }
   componentDidUpdate(prevProps) {
     if (prevProps != this.props) this.verifyComponentsInfo();
   }
   componentDidMount() {
     this.verifyComponentsInfo();
-    if (this.sheetsLoaded>=5) {
-      this.bodyRef.style.backgroundImage = `url(${bodySheet}?v=${Math.random()})`;
-      this.shirtRef.style.backgroundImage = `url(${shirtSheet}?v=${Math.random()})`;
-      this.mouthRef.style.backgroundImage = `url(${mouthSheet}?v=${Math.random()})`;
-      this.eyesRef.style.backgroundImage = `url(${eyesSheet}?v=${Math.random()})`;
-      this.hairRef.style.backgroundImage = `url(${hairSheet}?v=${Math.random()})`;
-    }
+    
   }
 
   verifyComponentsInfo() {
