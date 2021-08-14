@@ -7,46 +7,103 @@ import eyesSheet from "../../assets/avatar/eye.gif";
 import bodySheet from "../../assets/avatar/body.gif";
 import mouthSheet from "../../assets/avatar/mouth.gif";
 import shirtSheet from "../../assets/avatar/shirt.gif";
+import Sketch from "react-p5";
 
 export default class AvatarDisplay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sheetsLoaded: 0,
     };
-
-    // Make sure that gifs start at same time
-    let himg = new Image();
-    himg.onload = () => {
-      this.onSheetLoaded();
-    };
-    himg.src = hairSheet;
-    let eimg = new Image();
-    eimg.onload = () => {
-      this.onSheetLoaded();
-    };
-    eimg.src = eyesSheet;
-    let bimg = new Image();
-    bimg.onload = () => {
-      this.onSheetLoaded();
-    };
-    bimg.src = bodySheet;
-    let mimg = new Image();
-    mimg.onload = () => {
-      this.onSheetLoaded();
-    };
-    mimg.src = mouthSheet;
-    let simg = new Image();
-    simg.onload = () => {
-      this.onSheetLoaded();
-    };
-    simg.src = shirtSheet;
   }
-  onSheetLoaded() {
-    this.setState({ sheetsLoaded: this.state.sheetsLoaded + 1 });
-    // this.state.sheetsLoaded++;
-    console.log(this.state.sheetsLoaded);
-  }
+  setup = (p5, canvasParentRef) => {
+    p5.createCanvas(
+      sheetInfo.COMPONENT_DIMENSIONS.x * this.props.size,
+      sheetInfo.COMPONENT_DIMENSIONS.y * this.props.size
+    ).parent(canvasParentRef);
+    if (window.sheets!= undefined || window.sheets != null) {
+      this.bodySheet = window.sheets.bodySheet;
+      this.shirtSheet = window.sheets.shirtSheet;
+      this.mouthSheet = window.sheets.mouthSheet;
+      this.eyesSheet = window.sheets.eyesSheet;
+      this.hairSheet = window.sheets.hairSheet;
+    }
+    window.sheets.bodySheet.reset();
+    window.sheets.shirtSheet.reset();
+    window.sheets.mouthSheet.reset();
+    window.sheets.eyesSheet.reset();
+    window.sheets.hairSheet.reset();
+    
+  };
+  preload = (p5) => {
+    if (window.sheets === undefined || window.sheets === null) {
+      window.sheets = {};
+      window.sheets.bodySheet = p5.loadImage(bodySheet);
+      window.sheets.shirtSheet = p5.loadImage(shirtSheet);
+      window.sheets.mouthSheet = p5.loadImage(mouthSheet);
+      window.sheets.eyesSheet = p5.loadImage(eyesSheet);
+      window.sheets.hairSheet = p5.loadImage(hairSheet);
+    }
+  };
+  draw = (p5) => {
+    let w = sheetInfo.COMPONENT_DIMENSIONS.x;
+    let h = sheetInfo.COMPONENT_DIMENSIONS.y;
+    p5.clear();
+    p5.image(
+      window.sheets.bodySheet,
+      0,
+      0,
+      w * this.props.size,
+      h * this.props.size,
+      this.state.bodyPos.x,
+      this.state.bodyPos.y,
+      w,
+      h
+    );
+    p5.image(
+      window.sheets.shirtSheet,
+      0,
+      0,
+      w * this.props.size,
+      h * this.props.size,
+      this.state.shirtPos.x,
+      this.state.shirtPos.y,
+      w,
+      h
+    );
+    p5.image(
+      window.sheets.mouthSheet,
+      0,
+      0,
+      w * this.props.size,
+      h * this.props.size,
+      this.state.mouthPos.x,
+      this.state.mouthPos.y,
+      w,
+      h
+    );
+    p5.image(
+      window.sheets.eyesSheet,
+      0,
+      0,
+      w * this.props.size,
+      h * this.props.size,
+      this.state.eyesPos.x,
+      this.state.eyesPos.y,
+      w,
+      h
+    );
+    p5.image(
+      window.sheets.hairSheet,
+      0,
+      0,
+      w * this.props.size,
+      h * this.props.size,
+      this.state.hairPos.x,
+      this.state.hairPos.y,
+      w,
+      h
+    );
+  };
   componentDidUpdate(prevProps) {
     if (prevProps != this.props) this.verifyComponentsInfo();
   }
@@ -100,70 +157,32 @@ export default class AvatarDisplay extends React.Component {
     // console.log(this.state)
   }
   render() {
-    let size = this.props.size || 1;
     return (
       <div
         className={avatarDisplay.avatarContainer}
         style={{
-          width: `${sheetInfo.COMPONENT_DIMENSIONS.x * size}px`,
-          height: `${sheetInfo.COMPONENT_DIMENSIONS.y * size}px`,
+          width: `${sheetInfo.COMPONENT_DIMENSIONS.x * this.props.size}px`,
+          height: `${sheetInfo.COMPONENT_DIMENSIONS.y * this.props.size}px`,
           transform: this.props.flipped ? "scaleX(-1)" : "scaleX(1)",
         }}
       >
-        {this.state.sheetsLoaded >= 5 ? (
-          <div>
-            <div
-              className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarBody}`}
-              style={{
-                backgroundPosition: this.state.bodyPos,
-                backgroundImage: `url(${bodySheet})`,
-              }}
-            />
-            <div
-              className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarShirt}`}
-              style={{
-                backgroundPosition: this.state.shirtPos,
-                backgroundImage: `url(${shirtSheet})`,
-              }}
-            />
-            <div
-              className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarMouth}`}
-              style={{
-                backgroundPosition: this.state.mouthPos,
-                backgroundImage: `url(${mouthSheet})`,
-              }}
-            />
-            <div
-              className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarEyes}`}
-              style={{
-                backgroundPosition: this.state.eyesPos,
-                backgroundImage: `url(${eyesSheet})`,
-              }}
-            />
-            <div
-              className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarHair}`}
-              style={{
-                backgroundPosition: this.state.hairPos,
-                backgroundImage: `url(${hairSheet})`,
-              }}
-            />
-          </div>
-        ) : (
-          <div>{/* Loading icon here? */}</div>
-        )}
+        <Sketch setup={this.setup} draw={this.draw} preload={this.preload} />
       </div>
     );
   }
   getCoords(num, numCom) {
     let cols = sheetInfo.SHEET_DIMENSIONS.x / sheetInfo.COMPONENT_DIMENSIONS.x;
-    let x = -100 * num;
+    let x = sheetInfo.COMPONENT_DIMENSIONS.x * num;
     let row = 0;
     let y = 0;
-    while (x <= -100 * cols) {
+    while (x >= sheetInfo.SHEET_DIMENSIONS.x) {
       row++;
-      y = -100 * row;
-      x += 100 * cols;
+      y = sheetInfo.COMPONENT_DIMENSIONS.y * row;
+      x -= sheetInfo.SHEET_DIMENSIONS.x;
     }
-    return `${x}% ${y}%`;
+    return { x: x, y: y };
   }
 }
+AvatarDisplay.defaultProps = {
+  size: 1,
+};
