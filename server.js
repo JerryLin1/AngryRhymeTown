@@ -145,7 +145,7 @@ io.on('connection', socket => {
             }
             // hf.logObj(rooms);
             socket.room = roomId;
-            io.to(socket.room).emit("joinedLobby");
+            io.to(socket.room).emit("joinedLobby", socket.nickname);
             io.to(socket.room).emit("updateClientList", rooms[roomId].clients);
 
             // Update chat history. 
@@ -250,7 +250,7 @@ io.on('connection', socket => {
         io.to(socket.room).emit("startWritePhase");
         setGameState(socket.room, gameState.WRITING);
         let t = rooms[socket.room].settings.writingTime;
-        rooms[socket.room].nextPhase = setTimeout(() => { startVotePhase() }, t);
+        rooms[socket.room].nextPhase = setTimeout(() => { startRapPhase() }, t);
     };
 
     socket.on("finishedSpittin", () => {
@@ -259,25 +259,25 @@ io.on('connection', socket => {
         if (rooms[socket.room].finishedSpittin === numberOfClientsInRoom(socket.room) - rooms[socket.room].disconnected) {
 
             rooms[socket.room].finishedSpittin = 0;
-            startVotePhase();
+            startRapPhase();
         }
     })
 
     function startRapPhase() {
-        // if (rooms[socket.room].nextPhase !== null) clearTimeout(rooms[socket.room].nextPhase);
-        // io.to(socket.room).emit("startRapPhase");
-        // setGameState(socket.room, gameState.RAPPING);
-        // startBattle();
+        if (rooms[socket.room].nextPhase !== null) clearTimeout(rooms[socket.room].nextPhase);
+        io.to(socket.room).emit("startRapPhase");
+        setGameState(socket.room, gameState.RAPPING);
+        startBattle();
     }
 
     socket.on("finishedListenin", () => {
         // Goes to next phase if tts on host machine is done
-        // rooms[socket.room].finishedListenin += 1;
-        // if (rooms[socket.room].finishedListenin === numberOfClientsInRoom(socket.room)) {
-        //     clearTimeout(rooms[socket.room].nextPhase);
-        //     rooms[socket.room].finishedListenin = 0;
-        //     startVotePhase();
-        // }
+        rooms[socket.room].finishedListenin += 1;
+        if (rooms[socket.room].finishedListenin === numberOfClientsInRoom(socket.room)) {
+            clearTimeout(rooms[socket.room].nextPhase);
+            rooms[socket.room].finishedListenin = 0;
+            startVotePhase();
+        }
     })
 
     function startVotePhase() {
@@ -289,7 +289,7 @@ io.on('connection', socket => {
 
     function startBattle() {
         let t = rooms[socket.room].settings.votingTime;
-        if (rooms[socket.room].gameState == gameState.VOTING) {
+        if (rooms[socket.room].gameState === gameState.VOTING) {
             rooms[socket.room].nextPhase = setTimeout(() => { startNext() }, t)
         }
         const battles = Object.keys(rooms[socket.room].pairings);
@@ -321,7 +321,7 @@ io.on('connection', socket => {
 
         // Go to next battle and check if all battles in the round are over
         // If so, go to next round 
-        if (rooms[socket.room].gameState == gameState.VOTING) {
+        if (rooms[socket.room].gameState === gameState.VOTING) {
             rooms[socket.room].battle += 1;
             io.to(socket.room).emit("receiveBattleVoting", matchup);
         } else {
@@ -462,11 +462,15 @@ io.on('connection', socket => {
             .wordBonuses += wordBonuses;
     })
 
-    socket.on("receiveOpponent", callback => {
+    socket.on("getMatchupInfo", callback => {
+        let opponentId = rooms[socket.room]
+        .rounds[rooms[socket.room].currentRound][socket.id]
+        .opponent
         callback({
-            name: rooms[socket.room].clients[rooms[socket.room]
-                .rounds[rooms[socket.room].currentRound][socket.id]
-                .opponent].name
+            name: rooms[socket.room].clients[socket.id].name,
+            opponent: rooms[socket.room].clients[opponentId].name,
+            avatarData: rooms[socket.room].clients[socket.id].avatar,
+            opponentAvatarData: rooms[socket.room].clients[opponentId].avatar
         })
     })
 });

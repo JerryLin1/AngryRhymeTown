@@ -40,7 +40,7 @@ export default class VotingPhase extends React.Component {
         },
       ],
       voted: false,
-      color1: fontColors[],
+      color1: fontColors[3],
       color2: fontColors[color2],
       selected: undefined,
       numVoted: 0,
