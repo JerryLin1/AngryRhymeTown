@@ -41,17 +41,28 @@ export default class AvatarDisplay extends React.Component {
       this.onSheetLoaded();
     };
     simg.src = shirtSheet;
+    this.bodyRef = React.createRef();
+    this.shirtRef = React.createRef();
+    this.mouthRef = React.createRef();
+    this.eyesRef = React.createRef();
+    this.hairRef = React.createRef();
   }
   onSheetLoaded() {
     this.setState({ sheetsLoaded: this.state.sheetsLoaded + 1 });
     // this.state.sheetsLoaded++;
-    console.log(this.state.sheetsLoaded);
   }
   componentDidUpdate(prevProps) {
     if (prevProps != this.props) this.verifyComponentsInfo();
   }
   componentDidMount() {
     this.verifyComponentsInfo();
+    if (this.sheetsLoaded>=5) {
+      this.bodyRef.style.backgroundImage = `url(${bodySheet}?v=${Math.random()})`;
+      this.shirtRef.style.backgroundImage = `url(${shirtSheet}?v=${Math.random()})`;
+      this.mouthRef.style.backgroundImage = `url(${mouthSheet}?v=${Math.random()})`;
+      this.eyesRef.style.backgroundImage = `url(${eyesSheet}?v=${Math.random()})`;
+      this.hairRef.style.backgroundImage = `url(${hairSheet}?v=${Math.random()})`;
+    }
   }
 
   verifyComponentsInfo() {
@@ -114,6 +125,7 @@ export default class AvatarDisplay extends React.Component {
           <div>
             <div
               className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarBody}`}
+              ref={this.bodyRef}
               style={{
                 backgroundPosition: this.state.bodyPos,
                 backgroundImage: `url(${bodySheet})`,
@@ -121,6 +133,7 @@ export default class AvatarDisplay extends React.Component {
             />
             <div
               className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarShirt}`}
+              ref = {this.shirtRef}
               style={{
                 backgroundPosition: this.state.shirtPos,
                 backgroundImage: `url(${shirtSheet})`,
@@ -128,6 +141,7 @@ export default class AvatarDisplay extends React.Component {
             />
             <div
               className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarMouth}`}
+              ref={this.mouthRef}
               style={{
                 backgroundPosition: this.state.mouthPos,
                 backgroundImage: `url(${mouthSheet})`,
@@ -135,6 +149,7 @@ export default class AvatarDisplay extends React.Component {
             />
             <div
               className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarEyes}`}
+              ref={this.eyesRef}
               style={{
                 backgroundPosition: this.state.eyesPos,
                 backgroundImage: `url(${eyesSheet})`,
@@ -142,6 +157,7 @@ export default class AvatarDisplay extends React.Component {
             />
             <div
               className={`${avatarDisplay.avatarComponent} ${avatarDisplay.avatarHair}`}
+              ref={this.hairRef}
               style={{
                 backgroundPosition: this.state.hairPos,
                 backgroundImage: `url(${hairSheet})`,
