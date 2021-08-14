@@ -29,8 +29,8 @@ export default {
         return new Promise(resolve => {
             window.responsiveVoice.speak(string, "UK English Male", {volume: v, onend: resolve})
         })
+    },
+    timeout(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
-    // timeout(ms) {
-    //     return new Promise(resolve => setTimeout(resolve, ms));
-    // }
 }
