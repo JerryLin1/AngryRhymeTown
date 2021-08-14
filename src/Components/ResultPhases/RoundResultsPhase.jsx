@@ -22,32 +22,6 @@ export default class RoundResultsPhase extends React.Component {
       round: "",
     };
 
-    this.componentDidMount = () => {
-      let otherRappers = [];
-      for (let i = 0; i < 3; i++) {
-        otherRappers.push(
-          <Row>
-            <Col xs="8">
-              {i + 1}. {i}
-              {i == 0 ? <Award style={{ color: "#d4af37" }} /> : ""}
-              {i == 1 ? <Award style={{ color: "#C0C0C0" }} /> : ""}
-              {i == 2 ? <Award style={{ color: "#cd7f32" }} /> : ""}
-            </Col>
-
-            {/* TODO: Is 0.5em too small? */}
-            <Col xs="4">
-              <span>3 points </span>
-              <span style={{ fontSize: "0.5em" }}>
-                (No points from word bonuses)
-              </span>
-            </Col>
-          </Row>
-        );
-      }
-
-      this.setState({ otherRappers: otherRappers });
-    };
-
     this.socket.on("sendRoundResults", (results, round) => {
       this.setState({ results: results });
       this.setState({ round: round });

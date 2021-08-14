@@ -26,7 +26,6 @@ html {
 
 .currentPairName {
     border: solid white 3px;
-    box-shadow: 0 0 10px #f2ff9e;
     margin: 0 auto 0 auto;
     left: 0;
     right: 0;
@@ -165,7 +164,6 @@ html {
 
 .rap {
     font-size: 1.5em;
-    color: rgb(255, 238, 0);
 }
 
 .rapperName {
@@ -181,6 +179,10 @@ html {
 #voteConfirmation {
     text-align: center;
     font-size: 1.25em;
+}
+
+#rapDisplayRow {
+    margin-top: 1em;
 }
 
 #rapDisplayRow>div>div {
@@ -202,8 +204,10 @@ html {
 }
 
 #rapperList>div {
-    margin: 0.5em 0 0.5em 0;
+    margin: 0.5em 0;
+    border-radius: 0.25em;
     border: 1px solid #ccc;
+    background-color: #fff;
     transition: 0.3s;
 }
 

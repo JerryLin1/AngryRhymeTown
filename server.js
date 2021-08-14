@@ -145,7 +145,7 @@ io.on('connection', socket => {
             }
             // hf.logObj(rooms);
             socket.room = roomId;
-            io.to(socket.room).emit("joinedLobby", socket.nickname);
+            io.to(socket.id).emit("joinedLobby", socket.nickname);
             io.to(socket.room).emit("updateClientList", rooms[roomId].clients);
 
             // Update chat history. 

@@ -1,6 +1,5 @@
 import React from "react";
 import io from "socket.io-client";
-import $ from "jquery";
 
 export default class Client extends React.Component {
 
@@ -19,7 +18,7 @@ export default class Client extends React.Component {
         // Redirect URL (e.g. when client creates room)
         this.socket.on("redirect", (id) => {
             this.pushURL(id);
-        }); 
+        });
 
         this.socket.on("joinedLobby", name => {
             this.nickname = name;
@@ -94,6 +93,7 @@ export default class Client extends React.Component {
         // TODO: instead of an empty emit, emit an object that contains all the game options
         // E.g. Writing time, voting time, number of rounds, etc.
     }
+
     render() {
         return null;
     }

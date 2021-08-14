@@ -22,7 +22,7 @@ export default class GameResultsPhase extends React.Component {
       let otherRappers = [];
       for (let i = 3; i < results.length; i++) {
         otherRappers.push(
-          <Row>
+          <Row style={{ backgroundColor: i > 2 ? "#96ceff" : "#fff" }}>
             <Col xs="8">{i + 1}. {results[i].name}</Col>
             <Col>{results[i].score}</Col>
           </Row>

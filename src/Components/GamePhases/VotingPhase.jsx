@@ -16,16 +16,14 @@ export default class VotingPhase extends React.Component {
     const fontColors = [
       "rgb(0, 119, 255)",
       "rgb(1, 158, 22)",
-      "rgb(255, 129, 11)",
-      "rgb(228, 0, 209)",
-      "rgb(0, 228, 179)",
+      "rgb(223, 15, 0)",
     ];
     // this portion generates 2 colors that are guarenteed to be different from each other
-    let color1 = Math.floor(Math.random() * 5),
-      color2 = Math.floor(Math.random() * 5);
+    let color1 = Math.floor(Math.random() * 3),
+      color2 = Math.floor(Math.random() * 3);
 
     while (color1 === color2) {
-      color2 = Math.floor(Math.random() * 5);
+      color2 = Math.floor(Math.random() * 3);
     }
 
     this.state = {
@@ -40,7 +38,7 @@ export default class VotingPhase extends React.Component {
         },
       ],
       voted: false,
-      color1: fontColors[3],
+      color1: fontColors[color1],
       color2: fontColors[color2],
       selected: undefined,
       numVoted: 0,
@@ -75,6 +73,12 @@ export default class VotingPhase extends React.Component {
 
   displayVoteConfirmation = () => {
     if (this.state.selected !== undefined) {
+      $(
+        `#${game.rapDisplayRow}>div:nth-child(${Math.max(
+          this.state.selected + 1 ^ 3,
+          1
+        )})`
+      ).css("filter", "saturate(0.25)");
       return (
         <div
           id={`${game.voteConfirmation}`}
@@ -144,7 +148,7 @@ export default class VotingPhase extends React.Component {
                   backgroundColor: color1,
                   color: "#fff",
                   scale: 1.1,
-                  duration: 100,
+                  duration: 200,
                 });
               }}
               onMouseOut={() => {
@@ -153,7 +157,7 @@ export default class VotingPhase extends React.Component {
                   backgroundColor: "#fff",
                   color: color1,
                   scale: 1.0,
-                  duration: 100,
+                  duration: 200,
                 });
               }}
               onClick={() => {
@@ -174,7 +178,7 @@ export default class VotingPhase extends React.Component {
                   backgroundColor: color2,
                   color: "#fff",
                   scale: 1.1,
-                  duration: 100,
+                  duration: 200,
                 });
               }}
               onMouseOut={() => {
@@ -183,7 +187,7 @@ export default class VotingPhase extends React.Component {
                   backgroundColor: "#fff",
                   color: color2,
                   scale: 1.0,
-                  duration: 100,
+                  duration: 200,
                 });
               }}
               style={{
