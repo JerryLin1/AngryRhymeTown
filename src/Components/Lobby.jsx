@@ -28,17 +28,15 @@ export default class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
-    this.state = { numPlayers: 0, lobbyList: [], chat: [], muted: true };
+    this.state = { numPlayers: 0, lobbyList: [], chat: [], muted: true};
 
     this.client.socket.on("joinedLobby", (name) => {
       this.setState({ numPlayers: this.state.numPlayers + 1 });
       console.log(this.state.numPlayers);
     });
 
-    let roomId = props.match.params.roomId;
-
-    if (roomId.length > 1) {
-      this.client.joinRoom(roomId);
+    if (props.match.params.roomId.length > 1) {
+      this.client.joinRoom(props.match.params.roomId);
     }
 
     // Update the player list in the client's room
@@ -178,7 +176,7 @@ export default class Lobby extends React.Component {
                 </Form.Label>
                 <Form.Control
                   id={`${lobby.roomCode}`}
-                  value={window.location.href}
+                  value={`${window.location.host}/${this.props.match.params.roomId}`}
                   readOnly
                   plaintext
                 />
@@ -312,13 +310,13 @@ const MusicHint = () => {
       className={`${lobby.musicHint}`}
       style={{ textShadow: "0 0 2px #000" }}
     >
-      Click to hear
+      {/* Click to hear
       <br />
       some bussin beats!{" "}
       <Arrow90degDown
         id={`${lobby.hintArrow}`}
         style={{ fontSize: "0.75em" }}
-      />{" "}
+      />{" "} */}
     </div>
   );
 };

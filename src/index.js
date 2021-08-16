@@ -40,13 +40,8 @@ class Director extends React.Component {
           atActive={{ opacity: 1 }}
           className="game_wrapper"
         >
-          <Route path="/" exact>
-            <Home client={this.client} />
-          </Route>
-          <Route path="/:roomId" exact render={(props) => (<Lobby client={this.client} match={props.match} />)} />
-          {/* <Route path="/:roomId">
-            <Game client={this.client} />
-          </Route> */}
+          <Route path="/:roomId?" exact render={(props) => (<Home client={this.client} match={props.match} />)} />
+          <Route path="/:roomId/lobby" exact render={(props) => (<Lobby client={this.client} match={props.match} />)} />
           <Route path="/:roomId/pairing" render={() => (<PairingPhase client={this.client} />)} />
           <Route path="/:roomId/writing" render={() => (<WritingPhase client={this.client} />)} />
           <Route path="/:roomId/rapping" render={() => (<RappingPhase client={this.client} />)} />
@@ -60,9 +55,9 @@ class Director extends React.Component {
 }
 
 ReactDOM.render(
-  <BrowserRouter>
+  <MemoryRouter>
     <Route render={(props) => (<Director match={props} />)} />
-  </BrowserRouter>,
+  </MemoryRouter>,
   document.getElementById("root")
 );
 
