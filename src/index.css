@@ -6,7 +6,6 @@
 html {
     padding: 1em;
     height: 100%;
-
     background: hsla(217, 100%, 50%, 1) fixed;
     background: linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(190, 91%, 50%, 1) 100%) fixed;
     background: -moz-linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(190, 91%, 50%, 1) 100%) fixed;
@@ -14,21 +13,14 @@ html {
     filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#0061FF", endColorstr="#0BDCF3", GradientType=1);
 }
 
-/* .game_wrapper {
+.game_wrapper>div {
     padding: 1em;
-    position:absolute;
-    top:0;
-    left:0;
-    bottom:0;
-    right:0;
-    height:100%;
-    width:100%;
-    background: hsla(217, 100%, 50%, 1);
-    background: linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(190, 91%, 50%, 1) 100%);
-    background: -moz-linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(190, 91%, 50%, 1) 100%);
-    background: -webkit-linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(190, 91%, 50%, 1) 100%);
-    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#0061FF", endColorstr="#0BDCF3", GradientType=1);
-} */
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
 
 body {
     background-color: transparent !important;

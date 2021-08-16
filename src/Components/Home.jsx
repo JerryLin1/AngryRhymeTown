@@ -63,109 +63,33 @@ export default class Home extends React.Component {
           </Form.Group>
         </Row>
         <div style={{ marginTop: "5%", fontSize: "1.5em" }}>
-          Hi there {"(name)"}!
+          Choose your nickname!
         </div>
 
-        {/* <Form
-          onSubmit={(event) => {
-            sounds.play("button");
-            event.preventDefault();
-            const nickname = $(`#${home.inputNickname}`).val();
-            // animation that flash red and black when the player tries to submit an invalid name
-            if ($(`#${home.nameWarning}`).css("display") !== "none") {
-              anime({
-                targets: `#${home.nameWarning}`,
-                keyframes: [
-                  { color: "rgb(255,255,255)" },
-                  { color: "rgb(255,0,0)" },
-                  { color: "rgb(255,255,255)" },
-                  { color: "rgb(255,0,0)" },
-                  { color: "rgb(255,255,255)" },
-                ],
-                duration: 750,
-              });
-            } else if (nickname === "") {
-              $(`#${home.nameWarning}`).text("Nickname cannot be empty");
-              $(`#${home.nameWarning}`).show();
-              anime({
-                targets: `#${home.nameWarning}`,
-                keyframes: [
-                  { color: "rgb(255,0,0)" },
-                  { color: "rgb(255,255,255)" },
-                  { color: "rgb(255,0,0)" },
-                  { color: "rgb(255,255,255)" },
-                  { color: "rgb(255,0,0)" },
-                ],
-                duration: 750,
-              });
-            } else {
-              this.client.setNick(nickname);
-            }
-          }}
-        > */}
-        <Row id={`${home.nicknameRow}`}>
-          <Col xs="auto">
-            <Form.Control
-              placeholder={localStorage.getItem("defaultNickname")}
-              id={`${home.inputNickname}`}
-              autoComplete="off"
-              maxLength="12"
-              defaultValue={localStorage.getItem("nickname") || ""}
-              onChange={() => {
-                let input = $(`#${home.inputNickname}`);
-                this.setNick(input.val());
-                // if statements to check if nickname is empty or too long
-                // if (
-                //   (input.val().length === 13 || input.val().trim() === "") &&
-                //   $(`#${home.nameWarning}`).css("display") === "none"
-                // ) {
-                //   if (input.val().trim() === "") {
-                //     $(`#${home.nameWarning}`).text(
-                //       "Nickname cannot be empty"
-                //     );
-                //     $(`#${home.nameWarning}`).show();
-                //   } else {
-                //     $(`#${home.nameWarning}`).text(
-                //       "Nickname is too long. Your nickname cannot have any more than 12 characters."
-                //     );
-                //     $(`#${home.nameWarning}`).show();
-                //   }
-                // } else if (input.val().length > 12) {
-                //   return;
-                // } else if (input.val().trim() === "") {
-                //   $(`#${home.nameWarning}`).text("Nickname cannot be empty");
-                //   return;
-                // } else {
-                //   $(`#${home.nameWarning}`).hide();
-                // }
-              }}
-            />
-          </Col>
-          {/* <Col xs="auto">
-              <Button
-                variant="outline-dark"
-                type="submit"
-                id={`${home.setName}`}
-              >
-                Set Nickname
-              </Button>
-            </Col> */}
-        </Row>
-        {/* </Form> */}
-
-        {/* Flashing name warning */}
-        <div id={`${home.nameWarning}`}></div>
+        <Form>
+          <Row id={`${home.nicknameRow}`}>
+            <Col xs="auto">
+              <Form.Control
+                placeholder={localStorage.getItem("defaultNickname")}
+                id={`${home.inputNickname}`}
+                autoComplete="off"
+                maxLength="12"
+                defaultValue={localStorage.getItem("nickname") || ""}
+                onChange={() => {
+                  let input = $(`#${home.inputNickname}`);
+                  this.setNick(input.val());
+                }}
+              />
+            </Col>
+          </Row>
+        </Form>
 
         <div>
           <AvatarCustomizer />
         </div>
 
         <div id={home.credits}>
-          <Row>
-            <Col>
-              <h4>Game created by: Tom Han, Jerry Lin, and Roseak Lin</h4>
-            </Col>
-          </Row>
+          <div>Game created by: Tom Han, Jerry Lin, and Roseak Lin</div>
           <div
             id={`${home.repoLink}`}
             onClick={() => {

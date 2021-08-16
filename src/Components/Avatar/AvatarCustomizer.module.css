@@ -49,8 +49,8 @@
   cursor: pointer;
   display: inline-block;
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 1%;
+  right: 1%;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;

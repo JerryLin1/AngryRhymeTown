@@ -19,6 +19,7 @@ import RoundResultsPhase from "./Components/ResultPhases/RoundResultsPhase.jsx";
 import GameResultsPhase from "./Components/ResultPhases/GameResultsPhase.jsx";
 
 import { BrowserRouter, Route, Switch, MemoryRouter } from "react-router-dom";
+import { AnimatedSwitch } from "react-router-transition";
 import { GenerateName } from "./assets/nameGenerator";
 
 class Director extends React.Component {
@@ -32,8 +33,13 @@ class Director extends React.Component {
 
   render() {
     return (
-      <div className="game_wrapper">
-        <Switch>
+      <div >
+        <AnimatedSwitch
+          atEnter={{ opacity: 0 }}
+          atLeave={{ opacity: 0 }}
+          atActive={{ opacity: 1 }}
+          className="game_wrapper"
+        >
           <Route path="/" exact>
             <Home client={this.client} />
           </Route>
@@ -47,7 +53,7 @@ class Director extends React.Component {
           <Route path="/:roomId/voting" render={() => (<VotingPhase client={this.client} />)} />
           <Route path="/:roomId/roundresults" render={() => (<RoundResultsPhase client={this.client} />)} />
           <Route path="/:roomId/gameresults" render={() => (<GameResultsPhase client={this.client} />)} />
-        </Switch>
+        </AnimatedSwitch>
       </div>
     );
   }

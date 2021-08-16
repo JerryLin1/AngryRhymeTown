@@ -1,5 +1,6 @@
 .Home {
     text-align: center;
+    min-height: 768px;
     margin-bottom: 0.5em;
 }
 
@@ -47,19 +48,15 @@
 }
 
 #credits {
-    position: fixed;
-    color: #fff;
+    margin-top: 20%;
     text-align: center;
-    width: 100%;
-    bottom: 3.5em;
+    color: #fff;
 }
 
 #repoLink {
-    position: absolute;
-    padding: 8px;
-    bottom: -2.5em;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 0.5em auto 0 auto;
+    width: 15%;
+    padding: 0.5em;
     color: #000;
     background: #ccc;
     transition: 0.3s;
@@ -70,6 +67,6 @@
     cursor: pointer;
     color: #fff;
     fill: #fff;
-    background: linear-gradient(#e66465, #9198e5);
+    background: linear-gradient(#e66465, #b797ff);
     transition: 0.3s;
 }
