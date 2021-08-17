@@ -32,6 +32,11 @@ input {
     border: 1px solid #ccc;
 }
 
+input:focus {
+    outline: none;
+    box-shadow: none !important;
+}
+
 #root {
     padding-bottom: 0.5em;
 }

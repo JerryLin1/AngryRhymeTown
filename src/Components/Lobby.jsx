@@ -8,7 +8,8 @@ import {
   OverlayTrigger,
   Tooltip,
   Form,
-  Overlay,
+  DropdownButton,
+  Dropdown,
 } from "react-bootstrap";
 import lobby from "./Lobby.module.css";
 import {
@@ -32,13 +33,10 @@ export default class Lobby extends React.Component {
 
     this.client.socket.on("joinedLobby", (name) => {
       this.setState({ numPlayers: this.state.numPlayers + 1 });
-      console.log(this.state.numPlayers);
     });
 
-    let roomId = props.match.params.roomId;
-
-    if (roomId.length > 1) {
-      this.client.joinRoom(roomId);
+    if (props.match.params.roomId.length > 1) {
+      this.client.joinRoom(props.match.params.roomId);
     }
 
     // Update the player list in the client's room
@@ -53,7 +51,6 @@ export default class Lobby extends React.Component {
               key={key}
               className={`${lobby.playerListItem}`}
               style={{
-                backgroundColor: "#d4e5ff",
                 boxShadow:
                   client.name === this.name ? "0 0 10px #f2ff9e" : "none",
                 border:
@@ -91,6 +88,8 @@ export default class Lobby extends React.Component {
           );
         }),
       });
+
+      // only display "start game" button for host
       if (clients[this.client.socket.id].isHost === true) {
         $(`#${lobby.startGame}`).css("display", "initial");
         $(`#${lobby.waitingMsg}`).css("display", "none");
@@ -170,15 +169,15 @@ export default class Lobby extends React.Component {
               </Button>
               <div id={`${lobby.waitingMsg}`}>Waiting for host to start!</div>
             </Col>
-            <Col xs="3">
+            <Col xs="auto">
               <Form.Group id={`${lobby.copyCode}`}>
                 <Form.Label column>
                   <strong>Room Link: &ensp;</strong>
                 </Form.Label>
                 <input
                   id={`${lobby.roomCode}`}
-                  value={`${window.location.href}`}
-                  size={window.location.href.length - 7}
+                  value={`${window.location.host}/${this.props.match.params.roomId}`}
+                  size={window.location.href.length - 1}
                   readOnly
                   plaintext
                 />
@@ -230,6 +229,7 @@ export default class Lobby extends React.Component {
             </Card>
             <Form
               autoComplete="off"
+              style={{ marginTop: "1%" }}
               onSubmit={(event) => {
                 sounds.play("button");
                 event.preventDefault();
@@ -259,7 +259,59 @@ export default class Lobby extends React.Component {
               <Card.Header className={`${lobby.cardHeaders}`}>
                 Room Settings
               </Card.Header>
-              <Card.Body></Card.Body>
+              <Card.Body id={`${lobby.settings}`}>
+                <Row>
+                  <Col xs="3">Writing Time:</Col>
+                  <Col>
+                    <DropdownButton
+                      variant="outline-light"
+                      title="60 seconds"
+                      drop="end"
+                    >
+                      <Dropdown.Item eventKey="60" active>
+                        60 seconds
+                      </Dropdown.Item>
+                      <Dropdown.Item eventKey="75">75 seconds</Dropdown.Item>
+                      <Dropdown.Item eventKey="75">90 seconds</Dropdown.Item>
+                    </DropdownButton>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs="3">Voting Time:</Col>
+                  <Col>
+                    <DropdownButton
+                      variant="outline-light"
+                      title="30 seconds"
+                      drop="end"
+                    >
+                      <Dropdown.Item eventKey="30" active>
+                        30 seconds
+                      </Dropdown.Item>
+                      <Dropdown.Item eventKey="60">60 seconds</Dropdown.Item>
+                    </DropdownButton>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs="3">Max players:</Col>
+                  <Col>
+                    <DropdownButton
+                      variant="outline-light"
+                      title="4 Players"
+                      drop="end"
+                    >
+                      <Dropdown.Item eventKey="4" active>
+                        4 players
+                      </Dropdown.Item>
+                      <Dropdown.Item eventKey="5">5 players</Dropdown.Item>
+                    </DropdownButton>
+                  </Col>
+                </Row>
+                <div>
+                  <Button variant="light" disabled>Apply Changes</Button>
+                  {" "}
+                  <Button variant="light" disabled>Reset Changes</Button>
+                </div>
+              </Card.Body>
             </Card>
           </Col>
         </Row>
@@ -269,14 +321,12 @@ export default class Lobby extends React.Component {
           onClick={() => {
             this.state.muted ? sounds.play("menu") : sounds.pause("menu");
             this.setState({ muted: !this.state.muted });
-            $(`.${lobby.musicHint}`).fadeOut();
           }}
           variant="light"
           id={`${lobby.musicControl}`}
         >
           {this.state.muted ? <VolumeMuteFill /> : <VolumeUpFill />}
         </Button>
-        <MusicHint />
 
         {/* Error message */}
         <ErrorMsg />
@@ -302,23 +352,6 @@ const ErrorMsg = () => {
           &times;
         </div>
       </div>
-    </div>
-  );
-};
-
-const MusicHint = () => {
-  return (
-    <div
-      className={`${lobby.musicHint}`}
-      style={{ textShadow: "0 0 2px #000" }}
-    >
-      Click to hear
-      <br />
-      some bussin beats!{" "}
-      <Arrow90degDown
-        id={`${lobby.hintArrow}`}
-        style={{ fontSize: "0.75em" }}
-      />{" "}
     </div>
   );
 };

@@ -11,6 +11,8 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
+    console.log(window.location.pathname.substring(1))
+  
   }
 
   setNick = (nickname, save = false) => {
@@ -35,16 +37,24 @@ export default class Home extends React.Component {
         <Row>
           <Form.Group as={Col}>
             <Button
-              variant="outline-dark"
+              variant="light"
+              size="lg"
               id={`${home.createLobby}`}
               onClick={() => {
                 sounds.play("button");
-                this.client.createRoom();
+                window.location.pathname.substring(1) === ""
+                  ? this.client.createRoom()
+                  : this.client.redirectURL(
+                      `${window.location.pathname.substring(1)}/lobby`
+                    );
               }}
             >
-              Create lobby
+              {window.location.pathname.substring(1) === ""
+                ? "Create lobby"
+                : "Join lobby"}
             </Button>
-            <Form.Control
+            
+            {/* <Form.Control
               inline
               placeholder="Lobby Code"
               id={`${home.inputRoomID}`}
@@ -59,18 +69,18 @@ export default class Home extends React.Component {
               id={`${home.joinRoom}`}
             >
               Join Lobby
-            </Button>
+            </Button> */}
           </Form.Group>
         </Row>
         <div
           style={{
-            marginTop: "5%",
+            marginTop: "3%",
             fontSize: "1.5em",
             color: "#fff",
             textShadow: "0 1px 3px #000",
           }}
         >
-          Choose your nickname!
+          Choose your nickname and avatar!
         </div>
 
         <Form>

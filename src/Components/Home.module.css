@@ -1,6 +1,5 @@
 .Home {
     text-align: center;
-    min-height: 768px;
     margin-bottom: 0.5em;
 }
 
@@ -9,7 +8,15 @@
     text-shadow: 0 1px 3px #000;
 }
 
-#inputRoomID {
+#createLobby {
+    transition: 0.3s;
+}
+
+#createLobby:hover {
+    box-shadow: 2px 3px 1em #fff;
+}
+
+/* #inputRoomID {
     display: inline-block;
     width: 10em;
     border-radius: 0.25em;
@@ -21,13 +28,9 @@
     box-shadow: 2px 3px rgb(77, 77, 77);
 }
 
-#createLobby {
-    margin-right: 5em;
-}
-
 #joinRoom {
     margin-left: 0.5em;
-}
+} */
 
 /* Nickname and Character Select */
 
@@ -53,7 +56,7 @@
 }
 
 #credits {
-    margin-top: 20%;
+    margin-top: 22%;
     text-align: center;
     color: #fff;
 }

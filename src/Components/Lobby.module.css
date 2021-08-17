@@ -68,7 +68,7 @@
     font-size: 1.5em;
     position: absolute;
     left: 50%;
-    transform: translate(-50%, -25%);
+    transform: translateX(-50%);
     display: none;
 }
 
@@ -113,6 +113,7 @@
     padding: 0.5em;
     margin-bottom: 0.5em;
     border-radius: 15px;
+    background-color: #d4e5ff;
     color: #245497;
     text-shadow: none;
 }
@@ -124,14 +125,32 @@
 }
 
 #chatInput {
-    border-radius: 0.25rem 0 0 0.25rem;
+    border-radius: 0.25rem;
     width: 70%;
 }
 
 #chatEnter {
     border: solid rgba(103, 164, 255, 0.603) 2px;
-    border-radius: 0 0.25rem 0.25rem 0;
+    color: #245497;
+    border-radius: 0.25rem;
     width: 30%;
+}
+
+#chatEnter:hover {
+    color: #fff;
+}
+
+#chatEnter:hover {
+    background-color: rgb(103, 164, 255);
+}
+
+#settings>div {
+    margin-bottom: 0.5em;
+}
+
+#settings>div>div {
+    margin: auto;
+    display: inline-block;
 }
 
 /******* Error Message *******/

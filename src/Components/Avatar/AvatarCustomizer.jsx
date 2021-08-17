@@ -3,6 +3,7 @@ import AvatarDisplay from "./AvatarDisplay";
 import avatarCustomizer from "./AvatarCustomizer.module.css";
 import { getRandomInt, isValidComponent } from "./avatarFunctions";
 import sheetInfo from "./SheetInfo.json";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default class AvatarCustomizer extends React.Component {
   constructor(props) {
@@ -225,14 +226,21 @@ export default class AvatarCustomizer extends React.Component {
             }}
             size={1}
           />
-          <div
-            className={avatarCustomizer.random}
-            onClick={() => {
-              this.randomize();
-            }}
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip style={{ fontSize: "0.75em" }}>Randomize!</Tooltip>
+            }
           >
-            🎲
-          </div>
+            <div
+              className={avatarCustomizer.random}
+              onClick={() => {
+                this.randomize();
+              }}
+            >
+              🎲
+            </div>
+          </OverlayTrigger>
         </div>
       </div>
     );

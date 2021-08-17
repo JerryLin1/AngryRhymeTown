@@ -74,7 +74,7 @@ io.on('connection', socket => {
     socket.on("createRoom", () => {
         let roomId = hf.RandomId(8);
         // Redirect client to new URL
-        socket.emit("redirect", roomId);
+        socket.emit("redirect", `${roomId}/lobby`);
         rooms[roomId] = {};
         rooms[roomId].clients = {};
         rooms[roomId].chatHistory = [];
