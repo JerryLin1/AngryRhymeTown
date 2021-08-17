@@ -120,7 +120,11 @@ export default class Lobby extends React.Component {
           chatMsg = chatInfo.msg;
           color = "red";
         } else {
-          chatMsg = chatInfo.nickname + ": " + chatInfo.msg;
+          chatMsg = (
+            <span>
+              <b>{chatInfo.nickname}</b>: {chatInfo.msg}
+            </span>
+          );
           color = "black";
         }
         this.setState({
@@ -191,7 +195,9 @@ export default class Lobby extends React.Component {
                       sounds.play("button");
                       // $(`#${lobby.roomCode}`).select();
                       // document.execCommand("copy");
-                      navigator.clipboard.writeText(this.roomURL).then($(".tooltip-inner").text("Copied!"));
+                      navigator.clipboard
+                        .writeText(this.roomURL)
+                        .then($(".tooltip-inner").text("Copied!"));
                     }}
                   />
                 </OverlayTrigger>
@@ -307,9 +313,12 @@ export default class Lobby extends React.Component {
                   </Col>
                 </Row>
                 <div>
-                  <Button variant="light" disabled>Apply Changes</Button>
-                  {" "}
-                  <Button variant="light" disabled>Reset Changes</Button>
+                  <Button variant="light" disabled>
+                    Apply Changes
+                  </Button>{" "}
+                  <Button variant="light" disabled>
+                    Reset Changes
+                  </Button>
                 </div>
               </Card.Body>
             </Card>
