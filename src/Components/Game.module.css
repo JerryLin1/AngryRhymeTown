@@ -149,6 +149,7 @@ html {
     backdrop-filter: blur(0.5em) brightness(0.75);
 }
 
+
 #rapDisplay>div {
     font-size: 2em;
 }

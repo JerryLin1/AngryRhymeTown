@@ -88,9 +88,10 @@
 #roomCode {
     display: inline-block;
     border: none;
+    background-color: transparent;
+    /* width: 15em; */
     text-align-last: left;
     margin-right: 0.5em;
-    width: 14em !important;
 }
 
 /******* Row 2 *******/

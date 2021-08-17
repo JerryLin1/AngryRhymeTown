@@ -30,7 +30,7 @@ export default class Home extends React.Component {
   render() {
     return (
       <div className={`${home.Home}`}>
-        <h1 id="title">ANGRY RHYME TOWN</h1>
+        <h1 id={`${home.title}`}>ANGRY RHYME TOWN</h1>
 
         <Row>
           <Form.Group as={Col}>
@@ -62,7 +62,14 @@ export default class Home extends React.Component {
             </Button>
           </Form.Group>
         </Row>
-        <div style={{ marginTop: "5%", fontSize: "1.5em" }}>
+        <div
+          style={{
+            marginTop: "5%",
+            fontSize: "1.5em",
+            color: "#fff",
+            textShadow: "0 1px 3px #000",
+          }}
+        >
           Choose your nickname!
         </div>
 

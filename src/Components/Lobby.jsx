@@ -103,10 +103,9 @@ export default class Lobby extends React.Component {
     // Update the chat
     this.client.socket.on("receiveMessage", (chatInfo) => {
       if ($("#chat")[0] !== undefined) {
-
         // Autoscroll chat if scroll is already at bottom
         // Otherwise we assume they are reading chat and so do not scroll
-        
+
         let autoScroll = false;
         let jsele = $("#chat")[0];
         if (jsele.scrollHeight - jsele.scrollTop === jsele.clientHeight) {
@@ -171,14 +170,15 @@ export default class Lobby extends React.Component {
               </Button>
               <div id={`${lobby.waitingMsg}`}>Waiting for host to start!</div>
             </Col>
-            <Col>
+            <Col xs="3">
               <Form.Group id={`${lobby.copyCode}`}>
                 <Form.Label column>
                   <strong>Room Link: &ensp;</strong>
                 </Form.Label>
-                <Form.Control
+                <input
                   id={`${lobby.roomCode}`}
-                  value={window.location.href}
+                  value={`${window.location.href}`}
+                  size={window.location.href.length - 7}
                   readOnly
                   plaintext
                 />
