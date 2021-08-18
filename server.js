@@ -222,15 +222,6 @@ io.on('connection', socket => {
         let pairings = hf.GeneratePairs(Object.keys(rooms[socket.room].clients));
         rooms[socket.room].pairings = pairings;
 
-        // TODO: Remove undefined check when bot is ready or when odd number of players check is ready
-        let pairingsOfNames = Object.entries(pairings).map(([k, v]) => {
-            let newK = (k === "filler") ? "filler" : rooms[socket.room].clients[k].name;
-            let newV = (v === "filler") ? "filler" : rooms[socket.room].clients[v].name;
-            return [newK, newV];
-        });
-
-        io.to(socket.room).emit("sendPairings", pairingsOfNames);
-
         for (let rapper of Object.keys(pairings)) {
 
             // TODO: Remove undefined check when bot is ready or when odd number of players check is ready
@@ -246,12 +237,36 @@ io.on('connection', socket => {
         }
     }
 
+    socket.on("sendPairings", callback => {
+        callback({
+            pairings: Object.entries(rooms[socket.room].pairings).map(([k, v]) => {
+                let newK = (k === "filler") ? "filler" : rooms[socket.room].clients[k].name;
+                let newV = (v === "filler") ? "filler" : rooms[socket.room].clients[v].name;
+                return [newK, newV];
+            })
+        })
+    })
+
     function startWritePhase() {
         io.to(socket.room).emit("startWritePhase");
         setGameState(socket.room, gameState.WRITING);
         let t = rooms[socket.room].settings.writingTime;
         rooms[socket.room].nextPhase = setTimeout(() => { startRapPhase() }, t);
     };
+
+    socket.on("receiveWritingInfo", callback => {
+        let words = [];
+        for (let i = 0; i < 4; i++) {
+            words.push(wordFunctions.getRandomWords());
+        }
+        rooms[socket.room].clients[socket.id].words = words;
+        callback({
+            newWords: words,
+            opponent: rooms[socket.room].clients[rooms[socket.room]
+                .rounds[rooms[socket.room].currentRound][socket.id]
+                .opponent].name
+        })
+    })
 
     socket.on("finishedSpittin", () => {
         // TODO: Verification: a hacker could finish spitting more than once
@@ -426,19 +441,6 @@ io.on('connection', socket => {
         // TODO: reset stuff like round data?
     }
 
-    // Callback is the response: it returns the generated words to the client
-    socket.on("requestWords", () => {
-        let words = [];
-        for (let i = 0; i < 4; i++) {
-            words.push(wordFunctions.getRandomWords());
-        }
-        rooms[socket.room].clients[socket.id].words = words;
-        socket.emit("receiveWritingInfo", words, rooms[socket.room].clients[rooms[socket.room]
-            .rounds[rooms[socket.room].currentRound][socket.id]
-            .opponent].name);
-    })
-
-
     // Receive bars and calculate bonuses from using words
     socket.on("sendBars", (bars) => {
 
@@ -464,8 +466,8 @@ io.on('connection', socket => {
 
     socket.on("getMatchupInfo", callback => {
         let opponentId = rooms[socket.room]
-        .rounds[rooms[socket.room].currentRound][socket.id]
-        .opponent
+            .rounds[rooms[socket.room].currentRound][socket.id]
+            .opponent
         callback({
             name: rooms[socket.room].clients[socket.id].name,
             opponent: rooms[socket.room].clients[opponentId].name,

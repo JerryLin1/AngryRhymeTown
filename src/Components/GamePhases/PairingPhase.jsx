@@ -19,10 +19,11 @@ export default class PairingPhase extends React.Component {
       matchups: []
     };
 
-    this.socket.on("sendPairings", (pairDisplay) => {
-      console.log(this.client.nickname);
+    this.socket.emit("sendPairings", (pairInfo) => {
+      console.log("received pairing info");
       let matchups = [];
-      for (let pair of pairDisplay) {
+      let pairings = pairInfo.pairings;
+      for (let pair of pairings) {
         // TODO: fix highlight of opponent, if no fix possible, revert to old version
         matchups.push(
           <div className={`${game.pairWrapper}`}>

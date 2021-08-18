@@ -33,8 +33,6 @@ export default class Client extends React.Component {
         })
         this.socket.on("startWritePhase", () => {
             this.redirectURL(`${this.roomId}/writing`)
-
-            this.socket.emit("requestWords");
         })
         this.socket.on("startRapPhase", () => {
             this.redirectURL(`${this.roomId}/rapping`)

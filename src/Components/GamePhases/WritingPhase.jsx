@@ -28,14 +28,14 @@ export default class WritingPhase extends React.Component {
       opponent: "",
     };
 
-    this.socket.on("receiveWritingInfo", (newWords, opponent) => {
-      this.setState({ words: newWords });
-      this.setState({ opponent: opponent });
+    this.socket.emit("receiveWritingInfo", (writingInfo) => {
+      this.setState({ words: writingInfo.newWords });
+      this.setState({ opponent: writingInfo.opponent });
       let toDisplayWords = [];
-      for (let i = 0; i < newWords.length; i++) {
+      for (let i = 0; i < this.state.words.length; i++) {
         let display = [];
-        for (let j = 0; j < newWords[i].length; j++) {
-          let word = newWords[i][j];
+        for (let j = 0; j < this.state.words[i].length; j++) {
+          let word = this.state.words[i][j];
           display.push(
             <div className={`${game.displayWords}`}>
               {j + 1}. {word.substring(0, 1).toUpperCase()}
@@ -46,7 +46,7 @@ export default class WritingPhase extends React.Component {
         toDisplayWords.push(display);
       }
       this.setState({ displayWords: toDisplayWords });
-      this.setState({ wordsForCurrentBar: toDisplayWords[0] });
+      this.setState({ wordsForCurrentBar: toDisplayWords[0]});
     });
   }
 

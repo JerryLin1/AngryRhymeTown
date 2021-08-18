@@ -18,7 +18,7 @@ import VotingPhase from "./Components/GamePhases/VotingPhase.jsx";
 import RoundResultsPhase from "./Components/ResultPhases/RoundResultsPhase.jsx";
 import GameResultsPhase from "./Components/ResultPhases/GameResultsPhase.jsx";
 
-import { BrowserRouter, Route, MemoryRouter } from "react-router-dom";
+import { BrowserRouter, Route, MemoryRouter, Switch } from "react-router-dom";
 import { AnimatedSwitch } from "react-router-transition";
 import { GenerateName } from "./assets/nameGenerator";
 
@@ -42,12 +42,12 @@ class Director extends React.Component {
         >
           <Route path="/:roomId?" exact render={(props) => (<Home client={this.client} match={props.match} />)} />
           <Route path="/:roomId/lobby" exact render={(props) => (<Lobby client={this.client} match={props.match} />)} />
-          {/* <Route path="/:roomId/pairing" render={() => (<PairingPhase client={this.client} />)} />
+          <Route path="/:roomId/pairing" render={() => (<PairingPhase client={this.client} />)} />
           <Route path="/:roomId/writing" render={() => (<WritingPhase client={this.client} />)} />
-          <Route path="/:roomId/rapping" render={() => (<RappingPhase client={this.client} />)} /> */}
+          <Route path="/:roomId/rapping" render={() => (<RappingPhase client={this.client} />)} />
           <Route path="/:roomId/voting" render={() => (<VotingPhase client={this.client} />)} />
-          {/* <Route path="/:roomId/roundresults" render={() => (<RoundResultsPhase client={this.client} />)} />
-          <Route path="/:roomId/gameresults" render={() => (<GameResultsPhase client={this.client} />)} /> */}
+          <Route path="/:roomId/roundresults" render={() => (<RoundResultsPhase client={this.client} />)} />
+          <Route path="/:roomId/gameresults" render={() => (<GameResultsPhase client={this.client} />)} />
         </AnimatedSwitch>
       </div>
     );
