@@ -489,6 +489,9 @@ io.on('connection', socket => {
 function numberOfClientsInRoom(roomId) {
     return Object.keys(rooms[roomId].clients).length;
 }
+function getClientNames(roomId) {
+    return Object.values(rooms[roomId].clients).map((value) => (value.name))
+}
 function setGameState(roomId, gameState) {
     if (rooms[roomId] != undefined) {
         rooms[roomId].gameState = gameState;
