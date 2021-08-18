@@ -179,7 +179,6 @@ export default class Lobby extends React.Component {
                   value={`${window.location.host}/${this.props.match.params.roomId}`}
                   size={window.location.href.length - 1}
                   readOnly
-                  plaintext
                 />
                 <OverlayTrigger
                   placement="top"
@@ -263,11 +262,7 @@ export default class Lobby extends React.Component {
                 <Row>
                   <Col xs="3">Writing Time:</Col>
                   <Col>
-                    <DropdownButton
-                      variant="outline-light"
-                      title="60 seconds"
-                      drop="end"
-                    >
+                    <DropdownButton variant="outline-light" title="60 seconds">
                       <Dropdown.Item eventKey="60" active>
                         60 seconds
                       </Dropdown.Item>
@@ -279,11 +274,7 @@ export default class Lobby extends React.Component {
                 <Row>
                   <Col xs="3">Voting Time:</Col>
                   <Col>
-                    <DropdownButton
-                      variant="outline-light"
-                      title="30 seconds"
-                      drop="end"
-                    >
+                    <DropdownButton variant="outline-light" title="30 seconds">
                       <Dropdown.Item eventKey="30" active>
                         30 seconds
                       </Dropdown.Item>
@@ -294,22 +285,37 @@ export default class Lobby extends React.Component {
                 <Row>
                   <Col xs="3">Max players:</Col>
                   <Col>
-                    <DropdownButton
-                      variant="outline-light"
-                      title="4 Players"
-                      drop="end"
-                    >
-                      <Dropdown.Item eventKey="4" active>
-                        4 players
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey="5">5 players</Dropdown.Item>
+                    <DropdownButton variant="outline-light" title="4 Players">
+                      {/* Is there any better way 2 do this ._. */}
+                      {[4, 5, 6, 7, 8, 9, 10].map((value) => {
+                        return (
+                          <Dropdown.Item eventKey={value} active={value === 4}>
+                            {value} players
+                          </Dropdown.Item>
+                        );
+                      })}
                     </DropdownButton>
                   </Col>
                 </Row>
                 <div>
-                  <Button variant="light" disabled>Apply Changes</Button>
-                  {" "}
-                  <Button variant="light" disabled>Reset Changes</Button>
+                  <Button
+                    variant="light"
+                    onClick={() => {
+                      sounds.play("button");
+                    }}
+                    id={`${lobby.applyBtn}`}
+                  >
+                    Apply Changes
+                  </Button>{" "}
+                  <Button
+                    variant="light"
+                    onClick={() => {
+                      sounds.play("button");
+                    }}
+                    id={`${lobby.resetBtn}`}
+                  >
+                    Revert to Default Settings
+                  </Button>
                 </div>
               </Card.Body>
             </Card>

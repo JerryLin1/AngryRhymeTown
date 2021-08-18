@@ -141,7 +141,7 @@
 }
 
 #chatEnter:hover {
-    background-color: rgb(103, 164, 255);
+    background-color: #52aeff;
 }
 
 #settings>div {
@@ -151,6 +151,17 @@
 #settings>div>div {
     margin: auto;
     display: inline-block;
+}
+
+#applyBtn::after {
+    width: 0;
+    z-index: -1;
+    background-color: #ccc;
+    position: absolute;
+}
+
+#applyBtn::after:hover {
+    width: 100%;
 }
 
 /******* Error Message *******/
@@ -199,7 +210,7 @@
 
 /******* Music Hint *******/
 
-.musicHint {
+/* .musicHint {
     position: absolute;
     color: #fff;
     font-size: 0.8em;
@@ -214,4 +225,4 @@
     transform: rotate(180deg);
     width: 2em;
     height: 2em;
-}
+} */
