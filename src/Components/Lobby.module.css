@@ -153,17 +153,6 @@
     display: inline-block;
 }
 
-#applyBtn::after {
-    width: 0;
-    z-index: -1;
-    background-color: #ccc;
-    position: absolute;
-}
-
-#applyBtn::after:hover {
-    width: 100%;
-}
-
 /******* Error Message *******/
 
 .ErrorMsgBg {

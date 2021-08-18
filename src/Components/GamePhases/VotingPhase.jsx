@@ -74,10 +74,10 @@ export default class VotingPhase extends React.Component {
   displayVoteConfirmation = () => {
     if (this.state.selected !== undefined) {
       $(
-        `#${game.rapDisplayRow}>div:nth-child(${Math.max(
-          this.state.selected + 1 ^ 3,
-          1
-        )})`
+        `#${game.rapDisplayRow}>div:nth-child(${
+          (this.state.selected + 1) ^ 3
+        }), #${game.voteBtnRow}>div:nth-child(${(this.state.selected + 1) ^ 3}
+        )`
       ).css("filter", "saturate(0.25)");
       return (
         <div
@@ -132,9 +132,11 @@ export default class VotingPhase extends React.Component {
             </Card>
           </Col>
         </Row>
+
         <br />
+
         <Row id={`${game.voteBtnRow}`}>
-          <Col xs="3" sm={{ offset: 2 }} id="rap_1">
+          <Col xs={{ offset: 2, span: 3 }} id="rap_1">
             <Button
               variant="outline-light"
               style={{
@@ -169,7 +171,7 @@ export default class VotingPhase extends React.Component {
               Vote for {this.state.matchup[0].nickname}'s rap!
             </Button>
           </Col>
-          <Col xs="3" sm={{ offset: 2 }} id="rap_2">
+          <Col xs={{ offset: 2, span: 3 }} id="rap_2">
             <Button
               variant="outline-light"
               onMouseOver={() => {

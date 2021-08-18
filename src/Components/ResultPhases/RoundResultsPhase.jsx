@@ -43,8 +43,8 @@ export default class RoundResultsPhase extends React.Component {
                 {roundResults.results[i].wordBonuses == 0
                   ? " (No points from word bonuses)"
                   : " (" +
-                  roundResults.results[i].wordBonuses +
-                  " point(s) from word bonuses)"}
+                    roundResults.results[i].wordBonuses +
+                    " point(s) from word bonuses)"}
               </span>
             </Col>
           </Row>
@@ -57,7 +57,7 @@ export default class RoundResultsPhase extends React.Component {
 
   render() {
     return (
-      <div>
+      <div id={`${game.roundResults}`}>
         <div className={`${game.header}`}>
           Here are the results for round {this.state.round}!
         </div>

@@ -329,6 +329,7 @@ export default class Lobby extends React.Component {
         </Row>
 
         {/* Music Control button */}
+        
         <Button
           onClick={() => {
             this.state.muted ? sounds.play("menu") : sounds.pause("menu");

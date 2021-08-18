@@ -16,7 +16,7 @@ export default class PairingPhase extends React.Component {
       avatarData: undefined,
       opponentAvatarData: undefined,
       currentMatchup: [],
-      matchups: []
+      matchups: [],
     };
 
     this.socket.emit("sendPairings", (pairInfo) => {
@@ -24,40 +24,11 @@ export default class PairingPhase extends React.Component {
       let matchups = [];
       let pairings = pairInfo.pairings;
       for (let pair of pairings) {
-        // TODO: fix highlight of opponent, if no fix possible, revert to old version
         matchups.push(
           <div className={`${game.pairWrapper}`}>
-            <div
-              className={`${game.pairName}`}
-              style={{
-                boxShadow:
-                  this.client.nickname === pair[0]
-                    ? "0 0 10px #f2ff9e"
-                    : "0 0 10px #fff",
-                border:
-                  this.client.nickname === pair[0]
-                    ? "solid #e8ff52 3px"
-                    : "solid #fff 3px",
-              }}
-            >
-              {pair[0]}
-            </div>
+            <div className={`${game.pairName}`}>{pair[0]}</div>
             <strong>V. S.</strong>
-            <div
-              className={`${game.pairName}`}
-              style={{
-                boxShadow:
-                  this.client.nickname === pair[1]
-                    ? "0 0 10px #f2ff9e"
-                    : "0 0 10px #fff",
-                border:
-                  this.client.nickname === pair[1]
-                    ? "solid #e8ff52 3px"
-                    : "solid #fff 3px",
-              }}
-            >
-              {pair[1]}
-            </div>
+            <div className={`${game.pairName}`}>{pair[1]}</div>
           </div>
         );
       }
