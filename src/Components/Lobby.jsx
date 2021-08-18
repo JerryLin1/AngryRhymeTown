@@ -38,7 +38,7 @@ export default class Lobby extends React.Component {
     if (props.match.params.roomId.length > 1) {
       this.client.joinRoom(props.match.params.roomId);
     }
-
+    this.roomURL = `${window.location.host}/${this.props.match.params.roomId}`;
     // Update the player list in the client's room
     this.client.socket.on("updateClientList", (clients) => {
       this.name = clients[this.client.socket.id].name;
@@ -120,7 +120,11 @@ export default class Lobby extends React.Component {
           chatMsg = chatInfo.msg;
           color = "red";
         } else {
-          chatMsg = chatInfo.nickname + ": " + chatInfo.msg;
+          chatMsg = (
+            <span>
+              <b>{chatInfo.nickname}</b>: {chatInfo.msg}
+            </span>
+          );
           color = "black";
         }
         this.setState({
@@ -176,7 +180,7 @@ export default class Lobby extends React.Component {
                 </Form.Label>
                 <input
                   id={`${lobby.roomCode}`}
-                  value={`${window.location.host}/${this.props.match.params.roomId}`}
+                  value={this.roomURL}
                   size={window.location.href.length - 1}
                   readOnly
                 />
@@ -188,9 +192,11 @@ export default class Lobby extends React.Component {
                     id={`${lobby.cb}`}
                     onClick={() => {
                       sounds.play("button");
-                      $(`#${lobby.roomCode}`).select();
-                      document.execCommand("copy");
-                      $(".tooltip-inner").text("Copied!");
+                      // $(`#${lobby.roomCode}`).select();
+                      // document.execCommand("copy");
+                      navigator.clipboard
+                        .writeText(this.roomURL)
+                        .then($(".tooltip-inner").text("Copied!"));
                     }}
                   />
                 </OverlayTrigger>
