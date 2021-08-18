@@ -34,10 +34,10 @@ export default class RappingPhase extends React.Component {
     };
 
     // TODO: socket.on for incoming matchup. readBars for both raps, with a delay in between.
-    this.socket.on("receiveBattleRapping", (matchup) => {
+    this.socket.emit("receiveMatchup", (rapInfo) => {
       this.setState({ currentBattle: 0 });
       this.setState({ barDivs: [] });
-      this.setState({ matchup: matchup });
+      this.setState({ matchup: rapInfo.matchup });
 
       this.readBars();
     });

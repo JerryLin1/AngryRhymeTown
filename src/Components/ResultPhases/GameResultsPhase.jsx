@@ -16,15 +16,15 @@ export default class GameResultsPhase extends React.Component {
       otherRappers: []
     }
 
-    this.socket.on("sendGameResults", results => {
-      this.setState({ results: results });
+    this.socket.emit("receiveGameResults", gameResults => {
+      this.setState({ results: gameResults.results });
 
       let otherRappers = [];
-      for (let i = 3; i < results.length; i++) {
+      for (let i = 3; i < gameResults.results.length; i++) {
         otherRappers.push(
           <Row style={{ backgroundColor: i > 2 ? "#96ceff" : "#fff" }}>
-            <Col xs="8">{i + 1}. {results[i].name}</Col>
-            <Col>{results[i].score}</Col>
+            <Col xs="8">{i + 1}. {gameResults.results[i].name}</Col>
+            <Col>{gameResults.results[i].score}</Col>
           </Row>
         )
       }

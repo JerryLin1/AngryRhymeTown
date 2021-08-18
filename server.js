@@ -305,6 +305,7 @@ io.on('connection', socket => {
     function startBattle() {
         let t = rooms[socket.room].settings.votingTime;
         if (rooms[socket.room].gameState === gameState.VOTING) {
+            console.log("starting time out for next battle")
             rooms[socket.room].nextPhase = setTimeout(() => { startNext() }, t)
         }
         const battles = Object.keys(rooms[socket.room].pairings);
@@ -314,37 +315,33 @@ io.on('connection', socket => {
                 .rounds[rooms[socket.room].currentRound][battles[rooms[socket.room].battle]]
                 .opponent;
 
-
-        const matchup = [
-            {
-                nickname: rooms[socket.room]
-                    .clients[rooms[socket.room].rapper1]
-                    .name,
-                bars: rooms[socket.room]
-                    .rounds[rooms[socket.room].currentRound][rooms[socket.room].rapper1]
-                    .bars
-            },
-            {
-                nickname: rooms[socket.room]
-                    .clients[rooms[socket.room].rapper2]
-                    .name,
-                bars: rooms[socket.room]
-                    .rounds[rooms[socket.room].currentRound][rooms[socket.room].rapper2]
-                    .bars
-            }
-        ]
-
-        // Go to next battle and check if all battles in the round are over
-        // If so, go to next round 
         if (rooms[socket.room].gameState === gameState.VOTING) {
             rooms[socket.room].battle += 1;
-            io.to(socket.room).emit("receiveBattleVoting", matchup);
-        } else {
-            io.to(socket.room).emit("receiveBattleRapping", matchup);
         }
-
-
     }
+
+    socket.on("receiveMatchup", callback => {
+        callback({
+            matchup: [
+                {
+                    nickname: rooms[socket.room]
+                        .clients[rooms[socket.room].rapper1]
+                        .name,
+                    bars: rooms[socket.room]
+                        .rounds[rooms[socket.room].currentRound][rooms[socket.room].rapper1]
+                        .bars
+                },
+                {
+                    nickname: rooms[socket.room]
+                        .clients[rooms[socket.room].rapper2]
+                        .name,
+                    bars: rooms[socket.room]
+                        .rounds[rooms[socket.room].currentRound][rooms[socket.room].rapper2]
+                        .bars
+                }
+            ]
+        })
+    })
 
     socket.on("receiveVote", (rapper) => {
         // TODO: vote verification. a hacker could vote more than once 
@@ -414,16 +411,19 @@ io.on('connection', socket => {
         setGameState(socket.room, gameState.ROUND_RESULTS);
         let t = rooms[socket.room].settings.roundResultsTime;
 
-        io.to(socket.room).emit("sendRoundResults", getResults(), rooms[socket.room].rounds.length);
-
         // Start next round (which starts at pairing phase)
         setTimeout(() => { startRound() }, t);
     }
+
+    socket.on("receiveRoundResults", callback => {
+        callback({
+            results: getResults(),
+            round: rooms[socket.room].rounds.length
+        })
+    })
     function startGameResultsPhase() {
         io.to(socket.room).emit("startGameResultsPhase");
         setGameState(socket.room, gameState.GAME_RESULTS);
-
-        io.to(socket.room).emit("sendGameResults", getResults());
 
         // remove all disconnected clients
         for (let client of Object.keys(rooms[socket.room].clients)) {
@@ -435,6 +435,9 @@ io.on('connection', socket => {
         // have a button to go immediately to the next phase
         setTimeout(() => { returnToLobby() }, 5000);
     }
+    socket.on("receiveGameResults", callback => {
+        callback({ results: getResults() });
+    })
     function returnToLobby() {
         io.to(socket.room).emit("returnToLobby");
         setGameState(socket.room, gameState.LOBBY);
