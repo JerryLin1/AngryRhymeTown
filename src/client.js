@@ -59,9 +59,11 @@ export default class Client extends React.Component {
     redirectURL = (id) => {
         this.props.match.history.replace(`/${id}`);
     }
+
     pushURL = (id) => {
         this.props.match.history.push(`/${id}`);
     }
+    
     sendMessage = (msg) => {
         if (msg != "") {
             this.socket.emit("sendMessage", msg);

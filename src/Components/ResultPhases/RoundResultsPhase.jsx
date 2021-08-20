@@ -58,7 +58,9 @@ export default class RoundResultsPhase extends React.Component {
   render() {
     return (
       <div id={`${game.roundResults}`}>
-        <div className={`${game.header}`}>
+        <div
+          className={`${game.header}`}
+        >
           Here are the results for round {this.state.round}!
         </div>
 

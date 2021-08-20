@@ -1,6 +1,7 @@
 import React from "react";
 import $ from "jquery";
 import anime from "animejs";
+import sounds from "../../sounds.js";
 import Countdown from "../Countdown.jsx";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import game from "../Game.module.css";
@@ -136,7 +137,11 @@ export default class VotingPhase extends React.Component {
         <br />
 
         <Row id={`${game.voteBtnRow}`}>
-          <Col xs={{ offset: 2, span: 3 }} id="rap_1">
+          <Col
+            xs={{ offset: 2, span: 3 }}
+            style={{ textAlign: "center" }}
+            id="rap_1"
+          >
             <Button
               variant="outline-light"
               style={{
@@ -166,12 +171,17 @@ export default class VotingPhase extends React.Component {
                 this.vote(1);
                 this.setState({ voted: true });
                 this.setState({ selected: 0 });
+                sounds.play("button");
               }}
             >
               Vote for {this.state.matchup[0].nickname}'s rap!
             </Button>
           </Col>
-          <Col xs={{ offset: 2, span: 3 }} id="rap_2">
+          <Col
+            xs={{ offset: 2, span: 3 }}
+            style={{ textAlign: "center" }}
+            id="rap_2"
+          >
             <Button
               variant="outline-light"
               onMouseOver={() => {
@@ -201,6 +211,7 @@ export default class VotingPhase extends React.Component {
                 this.vote(2);
                 this.setState({ voted: true });
                 this.setState({ selected: 1 });
+                sounds.play("button");
               }}
             >
               Vote for {this.state.matchup[1].nickname}'s rap!
