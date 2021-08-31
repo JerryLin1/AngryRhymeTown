@@ -6,7 +6,8 @@ button.preload = true;
 
 const menu = new Audio(home);
 menu.loop = true;
-menu.volume = 0.25;
+menu.volume = 0.05;
+menu.volume = 0;
 
 const sounds = {
     "button": button,

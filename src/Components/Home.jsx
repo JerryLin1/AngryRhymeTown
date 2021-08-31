@@ -41,6 +41,7 @@ export default class Home extends React.Component {
               size="lg"
               id={`${home.createLobby}`}
               onClick={() => {
+                sounds.play("menu");
                 sounds.play("button");
                 window.location.pathname.substring(1) === ""
                   ? this.client.createRoom()

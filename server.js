@@ -54,9 +54,12 @@ io.on('connection', socket => {
                         startNext();
                     }
                 }
-            } else {
+            } else if (rooms[socket.room].gameState === gameState.LOBBY) {
                 delete rooms[socket.room].clients[socket.id];
             }
+            // else {
+            //     delete rooms[socket.room].clients[socket.id];
+            // }
 
             // Transfer host
             if (numberOfClientsInRoom(socket.room) > 0) {
@@ -66,7 +69,6 @@ io.on('connection', socket => {
                 io.to(socket.room).emit("updateClientList", rooms[socket.room].clients);
             }
 
-            // TODO: Delete room when empty
         }
     });
 
@@ -181,7 +183,7 @@ io.on('connection', socket => {
         io.to(socket.room).emit("receiveMessage", chatMsg);
     }
     socket.on("startGame", () => {
-        if (rooms[socket.room].gameState === gameState.LOBBY && rooms[socket.room].clients[socket.id].isHost === true) {
+        if (rooms[socket.room].gameState === gameState.LOBBY && rooms[socket.room].clients[socket.id].isHost) {
             // TODO: if (rooms[socket.room].length %% 2 === 0) Must be even number of players. unless we code bot?
             // TODO: Emit room settings whenever they are changed by host (once that is implemented)
             io.to(socket.room).emit("receiveRoomSettings", rooms[socket.room].settings);
@@ -288,7 +290,7 @@ io.on('connection', socket => {
     socket.on("finishedListenin", () => {
         // Goes to next phase if tts on host machine is done
         rooms[socket.room].finishedListenin += 1;
-        if (rooms[socket.room].finishedListenin === numberOfClientsInRoom(socket.room)) {
+        if (rooms[socket.room].clients[socket.id].isHost) {
             clearTimeout(rooms[socket.room].nextPhase);
             rooms[socket.room].finishedListenin = 0;
             startVotePhase();
@@ -303,8 +305,9 @@ io.on('connection', socket => {
     }
 
     function startBattle() {
-        let t = rooms[socket.room].settings.votingTime;
+        
         if (rooms[socket.room].gameState === gameState.VOTING) {
+            let t = rooms[socket.room].settings.votingTime;
             console.log("starting time out for next battle")
             rooms[socket.room].nextPhase = setTimeout(() => { startNext() }, t)
         }
@@ -316,6 +319,7 @@ io.on('connection', socket => {
                 .opponent;
 
         if (rooms[socket.room].gameState === gameState.VOTING) {
+            console.log("voting phase ended, going to next battle")
             rooms[socket.room].battle += 1;
         }
     }
@@ -389,7 +393,7 @@ io.on('connection', socket => {
                 startRoundResultsPhase();
             }
         } else if (Object.keys(rooms[socket.room].pairings).length > rooms[socket.room].battle) {
-            startBattle();
+            startRapPhase();
         }
     }
 

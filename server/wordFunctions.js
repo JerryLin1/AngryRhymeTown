@@ -24,10 +24,9 @@ module.exports = {
             countUsed++;
         }
         // Get bonus points if all words are used
-        if (countUsed === words.length) {
+        if (countUsed === words.length && points === 200) {
             points += 100;
         }
-
         return points;
     },
     getRandomWords() {
