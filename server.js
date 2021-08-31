@@ -290,7 +290,7 @@ io.on('connection', socket => {
     socket.on("finishedListenin", () => {
         // Goes to next phase if tts on host machine is done
         rooms[socket.room].finishedListenin += 1;
-        if (rooms[socket.room].clients[socket.id].isHost) {
+        if (rooms[socket.room].finishedListenin === numberOfClientsInRoom(socket.room)) {
             clearTimeout(rooms[socket.room].nextPhase);
             rooms[socket.room].finishedListenin = 0;
             startVotePhase();
