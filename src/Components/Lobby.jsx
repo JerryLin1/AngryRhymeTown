@@ -29,8 +29,15 @@ export default class Lobby extends React.Component {
   constructor(props) {
     super(props);
     this.client = props.client;
-    this.state = { numPlayers: 0, lobbyList: [], chat: [], muted: false };
-    console.log(this.client.id + " ID");
+    this.state = {
+      numPlayers: 0,
+      lobbyList: [],
+      chat: [],
+      muted: false,
+      writingTime: 60,
+      votingTime: 30,
+      maxPlayers: 4,
+    };
     this.client.socket.on("joinedLobby", (name) => {
       this.setState({ numPlayers: this.state.numPlayers + 1 });
     });
@@ -122,7 +129,7 @@ export default class Lobby extends React.Component {
         } else {
           chatMsg = (
             <span>
-              <b>{chatInfo.nickname}</b>: {chatInfo.msg}
+              <strong>{chatInfo.nickname}</strong>: {chatInfo.msg}
             </span>
           );
           color = "black";
@@ -144,6 +151,9 @@ export default class Lobby extends React.Component {
         {/* First row that displays the room code */}
         <Form>
           <Row>
+            <Col>
+              <div className={lobby.ARTLogo}>ART</div>
+            </Col>
             <Col>
               <Button
                 variant="success"
@@ -178,12 +188,7 @@ export default class Lobby extends React.Component {
                 <Form.Label column>
                   <strong>Room Link: &ensp;</strong>
                 </Form.Label>
-                <input
-                  id={`${lobby.roomCode}`}
-                  value={this.roomURL}
-                  size={window.location.href.length - 1}
-                  readOnly
-                />
+                <input id={`${lobby.roomCode}`} value={this.roomURL} readOnly />
                 <OverlayTrigger
                   placement="top"
                   overlay={<Tooltip id={`${lobby.tooltip}`}>Copy Code</Tooltip>}
@@ -192,8 +197,6 @@ export default class Lobby extends React.Component {
                     id={`${lobby.cb}`}
                     onClick={() => {
                       sounds.play("button");
-                      // $(`#${lobby.roomCode}`).select();
-                      // document.execCommand("copy");
                       navigator.clipboard
                         .writeText(this.roomURL)
                         .then($(".tooltip-inner").text("Copied!"));
@@ -266,36 +269,51 @@ export default class Lobby extends React.Component {
               </Card.Header>
               <Card.Body id={`${lobby.settings}`}>
                 <Row>
-                  <Col xs="3">Writing Time:</Col>
+                  <Col xs="3">Writing Time</Col>
                   <Col>
-                    <DropdownButton variant="outline-light" title="60 seconds">
-                      <Dropdown.Item eventKey="60" active>
-                        60 seconds
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey="75">75 seconds</Dropdown.Item>
-                      <Dropdown.Item eventKey="75">90 seconds</Dropdown.Item>
+                    <DropdownButton
+                      variant="outline-light"
+                      title={`${this.state.writingTime} seconds`}
+                      onSelect={(key) => {
+                        this.setState({ writingTime: key });
+                      }}
+                    >
+                      <Dropdown.Item eventKey={60}>60 seconds</Dropdown.Item>
+                      <Dropdown.Item eventKey={75}>75 seconds</Dropdown.Item>
+                      <Dropdown.Item eventKey={90}>90 seconds</Dropdown.Item>
                     </DropdownButton>
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs="3">Voting Time:</Col>
+                  <Col xs="3">Voting Time</Col>
                   <Col>
-                    <DropdownButton variant="outline-light" title="30 seconds">
-                      <Dropdown.Item eventKey="30" active>
-                        30 seconds
-                      </Dropdown.Item>
-                      <Dropdown.Item eventKey="60">60 seconds</Dropdown.Item>
+                    <DropdownButton
+                      variant="outline-light"
+                      title={`${this.state.votingTime} seconds`}
+                      onSelect={(key) => {
+                        this.setState({ votingTime: key });
+                      }}
+                    >
+                      <Dropdown.Item eventKey={30}>30 seconds</Dropdown.Item>
+                      <Dropdown.Item eventKey={45}>45 seconds</Dropdown.Item>
+                      <Dropdown.Item eventKey={60}>60 seconds</Dropdown.Item>
                     </DropdownButton>
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs="3">Max players:</Col>
+                  <Col xs="3">Max players</Col>
                   <Col>
-                    <DropdownButton variant="outline-light" title="4 Players">
+                    <DropdownButton
+                      variant="outline-light"
+                      title={`${this.state.maxPlayers} players`}
+                      onSelect={(key) => {
+                        this.setState({ maxPlayers: key });
+                      }}
+                    >
                       {/* Is there any better way 2 do this ._. */}
                       {[4, 5, 6, 7, 8, 9, 10].map((value) => {
                         return (
-                          <Dropdown.Item eventKey={value} active={value === 4}>
+                          <Dropdown.Item eventKey={value}>
                             {value} players
                           </Dropdown.Item>
                         );
@@ -308,15 +326,11 @@ export default class Lobby extends React.Component {
                     variant="light"
                     onClick={() => {
                       sounds.play("button");
-                    }}
-                    id={`${lobby.applyBtn}`}
-                  >
-                    Apply Changes
-                  </Button>{" "}
-                  <Button
-                    variant="light"
-                    onClick={() => {
-                      sounds.play("button");
+                      this.setState({
+                        writingTime: 60,
+                        votingTime: 30,
+                        maxPlayers: 4,
+                      });
                     }}
                     id={`${lobby.resetBtn}`}
                   >
@@ -329,7 +343,7 @@ export default class Lobby extends React.Component {
         </Row>
 
         {/* Music Control button */}
-        
+
         <Button
           onClick={() => {
             this.state.muted ? sounds.play("menu") : sounds.pause("menu");

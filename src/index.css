@@ -37,6 +37,10 @@ input:focus {
     box-shadow: none !important;
 }
 
+button:focus {
+    box-shadow:none !important;
+}
+
 #root {
     padding-bottom: 0.5em;
 }

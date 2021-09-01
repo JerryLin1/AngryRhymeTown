@@ -37,24 +37,15 @@
 
 /******* Row 1 *******/
 
+.ARTLogo {
+    font-size: x-large;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 3px #000;
+}
+
 .lobby>form:first-child {
     margin-bottom: 0.5em;
-}
-
-#inputNickname {
-    display: inline-block;
-    width: 12em;
-}
-
-#setName {
-    border: solid rgba(103, 164, 255, 0.603) 2px;
-    display: inline-block;
-    width: 8em;
-}
-
-#nameWarning {
-    display: inline-block;
-    color: red;
 }
 
 #startGame {
@@ -89,7 +80,7 @@
     display: inline-block;
     border: none;
     background-color: transparent;
-    /* width: 15em; */
+    width: fit-content;
     text-align-last: left;
     margin-right: 0.5em;
 }
@@ -153,6 +144,11 @@
     display: inline-block;
 }
 
+#resetBtn {
+    position: absolute;
+    bottom: 1em;
+}
+
 /******* Error Message *******/
 
 .ErrorMsgBg {
@@ -196,22 +192,3 @@
     cursor: pointer;
     transform: scale(1.1);
 }
-
-/******* Music Hint *******/
-
-/* .musicHint {
-    position: absolute;
-    color: #fff;
-    font-size: 0.8em;
-    right: 3.5em;
-    top: 3em;
-}
-
-#hintArrow {
-    position: absolute;
-    right: -2.25em;
-    top: 1.25em;
-    transform: rotate(180deg);
-    width: 2em;
-    height: 2em;
-} */

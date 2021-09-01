@@ -46,7 +46,7 @@ export default class WritingPhase extends React.Component {
         toDisplayWords.push(display);
       }
       this.setState({ displayWords: toDisplayWords });
-      this.setState({ wordsForCurrentBar: toDisplayWords[0]});
+      this.setState({ wordsForCurrentBar: toDisplayWords[0] });
     });
   }
 
@@ -81,7 +81,7 @@ export default class WritingPhase extends React.Component {
           .find(".card-body")
           .find("div")
           .eq(i)
-          .css("boxShadow", "0 0 10px #f2ff9e");
+          .css({ boxShadow: "0 0 10px #f2ff8e", backgroundColor: "#fff" });
       } else {
         $(`#${game.displayWordsWrapper}`)
           .find(".card")
