@@ -164,10 +164,12 @@
 
 .rap {
     font-size: 1.5em;
+    text-shadow: 0 0 2px #fff;
 }
 
 .rapperName {
     font-size: 2.5em;
+    text-shadow: 0 0 2px #fff;
 }
 
 #votePrompt {

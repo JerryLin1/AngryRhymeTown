@@ -78,9 +78,9 @@
 
 #roomCode {
     display: inline-block;
+    width: 12.5em;
     border: none;
     background-color: transparent;
-    width: fit-content;
     text-align-last: left;
     margin-right: 0.5em;
 }

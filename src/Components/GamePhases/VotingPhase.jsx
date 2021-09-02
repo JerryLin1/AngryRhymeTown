@@ -5,6 +5,7 @@ import sounds from "../../sounds.js";
 import Countdown from "../Countdown.jsx";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import game from "../Game.module.css";
+import AvatarDisplay from "../Avatar/AvatarDisplay.jsx";
 
 export default class VotingPhase extends React.Component {
   constructor(props) {
@@ -43,11 +44,13 @@ export default class VotingPhase extends React.Component {
       color2: fontColors[color2],
       selected: undefined,
       numVoted: 0,
+      playerAvatar: undefined,
+      opponentAvatar: undefined,
     };
 
     this.socket.emit("receiveMatchup", (votingInfo) => {
       this.setState({ numVoted: 0 });
-      this.setState({ matchup: votingInfo.matchup });
+      // this.setState({ matchup: votingInfo.matchup });
       this.setState({
         voted:
           this.client.name === votingInfo.matchup[0].nickname ||
@@ -59,6 +62,13 @@ export default class VotingPhase extends React.Component {
 
     this.socket.on("numVotedSoFar", (numVoted) => {
       this.setState({ numVoted: numVoted });
+    });
+
+    this.socket.emit("getMatchupInfo", (matchup) => {
+      this.setState({
+        playerAvatar: matchup.avatarData,
+        opponentAvatar: matchup.opponentAvatarData,
+      });
     });
   }
 
@@ -97,8 +107,7 @@ export default class VotingPhase extends React.Component {
   };
 
   render() {
-    const color1 = this.state.color1;
-    const color2 = this.state.color2;
+    const { color1, color2 } = this.state;
 
     return (
       <div className={`${game.votePhase}`}>
@@ -114,25 +123,50 @@ export default class VotingPhase extends React.Component {
           />
         </Row>
 
-        <Row id={`${game.rapDisplayRow}`}>
-          <Col xs={{ offset: 2, span: 3 }} style={{ color: color1 }}>
-            <Card>
-              <div className={`${game.rapperName}`}>
-                {this.state.matchup[0].nickname}'s bars
-              </div>
-              <div className={`${game.rap}`}>{this.renderBars(0)}</div>
-            </Card>
-          </Col>
+        {this.state.playerAvatar !== undefined &&
+          this.state.opponentAvatar !== undefined && (
+            <Row id={`${game.rapDisplayRow}`}>
+              <Col xs={{ offset: 2, span: 3 }} style={{ color: color1 }}>
+                <Card>
+                  <AvatarDisplay
+                    avatar={{
+                      bodyNum: this.state.playerAvatar.bodyNum,
+                      eyesNum: this.state.playerAvatar.eyesNum,
+                      hairNum: this.state.playerAvatar.hairNum,
+                      mouthNum: this.state.playerAvatar.mouthNum,
+                      shirtNum: this.state.playerAvatar.shirtNum,
+                    }}
+                    size={0.75}
+                  />
 
-          <Col xs={{ offset: 2, span: 3 }} style={{ color: color2 }}>
-            <Card>
-              <div className={`${game.rapperName}`}>
-                {this.state.matchup[1].nickname}'s bars
-              </div>
-              <div className={`${game.rap}`}>{this.renderBars(1)}</div>
-            </Card>
-          </Col>
-        </Row>
+                  <div className={`${game.rapperName}`}>
+                    {this.state.matchup[0].nickname}'s bars
+                  </div>
+                  <div className={`${game.rap}`}>{this.renderBars(0)}</div>
+                </Card>
+              </Col>
+
+              <Col xs={{ offset: 2, span: 3 }} style={{ color: color2 }}>
+                <Card>
+                  <AvatarDisplay
+                    avatar={{
+                      bodyNum: this.state.opponentAvatar.bodyNum,
+                      eyesNum: this.state.opponentAvatar.eyesNum,
+                      hairNum: this.state.opponentAvatar.hairNum,
+                      mouthNum: this.state.opponentAvatar.mouthNum,
+                      shirtNum: this.state.opponentAvatar.shirtNum,
+                    }}
+                    size={0.75}
+                    flipped={true}
+                  />
+                  <div className={`${game.rapperName}`}>
+                    {this.state.matchup[1].nickname}'s bars
+                  </div>
+                  <div className={`${game.rap}`}>{this.renderBars(1)}</div>
+                </Card>
+              </Col>
+            </Row>
+          )}
 
         <br />
 
@@ -155,7 +189,7 @@ export default class VotingPhase extends React.Component {
                   backgroundColor: color1,
                   color: "#fff",
                   scale: 1.1,
-                  duration: 200,
+                  duration: 250,
                 });
               }}
               onMouseOut={() => {
@@ -164,7 +198,7 @@ export default class VotingPhase extends React.Component {
                   backgroundColor: "#fff",
                   color: color1,
                   scale: 1.0,
-                  duration: 200,
+                  duration: 250,
                 });
               }}
               onClick={() => {
@@ -190,7 +224,7 @@ export default class VotingPhase extends React.Component {
                   backgroundColor: color2,
                   color: "#fff",
                   scale: 1.1,
-                  duration: 200,
+                  duration: 250,
                 });
               }}
               onMouseOut={() => {
@@ -199,7 +233,7 @@ export default class VotingPhase extends React.Component {
                   backgroundColor: "#fff",
                   color: color2,
                   scale: 1.0,
-                  duration: 200,
+                  duration: 250,
                 });
               }}
               style={{
@@ -222,8 +256,8 @@ export default class VotingPhase extends React.Component {
         <Row>
           <div id={`${game.votePrompt}`}>
             {this.state.numVoted}{" "}
-            {this.state.numVoted === 1 ? "person" : "people"} have voted so far!
-            Make sure you vote!
+            {this.state.numVoted === 1 ? "person has" : "people have"} voted so
+            far! Make sure you vote!
           </div>
           {this.displayVoteConfirmation()}
         </Row>

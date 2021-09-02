@@ -186,7 +186,7 @@ export default class Lobby extends React.Component {
             <Col xs="auto">
               <Form.Group id={`${lobby.copyCode}`}>
                 <Form.Label column>
-                  <strong>Room Link: &ensp;</strong>
+                  Room Link: &ensp;
                 </Form.Label>
                 <input id={`${lobby.roomCode}`} value={this.roomURL} readOnly />
                 <OverlayTrigger

@@ -34,12 +34,7 @@ class Director extends React.Component {
   render() {
     return (
       <div >
-        <AnimatedSwitch
-          atEnter={{ opacity: 0 }}
-          atLeave={{ opacity: 0 }}
-          atActive={{ opacity: 1 }}
-          className="game_wrapper"
-        >
+        <Switch>
           <Route path="/:roomId?" exact render={(props) => (<Home client={this.client} match={props.match} />)} />
           <Route path="/:roomId/lobby" exact render={(props) => (<Lobby client={this.client} match={props.match} />)} />
           <Route path="/:roomId/pairing" render={() => (<PairingPhase client={this.client} />)} />
@@ -48,7 +43,7 @@ class Director extends React.Component {
           <Route path="/:roomId/voting" render={() => (<VotingPhase client={this.client} />)} />
           <Route path="/:roomId/roundresults" render={() => (<RoundResultsPhase client={this.client} />)} />
           <Route path="/:roomId/gameresults" render={() => (<GameResultsPhase client={this.client} />)} />
-        </AnimatedSwitch>
+        </Switch>
       </div>
     );
   }

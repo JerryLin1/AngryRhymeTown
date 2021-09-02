@@ -95,7 +95,7 @@ export default class WritingPhase extends React.Component {
           .find(".card-body")
           .find("div")
           .eq(i)
-          .css("boxShadow", "none");
+          .css({ boxShadow: "none", backgroundColor: "#d4e5ff" });
       }
     }
 
