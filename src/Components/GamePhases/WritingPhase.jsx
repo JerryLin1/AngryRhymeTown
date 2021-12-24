@@ -114,7 +114,7 @@ export default class WritingPhase extends React.Component {
           onSubmit={(e) => {
             e.preventDefault();
 
-            sounds.play("button");
+            // sounds.play("button");
             this.sendBarsToServer(i);
             $(".btn-outline-dark:first").attr("class", "btn btn-success");
 
@@ -216,7 +216,7 @@ export default class WritingPhase extends React.Component {
                   id={`${game.finishWriting}`}
                   variant="outline-success"
                   onClick={() => {
-                    sounds.play("button");
+                    // sounds.play("button""button");
                     $(`#${game.finishWriting}`).attr(
                       "class",
                       "btn btn-success"

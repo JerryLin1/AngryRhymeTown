@@ -40,8 +40,8 @@ export default class Home extends React.Component {
               size="lg"
               id={`${home.createLobby}`}
               onClick={() => {
-                sounds.play("menu");
-                sounds.play("button");
+                // sounds.play("menu");
+                // sounds.play("button");
                 window.location.pathname.substring(1) === ""
                   ? this.client.createRoom()
                   : this.client.redirectURL(
@@ -110,7 +110,7 @@ export default class Home extends React.Component {
           <div
             id={`${home.repoLink}`}
             onClick={() => {
-              sounds.play("button");
+              // sounds.play("button");
               window.open("https://github.com/JerryLin1/AngryRhymeTown");
             }}
           >

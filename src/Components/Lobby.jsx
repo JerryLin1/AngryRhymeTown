@@ -171,7 +171,7 @@ export default class Lobby extends React.Component {
                   //   this.state.numPlayers % 2 === 0 &&
                   //   this.state.numPlayers >= 4
                   // ) {
-                  sounds.play("button");
+                  // sounds.play("button");
                   this.client.startGame();
                   // } else {
                   //   if (this.state.numPlayers < 4) {
@@ -205,7 +205,7 @@ export default class Lobby extends React.Component {
                   <Clipboard
                     id={`${lobby.cb}`}
                     onClick={() => {
-                      sounds.play("button");
+                      // sounds.play("button");
                       copyToClipboard(this.roomURL)
                         .then($(".tooltip-inner").text("Copied!"));
                     }}
@@ -247,7 +247,7 @@ export default class Lobby extends React.Component {
               autoComplete="off"
               style={{ marginTop: "1%" }}
               onSubmit={(event) => {
-                sounds.play("button");
+                // sounds.play("button");
                 event.preventDefault();
                 this.client.sendMessage($(`#${lobby.chatInput}`).val());
                 $(`#${lobby.chatInput}`).val("");
@@ -334,7 +334,7 @@ export default class Lobby extends React.Component {
                   <Button
                     variant="light"
                     onClick={() => {
-                      sounds.play("button");
+                      // sounds.play("button");
                       this.setState({
                         writingTime: 60,
                         votingTime: 30,
@@ -353,7 +353,7 @@ export default class Lobby extends React.Component {
 
         {/* Music Control button */}
 
-        <Button
+        {/* <Button
           onClick={() => {
             this.state.muted ? sounds.play("menu") : sounds.pause("menu");
             this.setState({ muted: !this.state.muted });
@@ -362,7 +362,7 @@ export default class Lobby extends React.Component {
           id={`${lobby.musicControl}`}
         >
           {this.state.muted ? <VolumeMuteFill /> : <VolumeUpFill />}
-        </Button>
+        </Button> */}
 
         {/* Error message */}
         <ErrorMsg />
@@ -381,7 +381,7 @@ const ErrorMsg = () => {
         <div
           id={`${lobby.closeErr}`}
           onClick={() => {
-            sounds.play("button");
+            // sounds.play("button");
             $(`.${lobby.ErrorMsgBg}`).fadeOut();
           }}
         >
