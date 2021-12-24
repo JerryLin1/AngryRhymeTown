@@ -54,6 +54,8 @@ export default class RappingPhase extends React.Component {
       await tts.speakResponsiveVoice(bar);
     }
 
+    await tts.timeout(5000)
+    this.setState({currentBattle: 1})
     this.setState({ barDivs: [] });
     for (let bar of this.state.matchup[1].bars) {
       this.setState({ barDivs: this.state.barDivs.concat(<div>{bar}</div>) });
@@ -79,8 +81,7 @@ export default class RappingPhase extends React.Component {
           className={`${game.header}`}
           style={{ backdropFilter: "blur(0.1em)" }}
         >
-          Let's hear those bars from{" "}
-          {this.state.matchup[this.state.currentBattle].nickname}!
+          Let's hear those bars from {this.state.matchup[this.state.currentBattle].nickname}!
         </div>
         <br />
         <Row>
