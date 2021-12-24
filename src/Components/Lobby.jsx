@@ -129,7 +129,7 @@ export default class Lobby extends React.Component {
         } else {
           chatMsg = (
             <span>
-              <strong>{chatInfo.nickname}</strong>: {chatInfo.msg}
+              <strong>{chatInfo.nickname}</strong>: <span dangerouslySetInnerHTML={{__html: processChatMessage(chatInfo.msg)}}/>
             </span>
           );
           color = "black";
@@ -382,3 +382,11 @@ const ErrorMsg = () => {
     </div>
   );
 };
+
+// modified from https://stackoverflow.com/a/8943487
+function processChatMessage(text) {
+  var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+  return text.replace(urlRegex, function(url) {
+      return `<a target="_blank" href="${url}"> ${url} </a>`;
+  });
+}
