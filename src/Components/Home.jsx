@@ -10,12 +10,11 @@ import { GenerateName } from "../assets/nameGenerator";
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.client = props.client;
-    console.log(window.location.pathname.substring(1))
-  
+    this.client = props.client;  
   }
 
   setNick = (nickname, save = false) => {
+    // CURRENTLY COMMENTED FOR TEST MODE
     // if (nickname.trim() === "" || nickname.trim().length <= 12) {
     //     if (Object.values(this.room).map(client => client.name).includes(name)) {
     //         // TODO: HANDLE IF NAME IS ALREADY TAKEN HERE. Already functional but an alert would be good

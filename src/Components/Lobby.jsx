@@ -262,6 +262,7 @@ export default class Lobby extends React.Component {
             </Form>
           </Col>
 
+          {/* Room settings */}
           <Col xs="4">
             <Card className={`${lobby.cards}`}>
               <Card.Header className={`${lobby.cardHeaders}`}>
