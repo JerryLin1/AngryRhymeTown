@@ -55,7 +55,7 @@ export default class Client extends React.Component {
             this.redirectURL(`${this.roomId}/gameresults`)
         })
         this.socket.on("returnToLobby", () => {
-            this.redirectURL(`${this.roomId}`)
+            this.redirectURL(`${this.roomId}/lobby`)
         })
 
         this.socket.on("receiveRoomSettings", roomSettings => {

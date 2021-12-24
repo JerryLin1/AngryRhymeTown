@@ -45,7 +45,16 @@ export default class Lobby extends React.Component {
     if (props.match.params.roomId.length > 1) {
       this.client.joinRoom(props.match.params.roomId);
     }
-    this.roomURL = `${window.location.host}/${this.props.match.params.roomId}`;
+
+    // Check if url has room code in it already
+    // Hosters will likely not have it
+    // Joiners will likely have it
+    let reg = new RegExp(this.props.match.params.roomId);
+    if (reg.test(window.location.href))
+      this.roomURL = window.location.href;
+    else {
+      this.roomURL = `${window.location.href}${this.props.match.params.roomId}`;
+    }
     // Update the player list in the client's room
     this.client.socket.on("updateClientList", (clients) => {
       this.name = clients[this.client.socket.id].name;
@@ -197,8 +206,7 @@ export default class Lobby extends React.Component {
                     id={`${lobby.cb}`}
                     onClick={() => {
                       sounds.play("button");
-                      navigator.clipboard
-                        .writeText(this.roomURL)
+                      copyToClipboard(this.roomURL)
                         .then($(".tooltip-inner").text("Copied!"));
                     }}
                   />
@@ -390,4 +398,29 @@ function processChatMessage(text) {
   return text.replace(urlRegex, function(url) {
       return `<a target="_blank" href="${url}"> ${url} </a>`;
   });
+}
+
+// https://stackoverflow.com/a/65996386
+function copyToClipboard(textToCopy) {
+  // navigator clipboard api needs a secure context (https)
+  if (navigator.clipboard && window.isSecureContext) {
+      // navigator clipboard api method'
+      return navigator.clipboard.writeText(textToCopy);
+  } else {
+      // text area method
+      let textArea = document.createElement("textarea");
+      textArea.value = textToCopy;
+      // make the textarea out of viewport
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      return new Promise((res, rej) => {
+          // here the magic happens
+          document.execCommand('copy') ? res() : rej();
+          textArea.remove();
+      });
+  }
 }
