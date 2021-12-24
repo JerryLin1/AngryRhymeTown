@@ -79,8 +79,7 @@ export default class RappingPhase extends React.Component {
           className={`${game.header}`}
           style={{ backdropFilter: "blur(0.1em)" }}
         >
-          Let's hear those bars from{" "}
-          {this.state.matchup[this.state.currentBattle].nickname}!
+          Let's hear those bars from {this.state.matchup[this.state.currentBattle].nickname}!
         </div>
         <br />
         <Row>
