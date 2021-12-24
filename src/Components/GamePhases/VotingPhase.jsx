@@ -50,14 +50,14 @@ export default class VotingPhase extends React.Component {
 
     this.socket.emit("receiveMatchup", (votingInfo) => {
       this.setState({ numVoted: 0 });
-      // this.setState({ matchup: votingInfo.matchup });
+      this.setState({ matchup: votingInfo.matchup });
       this.setState({
         voted:
           this.client.name === votingInfo.matchup[0].nickname ||
           this.client.name === votingInfo.matchup[1].nickname,
       });
       this.restartTimer++;
-      this.forceUpdate();
+      // this.forceUpdate();
     });
 
     this.socket.on("numVotedSoFar", (numVoted) => {
