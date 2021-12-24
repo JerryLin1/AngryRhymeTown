@@ -216,7 +216,7 @@ io.on('connection', socket => {
     }
 
     function startPairPhase() {
-        io.to(socket.room).emit("startPairPhase");
+        io.to(socket.room).emit("startPairPhase", Date.now());
         setGameState(socket.room, gameState.PAIRING);
         let t = rooms[socket.room].settings.pairingTime;
         rooms[socket.room].nextPhase = setTimeout(() => { startWritePhase() }, t);
@@ -250,7 +250,7 @@ io.on('connection', socket => {
     })
 
     function startWritePhase() {
-        io.to(socket.room).emit("startWritePhase");
+        io.to(socket.room).emit("startWritePhase", Date.now());
         setGameState(socket.room, gameState.WRITING);
         let t = rooms[socket.room].settings.writingTime;
         rooms[socket.room].nextPhase = setTimeout(() => { startRapPhase() }, t);
@@ -282,7 +282,7 @@ io.on('connection', socket => {
 
     function startRapPhase() {
         if (rooms[socket.room].nextPhase !== null) clearTimeout(rooms[socket.room].nextPhase);
-        io.to(socket.room).emit("startRapPhase");
+        io.to(socket.room).emit("startRapPhase", Date.now());
         setGameState(socket.room, gameState.RAPPING);
         startBattle();
     }
@@ -298,7 +298,7 @@ io.on('connection', socket => {
     })
 
     function startVotePhase() {
-        io.to(socket.room).emit("startVotePhase");
+        io.to(socket.room).emit("startVotePhase", Date.now());
         clearTimeout(rooms[socket.room].nextPhase);
         setGameState(socket.room, gameState.VOTING);
         startBattle();
@@ -411,7 +411,7 @@ io.on('connection', socket => {
     }
 
     function startRoundResultsPhase() {
-        io.to(socket.room).emit("startRoundResultsPhase");
+        io.to(socket.room).emit("startRoundResultsPhase", Date.now());
         setGameState(socket.room, gameState.ROUND_RESULTS);
         let t = rooms[socket.room].settings.roundResultsTime;
 
@@ -426,7 +426,7 @@ io.on('connection', socket => {
         })
     })
     function startGameResultsPhase() {
-        io.to(socket.room).emit("startGameResultsPhase");
+        io.to(socket.room).emit("startGameResultsPhase", Date.now());
         setGameState(socket.room, gameState.GAME_RESULTS);
 
         // remove all disconnected clients

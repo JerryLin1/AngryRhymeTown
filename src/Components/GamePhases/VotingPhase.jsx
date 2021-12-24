@@ -117,6 +117,7 @@ export default class VotingPhase extends React.Component {
         <Row>
           <Countdown
             key={this.restartTimer}
+            startDate = {this.client.startDates.votePhase}
             time={this.roomSettings.votingTime / 1000}
             before="You have"
             after="left to vote for your favorite rap!"

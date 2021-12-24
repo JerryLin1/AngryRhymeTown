@@ -9,6 +9,7 @@ export default class Client extends React.Component {
         this.nickname = "";
 
         this.roomSettings = {};
+        this.startDates = {};
 
         // For debug
         this.socket.on("log", (msg) => {
@@ -28,23 +29,29 @@ export default class Client extends React.Component {
         this.socket.on("startGame", () => {
             // TODO: Do some animations
         })
-        this.socket.on("startPairPhase", () => {
+        this.socket.on("startPairPhase", startDate => {
+            this.startDates.pairPhase = startDate
             this.redirectURL(`${this.roomId}/pairing`);
         })
-        this.socket.on("startWritePhase", () => {
+        this.socket.on("startWritePhase", startDate => {
+            this.startDates.writePhase = startDate
             this.redirectURL(`${this.roomId}/writing`)
         })
-        this.socket.on("startRapPhase", () => {
+        this.socket.on("startRapPhase", startDate => {
+            this.startDates.rapPhase = startDate
             this.redirectURL(`${this.roomId}/rapping`)
         })
         // Clientside timer should end about the same time as they receive startVotePhase from server
-        this.socket.on("startVotePhase", () => {
+        this.socket.on("startVotePhase", startDate => {
+            this.startDates.votePhase = startDate
             this.redirectURL(`${this.roomId}/voting`)
         })
-        this.socket.on("startRoundResultsPhase", () => {
+        this.socket.on("startRoundResultsPhase", startDate => {
+            this.startDates.roundResultsPhase = startDate
             this.redirectURL(`${this.roomId}/roundresults`)
         })
-        this.socket.on("startGameResultsPhase", () => {
+        this.socket.on("startGameResultsPhase", startDate => {
+            this.startDates.gameResultsPhase = startDate
             this.redirectURL(`${this.roomId}/gameresults`)
         })
         this.socket.on("returnToLobby", () => {

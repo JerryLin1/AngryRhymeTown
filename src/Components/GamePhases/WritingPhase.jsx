@@ -184,6 +184,7 @@ export default class WritingPhase extends React.Component {
 
         <Row>
           <Countdown
+            startDate = {this.client.startDates.writePhase}
             time={this.roomSettings.writingTime / 1000}
             before="You have "
             after=" to spit some bars!"

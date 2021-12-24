@@ -57,6 +57,7 @@ export default class PairingPhase extends React.Component {
       <div>
         <div className={`${game.header}`}>
           <Countdown
+            startDate = {this.client.startDates.pairPhase}
             time={this.roomSettings.pairingTime / 1000}
             before="The game starts in"
           />

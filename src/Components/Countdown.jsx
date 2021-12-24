@@ -13,7 +13,7 @@ export default class Countdown extends React.Component {
       const animation = anime.timeline({
         targets: `.${game.Countdown}`,
         loop: true,
-        duration: 1000
+        duration: 1000,
       });
 
       animation
@@ -25,11 +25,11 @@ export default class Countdown extends React.Component {
         });
     }, Math.max(this.props.time * 1000 - 14500, 0));
 
-    this.startingTime = Date.now();
+    this.startDate = this.props.startDate || Date.now();
     this.secondsLeft = parseInt(this.props.time);
     this.interval = setInterval(() => {
       // deltaTime is in milliseconds
-      this.deltaTime = Date.now() - this.startingTime;
+      this.deltaTime = Date.now() - this.startDate;
       this.secondsLeft = Math.round(this.props.time - this.deltaTime / 1000);
       if (this.secondsLeft <= 0) {
         clearInterval(this.interval);
