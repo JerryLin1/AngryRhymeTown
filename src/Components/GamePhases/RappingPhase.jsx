@@ -11,12 +11,12 @@ export default class RappingPhase extends React.Component {
     this.socket = this.props.client.socket;
 
     this.state = {
-      backgroundImgs: [
-        "https://mediacloud.kiplinger.com/image/private/s--o_dOiB7J--/v1599666964/Investing/small-town-millionaires-2020.jpg",
-        "https://static.onecms.io/wp-content/uploads/sites/24/2021/02/22/2432703_WhyIm_114w-2000.jpg",
-        "https://cdn.theculturetrip.com/wp-content/uploads/2017/11/paris-ontatio-courtesy-of-county-of-brant.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/f/fa/Lemgo_-_Marktplatz_mit_Rathaus.jpg",
-      ],
+      // backgroundImgs: [
+      //   "https://mediacloud.kiplinger.com/image/private/s--o_dOiB7J--/v1599666964/Investing/small-town-millionaires-2020.jpg",
+      //   "https://static.onecms.io/wp-content/uploads/sites/24/2021/02/22/2432703_WhyIm_114w-2000.jpg",
+      //   "https://cdn.theculturetrip.com/wp-content/uploads/2017/11/paris-ontatio-courtesy-of-county-of-brant.jpg",
+      //   "https://upload.wikimedia.org/wikipedia/commons/f/fa/Lemgo_-_Marktplatz_mit_Rathaus.jpg",
+      // ],
       bars: [
         "Hey my name is Jerry Lin",
         "Everyday I only win",
@@ -70,7 +70,7 @@ export default class RappingPhase extends React.Component {
       <div
         className={`${game.rapPhase}`}
         style={{
-          background: `url(${this.state.backgroundImgs[this.state.pageBG]})`,
+          // background: `url(${this.state.backgroundImgs[this.state.pageBG]})`,
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
         }}
